@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Enduring Daily</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;900&display=swap" rel="stylesheet" />
+<style>
+  /* ============================================================
+     ENDURING DAILY  —  built to the Enduring brand style guide
+     Enduring Blue #193661 · Rich Black #000 · White #FFF · 40% Gray #A7A9AC
+     Headlines: Georgia Regular · Subheaders: Roboto Black / All Caps
+     Body: Roboto Regular/Light
+     ============================================================ */
+  :root {
+    --blue:      #193661;
+    --blue-deep: #122a4d;
+    --blue-line: #2c4a78;
+    --black:     #000000;
+    --white:     #ffffff;
+    --gray:      #a7a9ac;
+    --gray-lt:   #f3f4f6;
+    --gray-md:   #d8dade;
+    --gray-dk:   #6b6d72;
+    --paper:     #f7f8fa;
+    --ink:       #14161a;
+    --line:      #e4e6ea;
+    --shadow-sm: 0 1px 2px rgba(16,24,40,0.06);
+    --serif: Georgia, "Times New Roman", serif;
+    --sans: "Roboto", "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --r: 6px;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-weight: 400; line-height: 1.55;
+    -webkit-font-smoothing: antialiased; min-height: 100vh;
+  }
+  a { color: inherit; }
+
+  header.masthead { background: var(--blue); color: var(--white); border-bottom: 3px solid var(--black); }
+  .mast-inner {
+    max-width: 1180px; margin: 0 auto; padding: 26px 28px 24px;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+  }
+  .logo-box {
+    display: inline-block; background: var(--blue); border: 1px solid rgba(255,255,255,0.25);
+    padding: 8px 16px; font-family: var(--serif); font-size: 22px; letter-spacing: 3px;
+    color: var(--white); line-height: 1;
+  }
+  .mast-left .product { margin-top: 14px; font-family: var(--serif); font-size: 30px; letter-spacing: 0.3px; color: var(--white); }
+  .mast-left .tagline { margin-top: 8px; font-size: 14px; font-weight: 300; color: #cdd6e4; max-width: 620px; }
+  .mast-right { text-align: right; }
+  .clock { font-size: 12.5px; color: #cdd6e4; }
+  .sync {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-weight: 900; text-transform: uppercase; letter-spacing: 1.2px; font-size: 10.5px; color: var(--white);
+  }
+  .sync .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: #5fd39a;
+    box-shadow: 0 0 0 0 rgba(95,211,154,0.7); animation: pulse 2.6s infinite;
+  }
+  .sync .dot.off { background: var(--gray); animation: none; }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(95,211,154,0.55); }
+    70% { box-shadow: 0 0 0 7px rgba(95,211,154,0); }
+    100% { box-shadow: 0 0 0 0 rgba(95,211,154,0); }
+  }
+  .mode-tag {
+    display: inline-block; margin-top: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.4px;
+    font-size: 10px; padding: 5px 11px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.3); color: #cdd6e4;
+  }
+  .mode-tag.owner { color: var(--blue); background: var(--white); border-color: var(--white); }
+
+  main {
+    max-width: 1180px; margin: 0 auto; padding: 26px 28px 90px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  }
+  .col-span { grid-column: 1 / -1; }
+  @media (max-width: 860px) { main { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--white); border: 1px solid var(--line); border-radius: var(--r);
+    box-shadow: var(--shadow-sm); display: flex; flex-direction: column; min-height: 190px; overflow: hidden;
+  }
+  .card-head { display: flex; align-items: center; gap: 12px; padding: 15px 18px 13px; border-bottom: 2px solid var(--blue); }
+  .card-head.sage { border-bottom-color: var(--gray); }
+  .card-head.clay { border-bottom-color: var(--black); }
+  .card-title { font-family: var(--serif); font-size: 19px; color: var(--blue); flex: 1; }
+  .card-sub { font-weight: 900; text-transform: uppercase; letter-spacing: 1.2px; font-size: 10px; color: var(--gray-dk); }
+  .count { font-weight: 500; font-size: 12px; color: var(--white); background: var(--blue); border-radius: 5px; padding: 2px 9px; min-width: 26px; text-align: center; }
+  .card-body { padding: 8px 8px 10px; flex: 1; display: flex; flex-direction: column; gap: 1px; }
+
+  .item { display: flex; align-items: flex-start; gap: 11px; padding: 10px; border-radius: 5px; transition: background 0.15s ease; }
+  .item:hover { background: var(--gray-lt); }
+  .check {
+    flex: 0 0 auto; width: 17px; height: 17px; margin-top: 2px; border: 1.5px solid var(--gray);
+    border-radius: 4px; cursor: pointer; position: relative; transition: all 0.15s ease; background: var(--white);
+  }
+  .check:hover { border-color: var(--blue); }
+  .check.done { background: var(--blue); border-color: var(--blue); }
+  .check.done::after {
+    content: ""; position: absolute; left: 4.5px; top: 1px; width: 5px; height: 9px;
+    border: solid var(--white); border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+  .check.readonly { cursor: default; opacity: 0.5; }
+  .item-main { flex: 1; min-width: 0; }
+  .item-text { font-size: 14.5px; color: var(--ink); word-wrap: break-word; }
+  .item.done .item-text { color: var(--gray-dk); text-decoration: line-through; text-decoration-color: var(--gray); }
+  .item-meta { margin-top: 3px; font-size: 11px; color: var(--gray-dk); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .pill { font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; font-size: 9px; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--gray-md); color: var(--gray-dk); }
+  .pill.new { color: var(--white); background: var(--blue); border-color: var(--blue); }
+  .item-actions { display: flex; gap: 6px; opacity: 0; transition: opacity 0.15s ease; flex: 0 0 auto; }
+  .item:hover .item-actions { opacity: 1; }
+  .iconbtn {
+    background: var(--white); border: 1px solid var(--gray-md); color: var(--gray-dk); border-radius: 5px;
+    width: 26px; height: 26px; font-size: 13px; line-height: 1; cursor: pointer; display: grid; place-items: center; transition: all 0.15s ease;
+  }
+  .iconbtn:hover { color: var(--blue); border-color: var(--blue); }
+  .iconbtn.danger:hover { color: var(--white); background: var(--black); border-color: var(--black); }
+  .iconbtn.accept:hover { color: var(--white); background: var(--blue); border-color: var(--blue); }
+  .empty { padding: 22px 12px; color: var(--gray-dk); font-size: 13.5px; font-weight: 300; text-align: center; }
+
+  .quick-add { display: flex; gap: 8px; padding: 10px 12px 13px; border-top: 1px solid var(--line); }
+  .quick-add input {
+    flex: 1; background: var(--white); border: 1px solid var(--gray-md); color: var(--ink);
+    border-radius: 5px; padding: 9px 12px; font-size: 14px; font-family: var(--sans);
+  }
+  .quick-add input:focus { outline: none; border-color: var(--blue); }
+  .quick-add input::placeholder { color: var(--gray); }
+  .btn { font-family: var(--sans); font-size: 13.5px; font-weight: 500; border-radius: 5px; padding: 9px 16px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s ease; white-space: nowrap; }
+  .btn.primary { background: var(--blue); color: var(--white); border-color: var(--blue); }
+  .btn.primary:hover { background: var(--blue-deep); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .form-grid { padding: 16px 18px 18px; display: grid; gap: 12px; }
+  .form-note { font-size: 12.5px; font-weight: 300; color: var(--gray-dk); }
+  .field label { display: block; font-weight: 900; text-transform: uppercase; letter-spacing: 1.2px; font-size: 9.5px; color: var(--gray-dk); margin-bottom: 6px; }
+  .field input, .field textarea {
+    width: 100%; background: var(--white); border: 1px solid var(--gray-md); color: var(--ink);
+    border-radius: 5px; padding: 10px 12px; font-size: 14px; font-family: var(--sans); resize: vertical;
+  }
+  .field input:focus, .field textarea:focus { outline: none; border-color: var(--blue); }
+  .field input::placeholder, .field textarea::placeholder { color: var(--gray); }
+  .two-up { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 520px) { .two-up { grid-template-columns: 1fr; } }
+  .route-row { display: flex; gap: 10px; align-items: center; }
+  select.route { background: var(--white); color: var(--ink); border: 1px solid var(--gray-md); border-radius: 5px; padding: 8px 10px; font-size: 13.5px; font-family: var(--sans); }
+  select.route:focus { outline: none; border-color: var(--blue); }
+  .form-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .toast { font-size: 12.5px; font-weight: 500; color: var(--blue); opacity: 0; transition: opacity 0.3s ease; }
+  .toast.show { opacity: 1; }
+  .toast.err { color: var(--black); }
+
+  footer { background: var(--blue); border-top: 3px solid var(--black); color: #cdd6e4; }
+  .foot-inner {
+    max-width: 1180px; margin: 0 auto; padding: 16px 28px; display: flex; align-items: center;
+    justify-content: space-between; gap: 14px; flex-wrap: wrap; font-size: 11.5px;
+  }
+  .foot-logo { font-family: var(--serif); letter-spacing: 2.5px; color: var(--white); font-size: 13px; }
+  .lock-hint { font-weight: 900; text-transform: uppercase; letter-spacing: 1px; font-size: 10px; color: #cdd6e4; cursor: pointer; }
+  .lock-hint:hover { color: var(--white); }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="mast-inner">
+    <div class="mast-left">
+      <span class="logo-box">ENDURING</span>
+      <div class="product">Enduring Daily</div>
+      <p class="tagline">A live board of active work, the AI intern's queue, and open questions. Anyone with the link can add an item or ask a question — nothing else can be changed.</p>
+      <span class="mode-tag" id="modeTag">Read-only view</span>
+    </div>
+    <div class="mast-right">
+      <div class="sync"><span class="dot" id="syncDot"></span><span id="syncLabel">Live</span></div>
+      <div class="clock" id="clock" style="margin-top:8px"></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="card" data-list="coop">
+    <div class="card-head">
+      <div class="card-title">Coop — Active Work</div>
+      <div class="count" data-count="coop">0</div>
+    </div>
+    <div class="card-body" data-body="coop"></div>
+    <div class="quick-add owner-only" data-add="coop" hidden>
+      <input type="text" placeholder="Add to your active work…" data-input="coop" />
+      <button class="btn primary" data-addbtn="coop">Add</button>
+    </div>
+  </section>
+
+  <section class="card" data-list="brian">
+    <div class="card-head sage">
+      <div class="card-title">Brian — AI Intern Queue</div>
+      <div class="count" data-count="brian">0</div>
+    </div>
+    <div class="card-body" data-body="brian"></div>
+    <div class="quick-add owner-only" data-add="brian" hidden>
+      <input type="text" placeholder="Assign a task to Brian…" data-input="brian" />
+      <button class="btn primary" data-addbtn="brian">Add</button>
+    </div>
+  </section>
+
+  <section class="card col-span" data-list="questions">
+    <div class="card-head clay">
+      <div class="card-title">Open Questions</div>
+      <div class="card-sub" style="flex:1">Running list — things I'm chasing an answer on</div>
+      <div class="count" data-count="questions">0</div>
+    </div>
+    <div class="card-body" data-body="questions"></div>
+    <div class="quick-add owner-only" data-add="questions" hidden>
+      <input type="text" placeholder="Log an open question…" data-input="questions" />
+      <button class="btn primary" data-addbtn="questions">Add</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <div class="card-title">Add an Item</div>
+      <div class="card-sub">Public</div>
+    </div>
+    <div class="form-grid">
+      <p class="form-note">Add something to the board. It lands with a “new” tag for Coop to review. You can’t edit or remove anything else — add only.</p>
+      <div class="two-up">
+        <div class="field"><label>Your name</label><input type="text" id="add_name" placeholder="Jane Okafor" /></div>
+        <div class="field"><label>Your email</label><input type="email" id="add_email" placeholder="jane@enduring.co" /></div>
+      </div>
+      <div class="field"><label>The item</label><textarea id="add_text" rows="2" placeholder="What should be added to the board?"></textarea></div>
+      <div class="route-row">
+        <span class="card-sub">Add to</span>
+        <select class="route" id="add_target">
+          <option value="coop">Coop — Active Work</option>
+          <option value="brian">Brian — AI Intern Queue</option>
+          <option value="questions">Open Questions</option>
+        </select>
+      </div>
+      <div class="form-foot">
+        <span class="toast" id="add_toast"></span>
+        <button class="btn primary" id="add_submit">Submit item</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <div class="card-title">Ask Coop a Question</div>
+      <div class="card-sub">Public</div>
+    </div>
+    <div class="form-grid">
+      <p class="form-note">Send a question straight to Coop’s inbox on this board. He sees it live and can clear it once answered.</p>
+      <div class="two-up">
+        <div class="field"><label>Your name</label><input type="text" id="ask_name" placeholder="Jane Okafor" /></div>
+        <div class="field"><label>Your email</label><input type="email" id="ask_email" placeholder="jane@enduring.co" /></div>
+      </div>
+      <div class="field"><label>Your question</label><textarea id="ask_text" rows="2" placeholder="What do you want to ask Coop?"></textarea></div>
+      <div class="form-foot">
+        <span class="toast" id="ask_toast"></span>
+        <button class="btn primary" id="ask_submit">Send to Coop</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card col-span owner-only" data-list="inbox" hidden>
+    <div class="card-head">
+      <div class="card-title">Coop’s Inbox</div>
+      <div class="card-sub" style="flex:1">Questions submitted through the board</div>
+      <div class="count" data-count="inbox">0</div>
+    </div>
+    <div class="card-body" data-body="inbox"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <span class="foot-logo">ENDURING</span>
+    <span>Enduring Daily · Operations Board</span>
+    <span class="lock-hint" id="lockHint">Owner? Unlock editing →</span>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script>
+/* ============================================================
+   1. LIVE SYNC CONFIG  ← paste your Firebase web config here.
+   Until then, the board runs on local demo data.
+   ============================================================ */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBtZiXmmL_rA51xFvS50xWM-W1jbygpkn4",
+  authDomain: "enduring-daily.firebaseapp.com",
+  databaseURL: "https://enduring-daily-default-rtdb.firebaseio.com",
+  projectId: "enduring-daily",
+  storageBucket: "enduring-daily.firebasestorage.app",
+  messagingSenderId: "1050464636884",
+  appId: "1:1050464636884:web:5e975f663e53847fd51041"
+};
+
+/* Your private edit key. Owner unlocks with  #edit=YOUR_KEY */
+const EDIT_KEY = "bonesbrigade";
+/* ============================================================ */
+
+const LISTS = ["coop", "brian", "questions", "inbox"];
+let db = null, LIVE = false;
+
+function readEditGrant() {
+  const h = new URLSearchParams(location.hash.replace(/^#/, ""));
+  if (h.get("edit") === EDIT_KEY) {
+    try { sessionStorage.setItem("enduring_edit", "1"); } catch(e){}
+    return true;
+  }
+  try { return sessionStorage.getItem("enduring_edit") === "1"; } catch(e){ return false; }
+}
+let isOwner = readEditGrant();
+
+let store = {};
+const localSeed = {
+  coop: {
+    a1: { text: "Finalize portfolio AI tooling rollout plan (KoSA, AllRec, School Apparel)", done: false, ts: Date.now()-8.6e7, order: 1, reviewed: true },
+    a2: { text: "First-week operating cadence with Jory + Jake", done: false, ts: Date.now()-7e7, order: 2, reviewed: true },
+    a3: { text: "Stand up Enduring Daily for the team", done: true, ts: Date.now()-6e7, order: 3, reviewed: true }
+  },
+  brian: {
+    b1: { text: "Pull competitor pricing across the three portfolio verticals", done: false, ts: Date.now()-5e7, order: 1, reviewed: true },
+    b2: { text: "Draft weekly ops digest template", done: false, ts: Date.now()-4e7, order: 2, reviewed: true }
+  },
+  questions: {
+    q1: { text: "Which portfolio company is the right pilot for the AI workflow rollout?", done: false, ts: Date.now()-3e7, order: 1, reviewed: true }
+  },
+  inbox: {}
+};
+
+function initBackend() {
+  const hasConfig = FIREBASE_CONFIG && FIREBASE_CONFIG.databaseURL;
+  if (hasConfig && window.firebase) {
+    try {
+      firebase.initializeApp(FIREBASE_CONFIG);
+      db = firebase.database();
+      LIVE = true;
+      // If owner, sign in anonymously so writes carry your auth UID.
+      // (Public visitors never sign in — they only add items, which the
+      //  security rules allow unauthenticated.)
+      if (isOwner && firebase.auth) {
+        firebase.auth().signInAnonymously()
+          .then(() => { const u = firebase.auth().currentUser; if (u) console.log("Owner UID:", u.uid); })
+          .catch(err => console.warn("Auth sign-in failed:", err));
+      }
+      LISTS.forEach(list => {
+        db.ref("board/" + list).on("value", snap => { store[list] = snap.val() || {}; renderList(list); });
+      });
+      setSync(true, "Live");
+      return;
+    } catch (e) { console.warn("Firebase init failed, local mode:", e); }
+  }
+  store = JSON.parse(JSON.stringify(localSeed));
+  LIVE = false;
+  setSync(false, "Demo");
+  LISTS.forEach(renderList);
+}
+
+function setSync(on, label) {
+  document.getElementById("syncDot").className = "dot" + (on ? "" : " off");
+  document.getElementById("syncLabel").textContent = label;
+}
+
+function pushItem(list, obj) {
+  if (LIVE) { db.ref("board/" + list).push(obj); }
+  else { const id = "loc" + Math.random().toString(36).slice(2, 9); store[list] = store[list] || {}; store[list][id] = obj; renderList(list); }
+}
+function updateItem(list, id, patch) {
+  if (LIVE) { db.ref("board/" + list + "/" + id).update(patch); }
+  else { Object.assign(store[list][id], patch); renderList(list); }
+}
+function removeItem(list, id) {
+  if (LIVE) { db.ref("board/" + list + "/" + id).remove(); }
+  else { delete store[list][id]; renderList(list); }
+}
+
+function esc(s){ return (s||"").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function ago(ts){
+  if(!ts) return "";
+  const d = Math.floor((Date.now()-ts)/1000);
+  if (d < 60) return "just now";
+  if (d < 3600) return Math.floor(d/60)+"m ago";
+  if (d < 86400) return Math.floor(d/3600)+"h ago";
+  return Math.floor(d/86400)+"d ago";
+}
+
+function renderList(list) {
+  const body = document.querySelector(`[data-body="${list}"]`);
+  const countEl = document.querySelector(`[data-count="${list}"]`);
+  if (!body) return;
+  const entries = Object.entries(store[list] || {}).sort((a,b) => (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0));
+  const openCount = entries.filter(([_,it]) => !it.done).length;
+  if (countEl) countEl.textContent = list === "inbox" ? entries.length : openCount;
+
+  if (!entries.length) {
+    const msg = { coop:"Nothing active yet.", brian:"Brian's queue is clear.", questions:"No open questions.", inbox:"No questions in your inbox." }[list] || "Empty.";
+    body.innerHTML = `<div class="empty">${msg}</div>`;
+    return;
+  }
+
+  body.innerHTML = entries.map(([id, it]) => {
+    if (list === "inbox") {
+      return `<div class="item">
+        <div class="item-main">
+          <div class="item-text">${esc(it.text)}</div>
+          <div class="item-meta"><span>${esc(it.name||"Anonymous")}</span>${it.email?`<span>${esc(it.email)}</span>`:""}<span>${ago(it.ts)}</span></div>
+        </div>
+        ${isOwner?`<div class="item-actions"><button class="iconbtn danger" title="Clear" data-act="remove" data-list="${list}" data-id="${id}">✕</button></div>`:""}
+      </div>`;
+    }
+    const isNew = it.source === "public" && !it.reviewed;
+    const submitter = it.name ? `<span>added by ${esc(it.name)}</span>` : "";
+    const checkCls = "check" + (it.done?" done":"") + (isOwner?"":" readonly");
+    return `<div class="item ${it.done?"done":""}">
+      <div class="${checkCls}" ${isOwner?`data-act="toggle" data-list="${list}" data-id="${id}"`:""}></div>
+      <div class="item-main">
+        <div class="item-text">${esc(it.text)}</div>
+        <div class="item-meta">${isNew?`<span class="pill new">New</span>`:""}${submitter}<span>${ago(it.ts)}</span></div>
+      </div>
+      ${isOwner?`<div class="item-actions">
+        ${isNew?`<button class="iconbtn accept" title="Mark reviewed" data-act="review" data-list="${list}" data-id="${id}">✓</button>`:""}
+        <button class="iconbtn danger" title="Delete" data-act="remove" data-list="${list}" data-id="${id}">✕</button>
+      </div>`:""}
+    </div>`;
+  }).join("");
+}
+
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("[data-act]");
+  if (!el || !isOwner) return;
+  const { act, list, id } = el.dataset;
+  if (act === "toggle") updateItem(list, id, { done: !store[list][id].done });
+  if (act === "review") updateItem(list, id, { reviewed: true });
+  if (act === "remove") removeItem(list, id);
+});
+
+document.querySelectorAll("[data-addbtn]").forEach(btn => {
+  const list = btn.dataset.addbtn;
+  const input = document.querySelector(`[data-input="${list}"]`);
+  const submit = () => {
+    const t = input.value.trim();
+    if (!t) return;
+    pushItem(list, { text: t, done: false, ts: Date.now(), order: Date.now(), source: "owner", reviewed: true });
+    input.value = ""; input.focus();
+  };
+  btn.addEventListener("click", submit);
+  input.addEventListener("keydown", e => { if (e.key === "Enter") submit(); });
+});
+
+function toast(el, msg, isErr) {
+  el.textContent = msg;
+  el.className = "toast show" + (isErr?" err":"");
+  setTimeout(() => { el.className = "toast" + (isErr?" err":""); }, 3200);
+}
+function validEmail(s){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
+
+document.getElementById("add_submit").addEventListener("click", () => {
+  const name = document.getElementById("add_name").value.trim();
+  const email = document.getElementById("add_email").value.trim();
+  const text = document.getElementById("add_text").value.trim();
+  const target = document.getElementById("add_target").value;
+  const t = document.getElementById("add_toast");
+  if (!name || !email || !text) return toast(t, "Name, email, and item are all required.", true);
+  if (!validEmail(email)) return toast(t, "That email doesn't look right.", true);
+  pushItem(target, { text, name, email, done: false, ts: Date.now(), order: Date.now(), source: "public", reviewed: false });
+  document.getElementById("add_text").value = "";
+  toast(t, "Added to the board ✓");
+});
+
+document.getElementById("ask_submit").addEventListener("click", () => {
+  const name = document.getElementById("ask_name").value.trim();
+  const email = document.getElementById("ask_email").value.trim();
+  const text = document.getElementById("ask_text").value.trim();
+  const t = document.getElementById("ask_toast");
+  if (!name || !email || !text) return toast(t, "Name, email, and question are all required.", true);
+  if (!validEmail(email)) return toast(t, "That email doesn't look right.", true);
+  pushItem("inbox", { text, name, email, ts: Date.now(), order: Date.now(), source: "public" });
+  document.getElementById("ask_text").value = "";
+  toast(t, "Sent to Coop ✓");
+});
+
+function applyOwnerUI() {
+  document.querySelectorAll(".owner-only").forEach(el => { el.hidden = !isOwner; });
+  const tag = document.getElementById("modeTag");
+  if (isOwner) { tag.textContent = "Editing unlocked"; tag.className = "mode-tag owner"; }
+  else { tag.textContent = "Read-only view"; tag.className = "mode-tag"; }
+  document.getElementById("lockHint").textContent = isOwner ? "Editing on — lock this device" : "Owner? Unlock editing →";
+}
+document.getElementById("lockHint").addEventListener("click", () => {
+  if (isOwner) {
+    try { sessionStorage.removeItem("enduring_edit"); } catch(e){}
+    location.hash = ""; isOwner = false; applyOwnerUI(); LISTS.forEach(renderList);
+  } else {
+    const k = prompt("Enter your edit key:");
+    if (k === EDIT_KEY) { try { sessionStorage.setItem("enduring_edit","1"); } catch(e){} isOwner = true; applyOwnerUI(); LISTS.forEach(renderList); }
+    else if (k !== null) { alert("That key isn't right."); }
+  }
+});
+window.addEventListener("hashchange", () => {
+  const now = readEditGrant();
+  if (now !== isOwner) { isOwner = now; applyOwnerUI(); LISTS.forEach(renderList); }
+});
+
+function tick(){
+  const now = new Date();
+  document.getElementById("clock").textContent =
+    now.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"}) + " · " +
+    now.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
+}
+tick(); setInterval(tick, 30000);
+
+applyOwnerUI();
+initBackend();
+</script>
+</body>
+</html>
