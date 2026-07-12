@@ -96,6 +96,17 @@
 
   .item { display: flex; align-items: flex-start; gap: 11px; padding: 10px; border-radius: 5px; transition: background 0.15s ease; }
   .item:hover { background: var(--gray-lt); }
+  .drag-handle {
+    flex: 0 0 auto; margin-top: 1px; width: 16px; text-align: center;
+    color: var(--gray-md); cursor: grab; font-size: 15px; line-height: 1.2;
+    user-select: none; opacity: 0; transition: opacity 0.15s ease, color 0.15s ease;
+    touch-action: none;
+  }
+  .item:hover .drag-handle { opacity: 1; }
+  .drag-handle:hover { color: var(--blue); }
+  .drag-handle:active { cursor: grabbing; }
+  .item.dragging { background: var(--white); box-shadow: 0 8px 24px -8px rgba(25,54,97,0.4); opacity: 0.95; border: 1px solid var(--blue); }
+  .item.drop-target { box-shadow: 0 -2px 0 0 var(--blue) inset; }
   .check {
     flex: 0 0 auto; width: 17px; height: 17px; margin-top: 2px; border: 1.5px solid var(--gray);
     border-radius: 4px; cursor: pointer; position: relative; transition: all 0.15s ease; background: var(--white);
@@ -307,6 +318,7 @@ const EDIT_KEY = "bonesbrigade";
 
 const LISTS = ["coop", "brian", "questions", "inbox"];
 let db = null, LIVE = false;
+let drag = null;
 
 function readEditGrant() {
   const h = new URLSearchParams(location.hash.replace(/^#/, ""));
@@ -395,6 +407,8 @@ function renderList(list) {
   const body = document.querySelector(`[data-body="${list}"]`);
   const countEl = document.querySelector(`[data-count="${list}"]`);
   if (!body) return;
+  // Don't redraw the list the user is actively dragging within.
+  if (drag && drag.list === list) return;
   const entries = Object.entries(store[list] || {}).sort((a,b) => (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0));
   const openCount = entries.filter(([_,it]) => !it.done).length;
   if (countEl) countEl.textContent = list === "inbox" ? entries.length : openCount;
@@ -418,7 +432,8 @@ function renderList(list) {
     const isNew = it.source === "public" && !it.reviewed;
     const submitter = it.name ? `<span>added by ${esc(it.name)}</span>` : "";
     const checkCls = "check" + (it.done?" done":"") + (isOwner?"":" readonly");
-    return `<div class="item ${it.done?"done":""}">
+    return `<div class="item ${it.done?"done":""}" data-id="${id}" data-list="${list}">
+      ${isOwner?`<div class="drag-handle" title="Drag to reorder" data-drag="${list}" data-id="${id}">⠿</div>`:""}
       <div class="${checkCls}" ${isOwner?`data-act="toggle" data-list="${list}" data-id="${id}"`:""}></div>
       <div class="item-main">
         <div class="item-text">${esc(it.text)}</div>
@@ -439,6 +454,48 @@ document.addEventListener("click", (e) => {
   if (act === "toggle") updateItem(list, id, { done: !store[list][id].done });
   if (act === "review") updateItem(list, id, { reviewed: true });
   if (act === "remove") removeItem(list, id);
+});
+
+/* ---------- Drag to reorder (owner only, pointer-based: works on desktop + touch) ---------- */
+document.addEventListener("pointerdown", (e) => {
+  if (!isOwner) return;
+  const handle = e.target.closest("[data-drag]");
+  if (!handle) return;
+  e.preventDefault();
+  const item = handle.closest(".item");
+  const listEl = handle.dataset.drag;
+  drag = { list: listEl, id: handle.dataset.id, el: item, startY: e.clientY };
+  item.classList.add("dragging");
+  handle.setPointerCapture(e.pointerId);
+});
+document.addEventListener("pointermove", (e) => {
+  if (!drag) return;
+  const container = document.querySelector(`[data-body="${drag.list}"]`);
+  const siblings = [...container.querySelectorAll(".item")].filter(x => x !== drag.el);
+  container.querySelectorAll(".item").forEach(x => x.classList.remove("drop-target"));
+  let placed = false;
+  for (const sib of siblings) {
+    const r = sib.getBoundingClientRect();
+    if (e.clientY < r.top + r.height / 2) {
+      container.insertBefore(drag.el, sib);
+      placed = true; break;
+    }
+  }
+  if (!placed) container.appendChild(drag.el);
+});
+document.addEventListener("pointerup", () => {
+  if (!drag) return;
+  const container = document.querySelector(`[data-body="${drag.list}"]`);
+  drag.el.classList.remove("dragging");
+  // Write new order for every item in this list based on current DOM position
+  const ids = [...container.querySelectorAll(".item")].map(x => x.dataset.id);
+  ids.forEach((id, i) => {
+    const newOrder = (i + 1) * 1000;
+    if (store[drag.list][id] && store[drag.list][id].order !== newOrder) {
+      updateItem(drag.list, id, { order: newOrder });
+    }
+  });
+  drag = null;
 });
 
 document.querySelectorAll("[data-addbtn]").forEach(btn => {
