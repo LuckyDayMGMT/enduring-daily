@@ -43,7 +43,7 @@
 
   header.masthead { background: var(--blue); color: var(--white); border-bottom: 3px solid var(--black); }
   .mast-inner {
-    max-width: 1180px; margin: 0 auto; padding: 26px 28px 24px;
+    max-width: 1440px; margin: 0 auto; padding: 26px 28px 24px;
     display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap;
   }
   .logo-box {
@@ -76,7 +76,7 @@
   .mode-tag.owner { color: var(--blue); background: var(--white); border-color: var(--white); }
 
   main {
-    max-width: 1180px; margin: 0 auto; padding: 26px 28px 90px;
+    max-width: 1440px; margin: 0 auto; padding: 26px 28px 90px;
     display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
   }
   .col-span { grid-column: 1 / -1; }
@@ -145,6 +145,9 @@
   .btn { font-family: var(--sans); font-size: 13.5px; font-weight: 500; border-radius: 5px; padding: 9px 16px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s ease; white-space: nowrap; }
   .btn.primary { background: var(--blue); color: var(--white); border-color: var(--blue); }
   .btn.primary:hover { background: var(--blue-deep); }
+  .btn.ghost { background: transparent; color: var(--gray-dk); border-color: var(--gray-md); font-size: 12px; padding: 6px 12px; }
+  .btn.ghost:hover { color: var(--black); border-color: var(--gray-dk); }
+  .restore-btn { font-size: 11px; padding: 4px 10px; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
   .form-grid { padding: 16px 18px 18px; display: grid; gap: 12px; }
@@ -168,7 +171,7 @@
 
   footer { background: var(--blue); border-top: 3px solid var(--black); color: #cdd6e4; }
   .foot-inner {
-    max-width: 1180px; margin: 0 auto; padding: 16px 28px; display: flex; align-items: center;
+    max-width: 1440px; margin: 0 auto; padding: 16px 28px; display: flex; align-items: center;
     justify-content: space-between; gap: 14px; flex-wrap: wrap; font-size: 11.5px;
   }
   .foot-logo { font-family: var(--serif); letter-spacing: 2.5px; color: var(--white); font-size: 13px; }
@@ -284,6 +287,16 @@
     </div>
     <div class="card-body" data-body="inbox"></div>
   </section>
+
+  <section class="card col-span owner-only" id="trashCard" hidden>
+    <div class="card-head clay">
+      <div class="card-title">Recently Deleted</div>
+      <div class="card-sub" style="flex:1">Restore anything you removed by mistake</div>
+      <div class="count" id="trashCount">0</div>
+      <button class="btn ghost" id="purgeBtn" style="margin-left:8px">Empty</button>
+    </div>
+    <div class="card-body" id="trashBody"></div>
+  </section>
 </main>
 
 <footer>
@@ -363,7 +376,7 @@ function initBackend() {
           .catch(err => console.warn("Auth sign-in failed:", err));
       }
       LISTS.forEach(list => {
-        db.ref("board/" + list).on("value", snap => { store[list] = snap.val() || {}; renderList(list); });
+        db.ref("board/" + list).on("value", snap => { store[list] = snap.val() || {}; renderList(list); renderTrash(); });
       });
       setSync(true, "Live");
       return;
@@ -392,6 +405,25 @@ function removeItem(list, id) {
   if (LIVE) { db.ref("board/" + list + "/" + id).remove(); }
   else { delete store[list][id]; renderList(list); }
 }
+// Soft delete: hide from view but keep recoverable
+function softDelete(list, id) {
+  updateItem(list, id, { deleted: true, deletedAt: Date.now() });
+  renderTrash();
+}
+function restoreItem(list, id) {
+  updateItem(list, id, { deleted: false, deletedAt: null });
+  renderTrash();
+}
+// Permanently remove everything in the trash
+function purgeTrash() {
+  let n = 0;
+  ["coop","brian","questions","inbox"].forEach(list => {
+    Object.entries(store[list] || {}).forEach(([id, it]) => {
+      if (it.deleted) { removeItem(list, id); n++; }
+    });
+  });
+  renderTrash();
+}
 
 function esc(s){ return (s||"").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function ago(ts){
@@ -409,7 +441,14 @@ function renderList(list) {
   if (!body) return;
   // Don't redraw the list the user is actively dragging within.
   if (drag && drag.list === list) return;
-  const entries = Object.entries(store[list] || {}).sort((a,b) => (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0));
+  const entries = Object.entries(store[list] || {})
+    .filter(([_, it]) => !it.deleted)
+    .sort((a,b) => {
+      // open items first, checked items sink to the bottom
+      const da = a[1].done ? 1 : 0, dbn = b[1].done ? 1 : 0;
+      if (da !== dbn) return da - dbn;
+      return (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0);
+    });
   const openCount = entries.filter(([_,it]) => !it.done).length;
   if (countEl) countEl.textContent = list === "inbox" ? entries.length : openCount;
 
@@ -447,13 +486,51 @@ function renderList(list) {
   }).join("");
 }
 
+const LIST_LABELS = { coop: "Coop", brian: "Brian", questions: "Questions", inbox: "Inbox" };
+function renderTrash() {
+  const card = document.getElementById("trashCard");
+  const body = document.getElementById("trashBody");
+  const countEl = document.getElementById("trashCount");
+  if (!body || !isOwner) { if (card) card.hidden = true; return; }
+  const deleted = [];
+  ["coop","brian","questions","inbox"].forEach(list => {
+    Object.entries(store[list] || {}).forEach(([id, it]) => {
+      if (it.deleted) deleted.push({ list, id, it });
+    });
+  });
+  deleted.sort((a,b) => (b.it.deletedAt||0) - (a.it.deletedAt||0));
+  card.hidden = deleted.length === 0;
+  countEl.textContent = deleted.length;
+  if (!deleted.length) { body.innerHTML = ""; return; }
+  body.innerHTML = deleted.map(({list, id, it}) => `
+    <div class="item">
+      <div class="item-main">
+        <div class="item-text">${esc(it.text)}</div>
+        <div class="item-meta"><span class="pill">${LIST_LABELS[list]||list}</span><span>deleted ${ago(it.deletedAt)}</span></div>
+      </div>
+      <div class="item-actions" style="opacity:1">
+        <button class="btn ghost restore-btn" data-restore="${list}" data-id="${id}">Restore</button>
+      </div>
+    </div>`).join("");
+}
+
 document.addEventListener("click", (e) => {
   const el = e.target.closest("[data-act]");
   if (!el || !isOwner) return;
   const { act, list, id } = el.dataset;
   if (act === "toggle") updateItem(list, id, { done: !store[list][id].done });
   if (act === "review") updateItem(list, id, { reviewed: true });
-  if (act === "remove") removeItem(list, id);
+  if (act === "remove") softDelete(list, id);
+});
+
+// Restore / purge handlers for the Recently Deleted drawer
+document.addEventListener("click", (e) => {
+  if (!isOwner) return;
+  const r = e.target.closest("[data-restore]");
+  if (r) { restoreItem(r.dataset.restore, r.dataset.id); return; }
+  if (e.target.id === "purgeBtn") {
+    if (confirm("Permanently delete everything in Recently Deleted? This can't be undone.")) purgeTrash();
+  }
 });
 
 /* ---------- Drag to reorder (owner only, pointer-based: works on desktop + touch) ---------- */
@@ -549,6 +626,7 @@ function applyOwnerUI() {
   if (isOwner) { tag.textContent = "Editing unlocked"; tag.className = "mode-tag owner"; }
   else { tag.textContent = "Read-only view"; tag.className = "mode-tag"; }
   document.getElementById("lockHint").textContent = isOwner ? "Editing on — lock this device" : "Owner? Unlock editing →";
+  renderTrash();
 }
 document.getElementById("lockHint").addEventListener("click", () => {
   if (isOwner) {
