@@ -43,7 +43,7 @@
 
   header.masthead { background: var(--blue); color: var(--white); border-bottom: 3px solid var(--black); }
   .mast-inner {
-    max-width: 1440px; margin: 0 auto; padding: 26px 28px 24px;
+    max-width: 1800px; margin: 0 auto; padding: 26px 28px 24px;
     display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap;
   }
   .logo-box {
@@ -76,7 +76,7 @@
   .mode-tag.owner { color: var(--blue); background: var(--white); border-color: var(--white); }
 
   main {
-    max-width: 1440px; margin: 0 auto; padding: 26px 28px 90px;
+    max-width: 1800px; margin: 0 auto; padding: 26px 28px 90px;
     display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
   }
   .col-span { grid-column: 1 / -1; }
@@ -172,7 +172,7 @@
 
   footer { background: var(--blue); border-top: 3px solid var(--black); color: #cdd6e4; }
   .foot-inner {
-    max-width: 1440px; margin: 0 auto; padding: 16px 28px; display: flex; align-items: center;
+    max-width: 1800px; margin: 0 auto; padding: 16px 28px; display: flex; align-items: center;
     justify-content: space-between; gap: 14px; flex-wrap: wrap; font-size: 11.5px;
   }
   .foot-logo { font-family: var(--serif); letter-spacing: 2.5px; color: var(--white); font-size: 13px; }
@@ -279,9 +279,9 @@
 </header>
 
 <main>
-  <section class="card col-span" data-list="coop">
+  <section class="card" data-list="coop">
     <div class="card-head">
-      <div class="card-title">Coop — Active Work</div>
+      <div class="card-title">Coop — Active Items</div>
       <div class="count" data-count="coop">0</div>
     </div>
     <div class="card-body" data-body="coop"></div>
@@ -291,9 +291,9 @@
     </div>
   </section>
 
-  <section class="card col-span" data-list="brian">
+  <section class="card" data-list="brian">
     <div class="card-head sage">
-      <div class="card-title">Brian — AI Intern Queue</div>
+      <div class="card-title">Brian — Active Items</div>
       <div class="count" data-count="brian">0</div>
     </div>
     <div class="card-body" data-body="brian"></div>
@@ -305,7 +305,7 @@
 
   <section class="card col-span" data-list="questions">
     <div class="card-head clay">
-      <div class="card-title">Open Questions</div>
+      <div class="card-title">Questions</div>
       <div class="card-sub" style="flex:1">Running list — things I'm chasing an answer on</div>
       <div class="count" data-count="questions">0</div>
     </div>
@@ -354,15 +354,6 @@
     </div>
   </section>
 
-  <section class="card col-span owner-only" data-list="inbox" hidden>
-    <div class="card-head">
-      <div class="card-title">Coop’s Inbox</div>
-      <div class="card-sub" style="flex:1">Questions submitted through the board</div>
-      <div class="count" data-count="inbox">0</div>
-    </div>
-    <div class="card-body" data-body="inbox"></div>
-  </section>
-
   <section class="card col-span owner-only" id="trashCard" hidden>
     <div class="card-head clay">
       <div class="card-title">Recently Deleted</div>
@@ -405,7 +396,7 @@ const OWNER_UID = "pvnOeV3RdLOIcdTAZEwCR0cEke72";
 const ALLOWED_DOMAIN = "enduring.co";
 /* ============================================================ */
 
-const LISTS = ["coop", "brian", "questions", "inbox", "queue"];
+const LISTS = ["coop", "brian", "questions", "queue"];
 let db = null, LIVE = false;
 let drag = null;
 let isOwner = false;
@@ -523,7 +514,7 @@ function restoreItem(list, id) {
 // Permanently remove everything in the trash
 function purgeTrash() {
   let n = 0;
-  ["coop","brian","questions","inbox"].forEach(list => {
+  ["coop","brian","questions","queue"].forEach(list => {
     Object.entries(store[list] || {}).forEach(([id, it]) => {
       if (it.deleted) { removeItem(list, id); n++; }
     });
@@ -628,24 +619,15 @@ function renderList(list) {
       return (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0);
     });
   const openCount = entries.filter(([_,it]) => !it.done).length;
-  if (countEl) countEl.textContent = list === "inbox" ? entries.length : openCount;
+  if (countEl) countEl.textContent = openCount;
 
   if (!entries.length) {
-    const msg = { coop:"Nothing active yet.", brian:"Brian's queue is clear.", questions:"No open questions.", inbox:"Nothing in your inbox." }[list] || "Empty.";
+    const msg = { coop:"Nothing active yet.", brian:"Brian's list is clear.", questions:"No open questions." }[list] || "Empty.";
     body.innerHTML = `<div class="empty">${msg}</div>`;
     return;
   }
 
   body.innerHTML = entries.map(([id, it]) => {
-    if (list === "inbox") {
-      return `<div class="item">
-        <div class="item-main">
-          <div class="item-text">${esc(it.text)}</div>
-          <div class="item-meta"><span>${esc(it.name||"Anonymous")}</span>${it.email?`<span>${esc(it.email)}</span>`:""}<span>${ago(it.ts)}</span></div>
-        </div>
-        ${isOwner?`<div class="item-actions"><button class="iconbtn danger" title="Clear" data-act="remove" data-list="${list}" data-id="${id}">✕</button></div>`:""}
-      </div>`;
-    }
     const submitter = it.name ? `<span>added by ${esc(it.name)}</span>` : "";
     const checkCls = "check" + (it.done?" done":"") + (isOwner?"":" readonly");
     return `<div class="item ${it.done?"done":""}" data-id="${id}" data-list="${list}">
@@ -663,14 +645,14 @@ function renderList(list) {
   }).join("");
 }
 
-const LIST_LABELS = { coop: "Coop", brian: "Brian", questions: "Questions", inbox: "Inbox" };
+const LIST_LABELS = { coop: "Coop", brian: "Brian", questions: "Questions", queue: "Queue" };
 function renderTrash() {
   const card = document.getElementById("trashCard");
   const body = document.getElementById("trashBody");
   const countEl = document.getElementById("trashCount");
   if (!body || !isOwner) { if (card) card.hidden = true; return; }
   const deleted = [];
-  ["coop","brian","questions","inbox"].forEach(list => {
+  ["coop","brian","questions","queue"].forEach(list => {
     Object.entries(store[list] || {}).forEach(([id, it]) => {
       if (it.deleted) deleted.push({ list, id, it });
     });
