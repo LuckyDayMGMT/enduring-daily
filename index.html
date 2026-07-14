@@ -136,6 +136,7 @@
   .empty { padding: 22px 12px; color: var(--gray-dk); font-size: 13.5px; font-weight: 300; text-align: center; }
 
   .quick-add { display: flex; gap: 8px; padding: 10px 12px 13px; border-top: 1px solid var(--line); }
+  [hidden] { display: none !important; }
   .quick-add input {
     flex: 1; background: var(--white); border: 1px solid var(--gray-md); color: var(--ink);
     border-radius: 5px; padding: 9px 12px; font-size: 14px; font-family: var(--sans);
@@ -278,7 +279,7 @@
 </header>
 
 <main>
-  <section class="card" data-list="coop">
+  <section class="card col-span" data-list="coop">
     <div class="card-head">
       <div class="card-title">Coop — Active Work</div>
       <div class="count" data-count="coop">0</div>
@@ -290,7 +291,7 @@
     </div>
   </section>
 
-  <section class="card" data-list="brian">
+  <section class="card col-span" data-list="brian">
     <div class="card-head sage">
       <div class="card-title">Brian — AI Intern Queue</div>
       <div class="count" data-count="brian">0</div>
@@ -353,19 +354,6 @@
     </div>
   </section>
 
-  <section class="card col-span" data-list="notes">
-    <div class="card-head sage">
-      <div class="card-title">General Notes</div>
-      <div class="card-sub" style="flex:1">Anything not tied to a specific item</div>
-      <div class="count" data-count="notes">0</div>
-    </div>
-    <div class="card-body" data-body="notes"></div>
-    <div class="quick-add" data-add="notes">
-      <input type="text" placeholder="Leave a note for the team…" data-input="notes" />
-      <button class="btn primary" data-addbtn="notes">Post</button>
-    </div>
-  </section>
-
   <section class="card col-span owner-only" data-list="inbox" hidden>
     <div class="card-head">
       <div class="card-title">Coop’s Inbox</div>
@@ -413,12 +401,11 @@ const FIREBASE_CONFIG = {
 };
 
 /* Owner UID — full edit rights. Everyone else on the domain is view + notes. */
-const OWNER_UID = "9HvKJaB5T5aCErcIw54dTyzcNQC2";
+const OWNER_UID = "pvnOeV3RdLOIcdTAZEwCR0cEke72";
 const ALLOWED_DOMAIN = "enduring.co";
 /* ============================================================ */
 
-const LISTS = ["coop", "brian", "questions", "inbox", "queue", "notes"];
-const ITEM_LISTS = ["coop", "brian", "questions", "inbox"];
+const LISTS = ["coop", "brian", "questions", "inbox", "queue"];
 let db = null, LIVE = false;
 let drag = null;
 let isOwner = false;
@@ -625,28 +612,8 @@ function renderQueue() {
   }).join("");
 }
 
-function renderNotesLane() {
-  const body = document.querySelector('[data-body="notes"]');
-  const countEl = document.querySelector('[data-count="notes"]');
-  if (!body) return;
-  const entries = Object.entries(store.notes || {})
-    .filter(([_, it]) => !it.deleted)
-    .sort((a,b) => (b[1].ts||0)-(a[1].ts||0));
-  if (countEl) countEl.textContent = entries.length;
-  if (!entries.length) { body.innerHTML = `<div class="empty">No notes yet.</div>`; return; }
-  body.innerHTML = entries.map(([id, it]) => `
-    <div class="item">
-      <div class="item-main">
-        <div class="item-text">${esc(it.text)}</div>
-        <div class="item-meta"><span>${esc(it.author||"Someone")}</span><span>${ago(it.ts)}</span></div>
-      </div>
-      ${isOwner?`<div class="item-actions"><button class="iconbtn danger" title="Delete" data-act="remove" data-list="notes" data-id="${id}">✕</button></div>`:""}
-    </div>`).join("");
-}
-
 function renderList(list) {
   if (list === "queue") return renderQueue();
-  if (list === "notes") return renderNotesLane();
   const body = document.querySelector(`[data-body="${list}"]`);
   const countEl = document.querySelector(`[data-count="${list}"]`);
   if (!body) return;
@@ -844,13 +811,8 @@ document.querySelectorAll("[data-addbtn]").forEach(btn => {
   const input = document.querySelector(`[data-input="${list}"]`);
   const submit = () => {
     const t = input.value.trim();
-    if (!t || !ME) return;
-    if (list === "notes") {
-      pushItem("notes", { text: t, ts: Date.now(), order: Date.now(), author: ME.name, uid: ME.uid });
-    } else {
-      if (!isOwner) return;
-      pushItem(list, { text: t, done: false, ts: Date.now(), order: Date.now(), source: "owner", reviewed: true });
-    }
+    if (!t || !isOwner) return;
+    pushItem(list, { text: t, done: false, ts: Date.now(), order: Date.now(), source: "owner", reviewed: true });
     input.value = ""; input.focus();
   };
   btn.addEventListener("click", submit);
