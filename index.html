@@ -213,25 +213,91 @@
     font-family: var(--sans); padding: 2px 0; margin-top: 4px; text-align: left; }
   .note-toggle:hover { color: var(--blue); }
 
-  /* ---- Gateway queue lane ---- */
-  .q-row { display: flex; align-items: center; gap: 11px; padding: 9px 10px; border-radius: 5px; }
-  .q-row:hover { background: var(--gray-lt); }
-  .q-rank { flex: 0 0 auto; width: 22px; font-family: var(--serif); font-size: 15px; color: var(--blue); text-align: right; }
-  .q-main { flex: 1; min-width: 0; }
-  .q-name { font-size: 14px; color: var(--ink); }
-  .q-meta { margin-top: 2px; font-size: 10.5px; color: var(--gray-dk); display: flex; gap: 9px; flex-wrap: wrap; align-items: center; }
-  .q-tags { flex: 0 0 auto; display: flex; gap: 6px; align-items: center; }
-  .tier { font-weight: 900; font-size: 9px; letter-spacing: .8px; padding: 2px 7px; border-radius: 999px; color: var(--white); }
-  .tier.p1 { background: #0F6E56; } .tier.p2 { background: #185FA5; } .tier.p3 { background: #854F0B; }
-  .tier.p4 { background: #993C1D; } .tier.p5 { background: #791F1F; }
-  .st { font-size: 9.5px; font-weight: 900; letter-spacing: .7px; text-transform: uppercase; color: var(--gray-dk); border: 1px solid var(--gray-md); border-radius: 999px; padding: 2px 8px; }
-  .ceil { font-size: 9px; font-weight: 900; letter-spacing: .7px; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--black); color: var(--black); }
-  .q-form { padding: 12px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
-  .q-form .qf-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; }
-  @media (max-width: 720px) { .q-form .qf-grid { grid-template-columns: 1fr 1fr; } }
-  .q-form input, .q-form select { background: var(--white); border: 1px solid var(--gray-md); border-radius: 5px;
-    padding: 8px 10px; font-size: 13px; font-family: var(--sans); color: var(--ink); width: 100%; }
-  .q-form input:focus, .q-form select:focus { outline: none; border-color: var(--blue); }
+  /* ---- Project tracker ---- */
+  .legend { display: flex; gap: 12px; align-items: center; margin-right: 14px; }
+  .lg { font-size: 10px; font-weight: 500; color: var(--gray-dk); display: inline-flex; align-items: center; gap: 4px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .dot.red { background: #993C1D; } .dot.yellow { background: #C9A227; }
+  .dot.blue { background: #185FA5; } .dot.green { background: #0F6E56; }
+
+  .proj { border-bottom: 1px solid var(--line); padding: 10px 10px 12px; }
+  .proj:last-child { border-bottom: none; }
+  .proj.complete { opacity: 0.45; }
+  .proj.complete .p-name { text-decoration: line-through; }
+  .p-head { display: flex; align-items: center; gap: 10px; }
+  .p-check { flex: 0 0 auto; width: 19px; height: 19px; border: 2px solid var(--gray-md); border-radius: 4px;
+    cursor: pointer; display: grid; place-items: center; font-size: 12px; color: transparent; background: var(--white); }
+  .p-check.on { background: var(--blue); border-color: var(--blue); color: var(--white); }
+  .p-check.readonly { cursor: default; }
+  .p-name { font-family: var(--serif); font-size: 17px; color: var(--navy, #193661); flex: 0 1 auto; min-width: 0; }
+  .p-chips { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-left: auto; }
+  .chip { font-size: 9.5px; font-weight: 900; letter-spacing: .6px; padding: 3px 8px; border-radius: 999px;
+    border: 1px solid var(--gray-md); color: var(--gray-dk); background: var(--white); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 3px; }
+  a.chip:hover { border-color: var(--blue); color: var(--blue); }
+  .chip.drive { border-color: var(--blue); color: var(--blue); }
+  .chip.launch { border-style: dashed; }
+  .chip.click { cursor: pointer; }
+  .p-body { margin-top: 8px; padding-left: 29px; }
+  .sub { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 5px; }
+  .sub:hover { background: var(--gray-lt); }
+  .s-dot { flex: 0 0 auto; width: 13px; height: 13px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15); }
+  .s-dot.click { cursor: pointer; }
+  .s-dot.red { background: #993C1D; } .s-dot.yellow { background: #C9A227; }
+  .s-dot.blue { background: #185FA5; } .s-dot.green { background: #0F6E56; }
+  .s-text { flex: 1; min-width: 0; font-size: 13.5px; color: var(--ink); }
+  .proj.complete .s-text { text-decoration: line-through; }
+  .ini { flex: 0 0 auto; width: 34px; text-align: center; }
+  .ini input { width: 34px; text-align: center; text-transform: uppercase; font-size: 11px; font-weight: 700;
+    color: var(--navy, #193661); background: var(--white); border: 1px solid var(--gray-md); border-radius: 4px;
+    padding: 3px 0; font-family: var(--sans); }
+  .ini input:focus { outline: none; border-color: var(--blue); }
+  .ini input:disabled { background: var(--gray-lt); color: var(--gray-dk); border-color: var(--line); }
+  .ini-h { flex: 0 0 auto; width: 34px; text-align: center; font-size: 8.5px; font-weight: 900;
+    letter-spacing: .5px; color: var(--gray); text-transform: uppercase; }
+  .s-cols { display: flex; align-items: center; gap: 8px; padding: 0 6px 2px; }
+  .s-cols .spacer { flex: 1; }
+  .s-arrows { flex: 0 0 auto; display: flex; gap: 2px; }
+  .s-arrows button, .s-del { background: none; border: none; cursor: pointer; color: var(--gray);
+    font-size: 12px; padding: 0 3px; font-family: var(--sans); }
+  .s-arrows button:hover, .s-del:hover { color: var(--blue); }
+  .s-del:hover { color: var(--black); }
+  .sub-add { display: flex; gap: 6px; margin-top: 5px; }
+  .sub-add input { flex: 1; background: var(--white); border: 1px solid var(--gray-md); border-radius: 4px;
+    padding: 5px 9px; font-size: 12.5px; font-family: var(--sans); }
+  .sub-add input:focus { outline: none; border-color: var(--blue); }
+  .sub-add button { font-size: 11px; padding: 4px 10px; }
+  .p-form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+  .p-form input { background: var(--white); border: 1px solid var(--gray-md); border-radius: 5px;
+    padding: 8px 10px; font-size: 13px; font-family: var(--sans); min-width: 140px; }
+  .p-form input:focus { outline: none; border-color: var(--blue); }
+
+  /* ---- Gantt ---- */
+  .p-date { display: flex; flex-direction: column; gap: 2px; font-size: 9px; font-weight: 900;
+    letter-spacing: .5px; color: var(--gray-dk); text-transform: uppercase; }
+  .p-date input { font-size: 12.5px; padding: 6px 8px; }
+  .gantt { padding: 6px 4px 10px; }
+  .g-months { display: flex; margin-left: 260px; border-bottom: 1px solid var(--line); }
+  .g-month { flex: 1; font-size: 9.5px; font-weight: 900; letter-spacing: .5px; color: var(--gray-dk);
+    text-transform: uppercase; padding: 4px 0 5px; border-left: 1px solid var(--line); text-align: center;
+    white-space: nowrap; overflow: hidden; }
+  .g-row { display: flex; align-items: center; min-height: 30px; }
+  .g-label { flex: 0 0 260px; font-size: 13px; color: var(--ink); padding-right: 12px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .g-row.complete .g-label { color: var(--gray); text-decoration: line-through; }
+  .g-track { flex: 1; position: relative; height: 30px; background:
+    repeating-linear-gradient(to right, transparent, transparent calc(100% / var(--gm) - 1px), var(--line) calc(100% / var(--gm) - 1px), var(--line) calc(100% / var(--gm))); }
+  .g-bar { position: absolute; top: 7px; height: 16px; border-radius: 4px; background: var(--blue); min-width: 8px; }
+  .g-bar .g-cap { position: absolute; right: -4px; top: -14px; font-size: 8.5px; font-weight: 900;
+    color: var(--gray-dk); letter-spacing: .4px; white-space: nowrap; }
+  .g-row.complete .g-bar { background: var(--gray-md); }
+  .g-today { position: absolute; top: 0; bottom: 0; width: 2px; background: #993C1D; z-index: 2; }
+  .g-today::after { content: "TODAY"; position: absolute; top: -1px; left: 4px; font-size: 8px;
+    font-weight: 900; color: #993C1D; letter-spacing: .5px; }
+  .g-wrap { position: relative; }
+  .g-unsched { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--line);
+    font-size: 12px; color: var(--gray-dk); }
+  .g-unsched b { color: var(--navy, #193661); font-weight: 700; }
 
   /* ---- Stage doc badges ---- */
   .stages { flex: 0 0 auto; display: flex; gap: 4px; align-items: center; }
@@ -279,27 +345,25 @@
 </header>
 
 <main>
-  <section class="card" data-list="coop">
+  <section class="card col-span" data-list="projects">
     <div class="card-head">
-      <div class="card-title">Coop — Active Items</div>
-      <div class="count" data-count="coop">0</div>
+      <div class="card-title">Projects</div>
+      <div class="card-sub" style="flex:1">Ranked portfolio tracker · gated through The Gateway</div>
+      <div class="legend">
+        <span class="lg"><i class="dot red"></i>Not started</span>
+        <span class="lg"><i class="dot yellow"></i>Working</span>
+        <span class="lg"><i class="dot blue"></i>Stuck</span>
+        <span class="lg"><i class="dot green"></i>Done</span>
+      </div>
+      <div class="count" data-count="projects">0</div>
     </div>
-    <div class="card-body" data-body="coop"></div>
-    <div class="quick-add owner-only" data-add="coop" hidden>
-      <input type="text" placeholder="Add to your active work…" data-input="coop" />
-      <button class="btn primary" data-addbtn="coop">Add</button>
-    </div>
-  </section>
-
-  <section class="card" data-list="brian">
-    <div class="card-head sage">
-      <div class="card-title">Brian — Active Items</div>
-      <div class="count" data-count="brian">0</div>
-    </div>
-    <div class="card-body" data-body="brian"></div>
-    <div class="quick-add owner-only" data-add="brian" hidden>
-      <input type="text" placeholder="Assign a task to Brian…" data-input="brian" />
-      <button class="btn primary" data-addbtn="brian">Add</button>
+    <div class="card-body" data-body="projects"></div>
+    <div class="p-form owner-only" hidden>
+      <input type="text" id="p_name" placeholder="New project name" style="flex:2" />
+      <input type="text" id="p_drive" placeholder="Google Drive folder URL (optional)" style="flex:2" />
+      <label class="p-date"><span>Start</span><input type="date" id="p_start" /></label>
+      <label class="p-date"><span>Est. launch</span><input type="date" id="p_launch" /></label>
+      <button class="btn primary" id="p_add">Add project</button>
     </div>
   </section>
 
@@ -316,42 +380,12 @@
     </div>
   </section>
 
-  <section class="card col-span" data-list="queue">
-    <div class="card-head">
-      <div class="card-title">The Gateway — Project Queue</div>
-      <div class="card-sub" style="flex:1">Ranked portfolio priority · scored through The Gateway</div>
-      <div class="count" data-count="queue">0</div>
+  <section class="card col-span">
+    <div class="card-head sage">
+      <div class="card-title">Timeline</div>
+      <div class="card-sub" style="flex:1">Project schedule · start to estimated launch</div>
     </div>
-    <div class="card-body" data-body="queue"></div>
-    <div class="q-form owner-only" hidden>
-      <div class="qf-grid">
-        <input type="text" id="q_name" placeholder="Project name" />
-        <select id="q_co">
-          <option value="HoldCo">HoldCo</option><option value="KoSA">KoSA</option>
-          <option value="AllRec">AllRec Awards</option><option value="School Apparel">School Apparel</option>
-          <option value="Multiple">Multiple</option>
-        </select>
-        <select id="q_tier">
-          <option value="P1">P1 — Accelerate</option><option value="P2">P2 — Near-Term</option>
-          <option value="P3" selected>P3 — Lower Priority</option><option value="P4">P4 — Validate</option>
-          <option value="P5">P5 — Pause</option>
-        </select>
-        <select id="q_status">
-          <option>Queued</option><option>In Validation</option><option>In Build</option>
-          <option>Live</option><option>Parked</option><option>Declined</option>
-        </select>
-      </div>
-      <div class="qf-grid">
-        <input type="text" id="q_score" placeholder="Score /100" />
-        <input type="text" id="q_dollars" placeholder="Run-rate $/yr" />
-        <select id="q_ceiling">
-          <option value="">Ceiling: Neutral</option>
-          <option value="Blocking">Ceiling: Blocking</option>
-          <option value="Limiting">Ceiling: Limiting</option>
-        </select>
-        <button class="btn primary" id="q_add">Add to queue</button>
-      </div>
-    </div>
+    <div class="card-body" id="ganttBody"></div>
   </section>
 
   <section class="card col-span owner-only" id="trashCard" hidden>
@@ -369,7 +403,7 @@
   <div class="foot-inner">
     <span class="foot-logo">ENDURING</span>
     <span>Enduring Daily · Operations Board</span>
-    <span class="lock-hint" id="lockHint">Owner? Unlock editing →</span>
+    <span class="lock-hint" id="lockHint"></span>
   </div>
 </footer>
 
@@ -396,7 +430,7 @@ const OWNER_UID = "pvnOeV3RdLOIcdTAZEwCR0cEke72";
 const ALLOWED_DOMAIN = "enduring.co";
 /* ============================================================ */
 
-const LISTS = ["coop", "brian", "questions", "queue"];
+const LISTS = ["questions", "projects"];
 let db = null, LIVE = false;
 let drag = null;
 let isOwner = false;
@@ -514,7 +548,7 @@ function restoreItem(list, id) {
 // Permanently remove everything in the trash
 function purgeTrash() {
   let n = 0;
-  ["coop","brian","questions","queue"].forEach(list => {
+  ["questions","projects"].forEach(list => {
     Object.entries(store[list] || {}).forEach(([id, it]) => {
       if (it.deleted) { removeItem(list, id); n++; }
     });
@@ -566,45 +600,140 @@ function stageBadge(id, stage, state, url) {
     : `<span class="${cls}" title="${title}">${label}${s==="na"?" —":""}</span>`;
 }
 
-function renderQueue() {
-  const body = document.querySelector('[data-body="queue"]');
-  const countEl = document.querySelector('[data-count="queue"]');
+const STATUS_CYCLE = ["red", "yellow", "blue", "green"];
+
+function subRow(pid, sid, s, canEdit, ownerCtl) {
+  const st = STATUS_CYCLE.includes(s.status) ? s.status : "red";
+  return `<div class="sub" data-sid="${sid}">
+    <span class="s-dot ${st}${canEdit ? " click" : ""}" ${canEdit ? `data-act="substatus" data-pid="${pid}" data-sid="${sid}"` : ""} title="${st}"></span>
+    <div class="s-text">${esc(s.text)}</div>
+    <div class="ini"><input maxlength="3" value="${esc(s.driver || "")}" placeholder="—" ${canEdit ? `data-ini="driver" data-pid="${pid}" data-sid="${sid}"` : "disabled"} /></div>
+    <div class="ini"><input maxlength="3" value="${esc(s.approved || "")}" placeholder="—" ${canEdit ? `data-ini="approved" data-pid="${pid}" data-sid="${sid}"` : "disabled"} /></div>
+    ${ownerCtl ? `<div class="s-arrows">
+      <button data-act="subup" data-pid="${pid}" data-sid="${sid}" title="Move up">▴</button>
+      <button data-act="subdown" data-pid="${pid}" data-sid="${sid}" title="Move down">▾</button>
+    </div>
+    <button class="s-del" data-act="subdel" data-pid="${pid}" data-sid="${sid}" title="Delete">✕</button>` : ""}
+  </div>`;
+}
+
+
+// ---- Date helpers + Gantt ----
+const MON = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+function parseISO(s) { if (!s || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; const d = new Date(s + "T00:00:00"); return isNaN(d) ? null : d; }
+function fmtMonth(s) { const d = parseISO(s); return d ? MON[d.getMonth()] + " " + d.getFullYear() : esc(String(s).toUpperCase()); }
+function fmtMonthDay(s) { const d = parseISO(s); return d ? MON[d.getMonth()] + " " + d.getDate() : esc(String(s).toUpperCase()); }
+
+function renderGantt() {
+  const body = document.getElementById("ganttBody");
   if (!body) return;
-  if (drag && drag.list === "queue") return;
-  const entries = Object.entries(store.queue || {})
-    .filter(([_, it]) => !it.deleted)
-    .sort((a,b) => (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0));
-  if (countEl) countEl.textContent = entries.length;
-  if (!entries.length) { body.innerHTML = `<div class="empty">No projects scored yet.</div>`; return; }
-  body.innerHTML = entries.map(([id, it], i) => {
-    const tier = (it.tier || "P3").toLowerCase();
-    const money = it.dollars ? `<span>$${Number(it.dollars).toLocaleString("en-US")}/yr</span>` : "";
-    const score = it.score ? `<span>${esc(String(it.score))}/100</span>` : "";
-    const ceil = it.ceiling ? `<span class="ceil">${esc(it.ceiling)}</span>` : "";
-    return `<div class="q-row" data-id="${id}" data-list="queue">
-      ${isOwner?`<div class="drag-handle" title="Drag to re-rank" data-drag="queue" data-id="${id}">⠿</div>`:""}
-      <div class="q-rank">${i+1}</div>
-      <div class="q-main">
-        <div class="q-name">${esc(it.text)}</div>
-        <div class="q-meta"><span>${esc(it.co||"")}</span>${score}${money}</div>
-        ${notesHTML("queue", id, it)}
+  const projs = Object.entries(store.projects || {})
+    .filter(([_, p]) => !p.deleted)
+    .sort((a, b) => {
+      const ca = a[1].complete ? 1 : 0, cb = b[1].complete ? 1 : 0;
+      if (ca !== cb) return ca - cb;
+      return (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0);
+    });
+  const scheduled = [], unscheduled = [];
+  projs.forEach(([pid, p]) => {
+    const start = parseISO(p.start) || (p.launch ? new Date(p.ts) : null);
+    const end = parseISO(p.launch);
+    if (start && end && end > start) scheduled.push({ pid, p, start, end });
+    else unscheduled.push(p.text);
+  });
+  if (!scheduled.length) {
+    body.innerHTML = `<div class="empty">No scheduled projects yet. Set a start and launch date to plot them.</div>` +
+      (unscheduled.length ? `<div class="g-unsched"><b>Unscheduled:</b> ${unscheduled.map(esc).join(" \u00b7 ")}</div>` : "");
+    return;
+  }
+  // Range: month boundaries, padded
+  let min = new Date(Math.min(...scheduled.map(x => x.start)));
+  let max = new Date(Math.max(...scheduled.map(x => x.end)));
+  min = new Date(min.getFullYear(), min.getMonth(), 1);
+  max = new Date(max.getFullYear(), max.getMonth() + 2, 1);
+  const span = max - min;
+  const months = [];
+  for (let d = new Date(min); d < max; d = new Date(d.getFullYear(), d.getMonth() + 1, 1)) {
+    months.push(MON[d.getMonth()] + (d.getMonth() === 0 || d.getTime() === min.getTime() ? " '" + String(d.getFullYear()).slice(2) : ""));
+  }
+  const now = new Date();
+  const todayPct = now >= min && now <= max ? ((now - min) / span * 100) : null;
+  body.innerHTML = `<div class="gantt">
+    <div class="g-months">${months.map(m => `<div class="g-month">${m}</div>`).join("")}</div>
+    <div class="g-wrap">
+      ${todayPct !== null ? `<div class="g-today" style="left: calc(260px + (100% - 260px) * ${(todayPct / 100).toFixed(4)})"></div>` : ""}
+      ${scheduled.map(({ pid, p, start, end }) => {
+        const l = ((start - min) / span * 100).toFixed(2);
+        const w = Math.max(((end - start) / span * 100), 0.8).toFixed(2);
+        return `<div class="g-row ${p.complete ? "complete" : ""}">
+          <div class="g-label" title="${esc(p.text)}">${esc(p.text)}</div>
+          <div class="g-track" style="--gm:${months.length}">
+            <div class="g-bar" style="left:${l}%; width:${w}%"><span class="g-cap">${fmtMonthDay(p.launch)}</span></div>
+          </div>
+        </div>`;
+      }).join("")}
+    </div>
+    ${unscheduled.length ? `<div class="g-unsched"><b>Unscheduled:</b> ${unscheduled.map(esc).join(" \u00b7 ")}</div>` : ""}
+  </div>`;
+}
+
+function renderProjects() {
+  const body = document.querySelector('[data-body="projects"]');
+  const countEl = document.querySelector('[data-count="projects"]');
+  if (!body) return;
+  if (drag && drag.list === "projects") return;
+  const entries = Object.entries(store.projects || {})
+    .filter(([_, p]) => !p.deleted)
+    .sort((a, b) => {
+      const ca = a[1].complete ? 1 : 0, cb = b[1].complete ? 1 : 0;
+      if (ca !== cb) return ca - cb;
+      return (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0);
+    });
+  if (countEl) countEl.textContent = entries.filter(([_, p]) => !p.complete).length;
+  if (!entries.length) { body.innerHTML = `<div class="empty">No projects yet.</div>`; renderGantt(); return; }
+  const canEdit = !!ME;
+  body.innerHTML = entries.map(([pid, p]) => {
+    const subs = Object.entries(p.subs || {})
+      .sort((a, b) => (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0));
+    const driveChip = p.driveUrl
+      ? `<a class="chip drive" href="${esc(p.driveUrl)}" target="_blank" rel="noopener">DRIVE ↗</a>${isOwner ? `<span class="chip click" data-act="setdrive" data-pid="${pid}" title="Change link">•</span>` : ""}`
+      : (isOwner ? `<span class="chip click" data-act="setdrive" data-pid="${pid}">+ DRIVE</span>` : "");
+    const startChip = p.start
+      ? (isOwner ? `<span class="chip launch click" data-act="setstart" data-pid="${pid}">START: ${fmtMonthDay(p.start)}</span>` : "")
+      : (isOwner ? `<span class="chip launch click" data-act="setstart" data-pid="${pid}">+ START</span>` : "");
+    const launchChip = p.launch
+      ? `<span class="chip launch${isOwner ? " click" : ""}" ${isOwner ? `data-act="setlaunch" data-pid="${pid}"` : ""}>LAUNCH: ${fmtMonth(p.launch)}</span>`
+      : (isOwner ? `<span class="chip launch click" data-act="setlaunch" data-pid="${pid}">+ LAUNCH</span>` : "");
+    return `<div class="proj ${p.complete ? "complete" : ""}" data-id="${pid}" data-list="projects">
+      <div class="p-head">
+        ${isOwner ? `<div class="drag-handle" title="Drag to re-rank" data-drag="projects" data-id="${pid}">⠿</div>` : ""}
+        <span class="p-check ${p.complete ? "on" : ""}${isOwner ? "" : " readonly"}" ${isOwner ? `data-act="pcomplete" data-pid="${pid}"` : ""} title="${p.complete ? "Complete" : "Mark complete"}">✓</span>
+        <div class="p-name">${esc(p.text)}</div>
+        <div class="p-chips">
+          ${driveChip}
+          ${stageBadge(pid, "s1", p.s1, p.s1url)}
+          ${stageBadge(pid, "s2", p.s2, p.s2url)}
+          ${startChip}
+          ${launchChip}
+          ${isOwner ? `<button class="iconbtn danger" title="Remove project" data-act="remove" data-list="projects" data-id="${pid}">✕</button>` : ""}
+        </div>
       </div>
-      <div class="stages">
-        ${stageBadge(id, "s1", it.s1, it.s1url)}
-        ${stageBadge(id, "s2", it.s2, it.s2url)}
+      <div class="p-body">
+        ${subs.length ? `<div class="s-cols"><span style="width:13px"></span><span class="spacer"></span><span class="ini-h">Driver</span><span class="ini-h">Appr</span>${isOwner ? `<span style="width:52px"></span>` : ""}</div>` : ""}
+        ${subs.map(([sid, s]) => subRow(pid, sid, s, canEdit, isOwner)).join("")}
+        ${isOwner ? `<div class="sub-add">
+          <input type="text" placeholder="Add a sub-item…" data-subinput="${pid}" />
+          <button class="btn primary" data-subadd="${pid}">Add</button>
+        </div>` : ""}
+        ${notesHTML("projects", pid, p)}
       </div>
-      <div class="q-tags">
-        ${ceil}
-        <span class="tier ${tier}">${esc(it.tier||"P3")}</span>
-        <span class="st">${esc(it.status||"Queued")}</span>
-      </div>
-      ${isOwner?`<div class="item-actions"><button class="iconbtn danger" title="Remove" data-act="remove" data-list="queue" data-id="${id}">✕</button></div>`:""}
     </div>`;
   }).join("");
+  renderGantt();
 }
 
 function renderList(list) {
-  if (list === "queue") return renderQueue();
+  if (list === "projects") return renderProjects();
   const body = document.querySelector(`[data-body="${list}"]`);
   const countEl = document.querySelector(`[data-count="${list}"]`);
   if (!body) return;
@@ -622,7 +751,7 @@ function renderList(list) {
   if (countEl) countEl.textContent = openCount;
 
   if (!entries.length) {
-    const msg = { coop:"Nothing active yet.", brian:"Brian's list is clear.", questions:"No open questions." }[list] || "Empty.";
+    const msg = { questions:"No open questions." }[list] || "Empty.";
     body.innerHTML = `<div class="empty">${msg}</div>`;
     return;
   }
@@ -645,14 +774,14 @@ function renderList(list) {
   }).join("");
 }
 
-const LIST_LABELS = { coop: "Coop", brian: "Brian", questions: "Questions", queue: "Queue" };
+const LIST_LABELS = { questions: "Questions", projects: "Projects" };
 function renderTrash() {
   const card = document.getElementById("trashCard");
   const body = document.getElementById("trashBody");
   const countEl = document.getElementById("trashCount");
   if (!body || !isOwner) { if (card) card.hidden = true; return; }
   const deleted = [];
-  ["coop","brian","questions","queue"].forEach(list => {
+  ["questions","projects"].forEach(list => {
     Object.entries(store[list] || {}).forEach(([id, it]) => {
       if (it.deleted) deleted.push({ list, id, it });
     });
@@ -686,12 +815,68 @@ document.addEventListener("click", (e) => {
   }
   if (act === "delnote") { delNote(list, id, nid); return; }
 
+  // Sub-item status cycle: any signed-in user
+  if (act === "substatus") {
+    if (!ME) return;
+    const { pid, sid } = el.dataset;
+    const cur = (((store.projects || {})[pid] || {}).subs || {})[sid];
+    if (!cur) return;
+    const next = STATUS_CYCLE[(STATUS_CYCLE.indexOf(cur.status || "red") + 1) % STATUS_CYCLE.length];
+    db.ref(projPath(pid) + "/subs/" + sid + "/status").set(next);
+    return;
+  }
+
   if (!isOwner) return;
+
+  if (act === "pcomplete") {
+    const pid = el.dataset.pid;
+    updateItem("projects", pid, { complete: !(store.projects[pid] || {}).complete });
+    return;
+  }
+  if (act === "setdrive") {
+    const pid = el.dataset.pid;
+    const cur = (store.projects[pid] || {}).driveUrl || "";
+    const url = prompt("Google Drive folder URL for this project:", cur);
+    if (url === null) return;
+    const clean = url.trim();
+    if (clean && !/^https?:\/\//i.test(clean)) { alert("That doesn't look like a URL."); return; }
+    updateItem("projects", pid, { driveUrl: clean || null });
+    return;
+  }
+  if (act === "setlaunch" || act === "setstart") {
+    const pid = el.dataset.pid;
+    const key = act === "setlaunch" ? "launch" : "start";
+    const cur = (store.projects[pid] || {})[key] || "";
+    const v = prompt((key === "launch" ? "Estimated launch" : "Start") + " date (YYYY-MM-DD):", cur);
+    if (v === null) return;
+    const clean = v.trim();
+    if (clean && !/^\d{4}-\d{2}-\d{2}$/.test(clean)) { alert("Use YYYY-MM-DD, e.g. 2026-09-15"); return; }
+    updateItem("projects", pid, { [key]: clean || null });
+    return;
+  }
+  if (act === "subdel") {
+    const { pid, sid } = el.dataset;
+    if (confirm("Delete this sub-item?")) db.ref(projPath(pid) + "/subs/" + sid).remove();
+    return;
+  }
+  if (act === "subup" || act === "subdown") {
+    const { pid, sid } = el.dataset;
+    const subs = Object.entries((store.projects[pid] || {}).subs || {})
+      .sort((a, b) => (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0));
+    const idx = subs.findIndex(([id]) => id === sid);
+    const swap = act === "subup" ? idx - 1 : idx + 1;
+    if (swap < 0 || swap >= subs.length) return;
+    const A = subs[idx], B = subs[swap];
+    const ao = A[1].order ?? A[1].ts, bo = B[1].order ?? B[1].ts;
+    db.ref(projPath(pid) + "/subs/" + A[0] + "/order").set(bo);
+    db.ref(projPath(pid) + "/subs/" + B[0] + "/order").set(ao);
+    return;
+  }
 
   // Cycle a stage badge: todo -> done (asks for Drive link) -> n/a -> todo
   if (act === "stage") {
     const stage = el.dataset.stage;
-    const it = (store.queue || {})[id];
+    const it = (store.projects || {})[id];
     if (!it) return;
     const cur = it[stage] || "todo";
     const patch = {};
@@ -709,7 +894,7 @@ document.addEventListener("click", (e) => {
       patch[stage] = null;
       patch[stage + "url"] = null;
     }
-    updateItem("queue", id, patch);
+    updateItem("projects", id, patch);
     return;
   }
 
@@ -752,7 +937,7 @@ document.addEventListener("pointerdown", (e) => {
   const handle = e.target.closest("[data-drag]");
   if (!handle) return;
   e.preventDefault();
-  const item = handle.closest(".item, .q-row");
+  const item = handle.closest(".item, .proj");
   const listEl = handle.dataset.drag;
   drag = { list: listEl, id: handle.dataset.id, el: item, startY: e.clientY };
   item.classList.add("dragging");
@@ -761,8 +946,8 @@ document.addEventListener("pointerdown", (e) => {
 document.addEventListener("pointermove", (e) => {
   if (!drag) return;
   const container = document.querySelector(`[data-body="${drag.list}"]`);
-  const siblings = [...container.querySelectorAll(".item, .q-row")].filter(x => x !== drag.el);
-  container.querySelectorAll(".item, .q-row").forEach(x => x.classList.remove("drop-target"));
+  const siblings = [...container.querySelectorAll(".item, .proj")].filter(x => x !== drag.el);
+  container.querySelectorAll(".item, .proj").forEach(x => x.classList.remove("drop-target"));
   let placed = false;
   for (const sib of siblings) {
     const r = sib.getBoundingClientRect();
@@ -778,7 +963,7 @@ document.addEventListener("pointerup", () => {
   const container = document.querySelector(`[data-body="${drag.list}"]`);
   drag.el.classList.remove("dragging");
   // Write new order for every item in this list based on current DOM position
-  const ids = [...container.querySelectorAll(".item, .q-row")].map(x => x.dataset.id);
+  const ids = [...container.querySelectorAll(".item, .proj")].map(x => x.dataset.id);
   ids.forEach((id, i) => {
     const newOrder = (i + 1) * 1000;
     if (store[drag.list][id] && store[drag.list][id].order !== newOrder) {
@@ -801,36 +986,61 @@ document.querySelectorAll("[data-addbtn]").forEach(btn => {
   input.addEventListener("keydown", e => { if (e.key === "Enter") submit(); });
 });
 
-// Gateway queue — owner adds a scored project
-document.getElementById("q_add").addEventListener("click", () => {
+// ---- Project tracker handlers ----
+function projPath(pid) { return "board/projects/" + pid; }
+
+document.getElementById("p_add").addEventListener("click", () => {
   if (!isOwner) return;
-  const name = document.getElementById("q_name").value.trim();
+  const name = document.getElementById("p_name").value.trim();
   if (!name) return;
-  const scoreRaw = document.getElementById("q_score").value.trim();
-  const dollarsRaw = document.getElementById("q_dollars").value.replace(/[^0-9.]/g, "");
-  const obj = {
-    text: name,
-    co: document.getElementById("q_co").value,
-    tier: document.getElementById("q_tier").value,
-    status: document.getElementById("q_status").value,
-    ts: Date.now(), order: Date.now()
-  };
-  if (scoreRaw) obj.score = Number(scoreRaw);
-  if (dollarsRaw) obj.dollars = Number(dollarsRaw);
-  const c = document.getElementById("q_ceiling").value;
-  if (c) obj.ceiling = c;
-  pushItem("queue", obj);
-  document.getElementById("q_name").value = "";
-  document.getElementById("q_score").value = "";
-  document.getElementById("q_dollars").value = "";
+  const obj = { text: name, ts: Date.now(), order: Date.now() };
+  const drive = document.getElementById("p_drive").value.trim();
+  const launch = document.getElementById("p_launch").value;
+  if (drive) {
+    if (!/^https?:\/\//i.test(drive)) { alert("Drive link should start with https://"); return; }
+    obj.driveUrl = drive;
+  }
+  const start = document.getElementById("p_start").value;
+  if (start) obj.start = start;
+  if (launch) obj.launch = launch;
+  pushItem("projects", obj);
+  ["p_name","p_drive","p_start","p_launch"].forEach(i => document.getElementById(i).value = "");
 });
+
+// Add a sub-item
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-subadd]");
+  if (!b || !isOwner) return;
+  const pid = b.dataset.subadd;
+  const input = document.querySelector(`[data-subinput="${pid}"]`);
+  if (!input || !input.value.trim()) return;
+  db.ref(projPath(pid) + "/subs").push({ text: input.value.trim(), ts: Date.now(), order: Date.now(), status: "red" });
+  input.value = "";
+});
+document.addEventListener("keydown", (e) => {
+  const i = e.target.closest("[data-subinput]");
+  if (!i || e.key !== "Enter" || !isOwner) return;
+  if (i.value.trim()) {
+    db.ref(projPath(i.dataset.subinput) + "/subs").push({ text: i.value.trim(), ts: Date.now(), order: Date.now(), status: "red" });
+    i.value = "";
+  }
+});
+
+// Driver / Approved initials — any signed-in user
+document.addEventListener("change", (e) => {
+  const i = e.target.closest("[data-ini]");
+  if (!i || !ME) return;
+  const v = i.value.trim().toUpperCase().slice(0, 3);
+  db.ref(projPath(i.dataset.pid) + "/subs/" + i.dataset.sid + "/" + i.dataset.ini).set(v || null);
+});
+
 
 function applyOwnerUI() {
   document.querySelectorAll(".owner-only").forEach(el => { el.hidden = !isOwner; });
   const tag = document.getElementById("modeTag");
   if (isOwner) { tag.textContent = "Owner — full edit"; tag.className = "mode-tag owner"; }
   else { tag.textContent = "View + notes"; tag.className = "mode-tag"; }
-  document.getElementById("lockHint").textContent = isOwner ? "Owner access" : "View + notes";
+  document.getElementById("lockHint").textContent = isOwner ? "Owner access" : "View + status + notes";
   renderTrash();
 }
 
