@@ -267,7 +267,6 @@
     padding: 5px 9px; font-size: 12.5px; font-family: var(--sans); }
   .sub-add input:focus { outline: none; border-color: var(--blue); }
   .sub-add button { font-size: 11px; padding: 4px 10px; }
-  .p-arrows button { font-size: 15px; padding: 0 4px; }
   .p-form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); flex-wrap: wrap; }
   .p-form input { background: var(--white); border: 1px solid var(--gray-md); border-radius: 5px;
     padding: 8px 10px; font-size: 13px; font-family: var(--sans); min-width: 140px; }
@@ -716,11 +715,7 @@ function renderProjects() {
           ${stageBadge(pid, "s2", p.s2, p.s2url)}
           ${startChip}
           ${launchChip}
-          ${isOwner ? `<span class="s-arrows p-arrows">
-            <button data-act="projup" data-pid="${pid}" title="Move up">▴</button>
-            <button data-act="projdown" data-pid="${pid}" title="Move down">▾</button>
-          </span>
-          <button class="iconbtn danger" title="Remove project" data-act="remove" data-list="projects" data-id="${pid}">✕</button>` : ""}
+          ${isOwner ? `<button class="iconbtn danger" title="Remove project" data-act="remove" data-list="projects" data-id="${pid}">✕</button>` : ""}
         </div>
       </div>
       <div class="p-body">
@@ -862,22 +857,6 @@ document.addEventListener("click", (e) => {
   if (act === "subdel") {
     const { pid, sid } = el.dataset;
     if (confirm("Delete this sub-item?")) db.ref(projPath(pid) + "/subs/" + sid).remove();
-    return;
-  }
-  if (act === "projup" || act === "projdown") {
-    const pid = el.dataset.pid;
-    const me = store.projects[pid];
-    if (!me) return;
-    const group = Object.entries(store.projects || {})
-      .filter(([_, p]) => !p.deleted && !!p.complete === !!me.complete)
-      .sort((a, b) => (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0));
-    const idx = group.findIndex(([id]) => id === pid);
-    const swap = act === "projup" ? idx - 1 : idx + 1;
-    if (swap < 0 || swap >= group.length) return;
-    const A = group[idx], B = group[swap];
-    const ao = A[1].order ?? A[1].ts, bo = B[1].order ?? B[1].ts;
-    updateItem("projects", A[0], { order: bo });
-    updateItem("projects", B[0], { order: ao });
     return;
   }
   if (act === "subup" || act === "subdown") {
