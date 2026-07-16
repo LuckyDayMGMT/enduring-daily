@@ -43,7 +43,7 @@
 
   header.masthead { background: var(--blue); color: var(--white); border-bottom: 3px solid var(--black); }
   .mast-inner {
-    max-width: 1800px; margin: 0 auto; padding: 26px 28px 24px;
+    max-width: 1440px; margin: 0 auto; padding: 26px 28px 24px;
     display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap;
   }
   .logo-box {
@@ -76,7 +76,7 @@
   .mode-tag.owner { color: var(--blue); background: var(--white); border-color: var(--white); }
 
   main {
-    max-width: 1800px; margin: 0 auto; padding: 26px 28px 90px;
+    max-width: 1440px; margin: 0 auto; padding: 26px 28px 90px;
     display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
   }
   .col-span { grid-column: 1 / -1; }
@@ -107,6 +107,20 @@
   .drag-handle:active { cursor: grabbing; }
   .item.dragging { background: var(--white); box-shadow: 0 8px 24px -8px rgba(25,54,97,0.4); opacity: 0.95; border: 1px solid var(--blue); }
   .item.drop-target { box-shadow: 0 -2px 0 0 var(--blue) inset; }
+  /* --- Projects & nesting --- */
+  .item.is-project .item-text { font-family: var(--serif); font-size: 16px; color: var(--blue); font-weight: 400; }
+  .item.is-project { border-top: 1px solid var(--line); margin-top: 2px; }
+  .item.is-project:first-child { border-top: none; margin-top: 0; }
+  .children { margin: 0 0 4px 30px; border-left: 2px solid var(--line); padding-left: 4px; }
+  .empty-child { padding: 7px 10px; font-size: 12px; font-weight: 300; color: var(--gray); font-style: italic; }
+  .twisty {
+    flex: 0 0 auto; width: 14px; margin-top: 1px; text-align: center; cursor: pointer;
+    color: var(--gray-dk); font-size: 11px; line-height: 1.6; user-select: none;
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+  .twisty:hover { color: var(--blue); }
+  .twisty.closed { transform: rotate(-90deg); }
+  .drag-spacer { flex: 0 0 auto; width: 16px; }
   .check {
     flex: 0 0 auto; width: 17px; height: 17px; margin-top: 2px; border: 1.5px solid var(--gray);
     border-radius: 4px; cursor: pointer; position: relative; transition: all 0.15s ease; background: var(--white);
@@ -136,13 +150,18 @@
   .empty { padding: 22px 12px; color: var(--gray-dk); font-size: 13.5px; font-weight: 300; text-align: center; }
 
   .quick-add { display: flex; gap: 8px; padding: 10px 12px 13px; border-top: 1px solid var(--line); }
-  [hidden] { display: none !important; }
   .quick-add input {
     flex: 1; background: var(--white); border: 1px solid var(--gray-md); color: var(--ink);
     border-radius: 5px; padding: 9px 12px; font-size: 14px; font-family: var(--sans);
   }
   .quick-add input:focus { outline: none; border-color: var(--blue); }
   .quick-add input::placeholder { color: var(--gray); }
+  .proj-toggle {
+    display: flex; align-items: center; gap: 5px; white-space: nowrap;
+    font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--gray-dk); cursor: pointer; user-select: none;
+  }
+  .proj-toggle input { accent-color: var(--blue); cursor: pointer; }
   .btn { font-family: var(--sans); font-size: 13.5px; font-weight: 500; border-radius: 5px; padding: 9px 16px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s ease; white-space: nowrap; }
   .btn.primary { background: var(--blue); color: var(--white); border-color: var(--blue); }
   .btn.primary:hover { background: var(--blue-deep); }
@@ -172,162 +191,15 @@
 
   footer { background: var(--blue); border-top: 3px solid var(--black); color: #cdd6e4; }
   .foot-inner {
-    max-width: 1800px; margin: 0 auto; padding: 16px 28px; display: flex; align-items: center;
+    max-width: 1440px; margin: 0 auto; padding: 16px 28px; display: flex; align-items: center;
     justify-content: space-between; gap: 14px; flex-wrap: wrap; font-size: 11.5px;
   }
   .foot-logo { font-family: var(--serif); letter-spacing: 2.5px; color: var(--white); font-size: 13px; }
   .lock-hint { font-weight: 900; text-transform: uppercase; letter-spacing: 1px; font-size: 10px; color: #cdd6e4; cursor: pointer; }
   .lock-hint:hover { color: var(--white); }
-
-  /* ---- Sign-in gate ---- */
-  #gate { position: fixed; inset: 0; background: var(--blue); display: grid; place-items: center; z-index: 999; padding: 24px; }
-  #gate[hidden] { display: none; }
-  .gate-card { width: 100%; max-width: 400px; background: var(--white); border-radius: var(--r); padding: 34px 30px; text-align: center; box-shadow: 0 20px 60px -20px rgba(0,0,0,0.5); }
-  .gate-card .logo-box { background: var(--blue); margin-bottom: 18px; }
-  .gate-card h1 { font-family: var(--serif); font-size: 25px; color: var(--blue); margin: 0 0 8px; font-weight: 400; }
-  .gate-card p { font-size: 13.5px; font-weight: 300; color: var(--gray-dk); margin: 0 0 22px; line-height: 1.5; }
-  .gsi { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
-    background: var(--white); border: 1px solid var(--gray-md); border-radius: 5px; padding: 11px 16px;
-    font-family: var(--sans); font-size: 14.5px; font-weight: 500; color: var(--ink); cursor: pointer; transition: all .15s ease; }
-  .gsi:hover { border-color: var(--blue); background: var(--gray-lt); }
-  .gate-err { margin-top: 16px; font-size: 12.5px; color: var(--black); font-weight: 500; min-height: 18px; }
-  .gate-foot { margin-top: 20px; font-size: 11px; color: var(--gray); font-weight: 300; }
-  .who { display: inline-flex; align-items: center; gap: 8px; font-size: 11.5px; color: #cdd6e4; }
-  .who b { color: var(--white); font-weight: 500; }
-  .signout { font-weight: 900; text-transform: uppercase; letter-spacing: 1px; font-size: 9.5px; color: #cdd6e4; cursor: pointer; border: 1px solid rgba(255,255,255,0.3); border-radius: 999px; padding: 3px 9px; background: none; font-family: var(--sans); }
-  .signout:hover { color: var(--blue); background: var(--white); border-color: var(--white); }
-
-  /* ---- Notes ---- */
-  .notes { margin-top: 8px; padding-left: 2px; display: flex; flex-direction: column; gap: 5px; }
-  .note { background: var(--gray-lt); border-left: 2px solid var(--gray-md); border-radius: 0 4px 4px 0; padding: 6px 9px; }
-  .note-text { font-size: 12.5px; color: var(--ink); word-wrap: break-word; }
-  .note-meta { margin-top: 2px; font-size: 10px; color: var(--gray-dk); display: flex; gap: 8px; align-items: center; }
-  .note-del { margin-left: auto; cursor: pointer; color: var(--gray); font-size: 11px; background: none; border: none; padding: 0 2px; }
-  .note-del:hover { color: var(--black); }
-  .note-add { display: flex; gap: 6px; margin-top: 7px; }
-  .note-add input { flex: 1; background: var(--white); border: 1px solid var(--gray-md); border-radius: 4px;
-    padding: 6px 9px; font-size: 12.5px; font-family: var(--sans); color: var(--ink); }
-  .note-add input:focus { outline: none; border-color: var(--blue); }
-  .note-add button { font-size: 11.5px; padding: 5px 11px; }
-  .note-toggle { font-size: 10.5px; font-weight: 500; color: var(--gray-dk); cursor: pointer; background: none; border: none;
-    font-family: var(--sans); padding: 2px 0; margin-top: 4px; text-align: left; }
-  .note-toggle:hover { color: var(--blue); }
-
-  /* ---- Project tracker ---- */
-  .legend { display: flex; gap: 12px; align-items: center; margin-right: 14px; }
-  .lg { font-size: 10px; font-weight: 500; color: var(--gray-dk); display: inline-flex; align-items: center; gap: 4px; }
-  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
-  .dot.red { background: #993C1D; } .dot.yellow { background: #C9A227; }
-  .dot.blue { background: #185FA5; } .dot.green { background: #0F6E56; }
-
-  .proj { border-bottom: 1px solid var(--line); padding: 10px 10px 12px; }
-  .proj:last-child { border-bottom: none; }
-  .proj.complete { opacity: 0.45; }
-  .proj.complete .p-name { text-decoration: line-through; }
-  .p-head { display: flex; align-items: center; gap: 10px; }
-  .p-check { flex: 0 0 auto; width: 19px; height: 19px; border: 2px solid var(--gray-md); border-radius: 4px;
-    cursor: pointer; display: grid; place-items: center; font-size: 12px; color: transparent; background: var(--white); }
-  .p-check.on { background: var(--blue); border-color: var(--blue); color: var(--white); }
-  .p-check.readonly { cursor: default; }
-  .p-name { font-family: var(--serif); font-size: 17px; color: var(--navy, #193661); flex: 0 1 auto; min-width: 0; }
-  .p-chips { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-left: auto; }
-  .chip { font-size: 9.5px; font-weight: 900; letter-spacing: .6px; padding: 3px 8px; border-radius: 999px;
-    border: 1px solid var(--gray-md); color: var(--gray-dk); background: var(--white); text-decoration: none;
-    display: inline-flex; align-items: center; gap: 3px; }
-  a.chip:hover { border-color: var(--blue); color: var(--blue); }
-  .chip.drive { border-color: var(--blue); color: var(--blue); }
-  .chip.launch { border-style: dashed; }
-  .chip.click { cursor: pointer; }
-  .p-body { margin-top: 8px; padding-left: 29px; }
-  .sub { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 5px; }
-  .sub:hover { background: var(--gray-lt); }
-  .s-dot { flex: 0 0 auto; width: 13px; height: 13px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15); }
-  .s-dot.click { cursor: pointer; }
-  .s-dot.red { background: #993C1D; } .s-dot.yellow { background: #C9A227; }
-  .s-dot.blue { background: #185FA5; } .s-dot.green { background: #0F6E56; }
-  .s-text { flex: 1; min-width: 0; font-size: 13.5px; color: var(--ink); }
-  .proj.complete .s-text { text-decoration: line-through; }
-  .ini { flex: 0 0 auto; width: 34px; text-align: center; }
-  .ini input { width: 34px; text-align: center; text-transform: uppercase; font-size: 11px; font-weight: 700;
-    color: var(--navy, #193661); background: var(--white); border: 1px solid var(--gray-md); border-radius: 4px;
-    padding: 3px 0; font-family: var(--sans); }
-  .ini input:focus { outline: none; border-color: var(--blue); }
-  .ini input:disabled { background: var(--gray-lt); color: var(--gray-dk); border-color: var(--line); }
-  .ini-h { flex: 0 0 auto; width: 34px; text-align: center; font-size: 8.5px; font-weight: 900;
-    letter-spacing: .5px; color: var(--gray); text-transform: uppercase; }
-  .s-cols { display: flex; align-items: center; gap: 8px; padding: 0 6px 2px; }
-  .s-cols .spacer { flex: 1; }
-  .s-arrows { flex: 0 0 auto; display: flex; gap: 2px; }
-  .s-arrows button, .s-del { background: none; border: none; cursor: pointer; color: var(--gray);
-    font-size: 12px; padding: 0 3px; font-family: var(--sans); }
-  .s-arrows button:hover, .s-del:hover { color: var(--blue); }
-  .s-del:hover { color: var(--black); }
-  .sub-add { display: flex; gap: 6px; margin-top: 5px; }
-  .sub-add input { flex: 1; background: var(--white); border: 1px solid var(--gray-md); border-radius: 4px;
-    padding: 5px 9px; font-size: 12.5px; font-family: var(--sans); }
-  .sub-add input:focus { outline: none; border-color: var(--blue); }
-  .sub-add button { font-size: 11px; padding: 4px 10px; }
-  .p-form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); flex-wrap: wrap; }
-  .p-form input { background: var(--white); border: 1px solid var(--gray-md); border-radius: 5px;
-    padding: 8px 10px; font-size: 13px; font-family: var(--sans); min-width: 140px; }
-  .p-form input:focus { outline: none; border-color: var(--blue); }
-
-  /* ---- Gantt ---- */
-  .p-date { display: flex; flex-direction: column; gap: 2px; font-size: 9px; font-weight: 900;
-    letter-spacing: .5px; color: var(--gray-dk); text-transform: uppercase; }
-  .p-date input { font-size: 12.5px; padding: 6px 8px; }
-  .gantt { padding: 6px 4px 10px; }
-  .g-months { display: flex; margin-left: 260px; border-bottom: 1px solid var(--line); }
-  .g-month { flex: 1; font-size: 9.5px; font-weight: 900; letter-spacing: .5px; color: var(--gray-dk);
-    text-transform: uppercase; padding: 4px 0 5px; border-left: 1px solid var(--line); text-align: center;
-    white-space: nowrap; overflow: hidden; }
-  .g-row { display: flex; align-items: center; min-height: 30px; }
-  .g-label { flex: 0 0 260px; font-size: 13px; color: var(--ink); padding-right: 12px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .g-row.complete .g-label { color: var(--gray); text-decoration: line-through; }
-  .g-track { flex: 1; position: relative; height: 30px; background:
-    repeating-linear-gradient(to right, transparent, transparent calc(100% / var(--gm) - 1px), var(--line) calc(100% / var(--gm) - 1px), var(--line) calc(100% / var(--gm))); }
-  .g-bar { position: absolute; top: 7px; height: 16px; border-radius: 4px; background: var(--blue); min-width: 8px; }
-  .g-bar .g-cap { position: absolute; right: -4px; top: -14px; font-size: 8.5px; font-weight: 900;
-    color: var(--gray-dk); letter-spacing: .4px; white-space: nowrap; }
-  .g-row.complete .g-bar { background: var(--gray-md); }
-  .g-today { position: absolute; top: 0; bottom: 0; width: 2px; background: #993C1D; z-index: 2; }
-  .g-today::after { content: "TODAY"; position: absolute; top: -1px; left: 4px; font-size: 8px;
-    font-weight: 900; color: #993C1D; letter-spacing: .5px; }
-  .g-wrap { position: relative; }
-  .g-unsched { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--line);
-    font-size: 12px; color: var(--gray-dk); }
-  .g-unsched b { color: var(--navy, #193661); font-weight: 700; }
-
-  /* ---- Stage doc badges ---- */
-  .stages { flex: 0 0 auto; display: flex; gap: 4px; align-items: center; }
-  .sb { font-weight: 900; font-size: 9px; letter-spacing: .6px; padding: 3px 7px; border-radius: 4px;
-    border: 1px solid var(--gray-md); color: var(--gray); background: var(--white);
-    cursor: default; text-decoration: none; display: inline-flex; align-items: center; gap: 3px; line-height: 1.2; }
-  .sb.owner { cursor: pointer; }
-  .sb.owner:hover { border-color: var(--blue); color: var(--blue); }
-  .sb.done { background: var(--blue); border-color: var(--blue); color: var(--white); }
-  .sb.done:hover { background: var(--blue-deep); border-color: var(--blue-deep); color: var(--white); }
-  .sb.na { border-style: dashed; color: var(--gray-md); border-color: var(--gray-md); }
-  .sb .lnk { font-size: 8px; opacity: .85; }
-  .stages-wrap { display: inline-flex; align-items: center; gap: 2px; }
 </style>
 </head>
 <body>
-
-<div id="gate">
-  <div class="gate-card">
-    <span class="logo-box">ENDURING</span>
-    <h1>Enduring Daily</h1>
-    <p>Internal operations board. Sign in with your Enduring Co Google account to continue.</p>
-    <button class="gsi" id="gateBtn">
-      <svg width="17" height="17" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.7-2 5-4.4 6.6v5.5h7.1c4.1-3.8 6.6-9.4 6.6-16.1z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.4l-7.1-5.5c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9h-7.3v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C2.9 17.3 2 20.5 2 24s.9 6.7 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 11.4c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.8 29.9 2.7 24 2.7 15.5 2.7 8.1 7.6 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>
-      Sign in with Google
-    </button>
-    <div class="gate-err" id="gateErr"></div>
-    <div class="gate-foot">Access limited to @enduring.co accounts</div>
-  </div>
-</div>
 
 <header class="masthead">
   <div class="mast-inner">
@@ -339,53 +211,104 @@
     <div class="mast-right">
       <div class="sync"><span class="dot" id="syncDot"></span><span id="syncLabel">Live</span></div>
       <div class="clock" id="clock" style="margin-top:8px"></div>
-      <div style="margin-top:10px"><span class="who" id="whoBox"></span></div>
     </div>
   </div>
 </header>
 
 <main>
-  <section class="card col-span" data-list="projects">
+  <section class="card" data-list="coop">
     <div class="card-head">
-      <div class="card-title">Projects</div>
-      <div class="card-sub" style="flex:1">Ranked portfolio tracker · gated through The Gateway</div>
-      <div class="legend">
-        <span class="lg"><i class="dot red"></i>Not started</span>
-        <span class="lg"><i class="dot yellow"></i>Working</span>
-        <span class="lg"><i class="dot blue"></i>Stuck</span>
-        <span class="lg"><i class="dot green"></i>Done</span>
-      </div>
-      <div class="count" data-count="projects">0</div>
+      <div class="card-title">Coop — Active Work</div>
+      <div class="count" data-count="coop">0</div>
     </div>
-    <div class="card-body" data-body="projects"></div>
-    <div class="p-form owner-only" hidden>
-      <input type="text" id="p_name" placeholder="New project name" style="flex:2" />
-      <input type="text" id="p_drive" placeholder="Google Drive folder URL (optional)" style="flex:2" />
-      <label class="p-date"><span>Start</span><input type="date" id="p_start" /></label>
-      <label class="p-date"><span>Est. launch</span><input type="date" id="p_launch" /></label>
-      <button class="btn primary" id="p_add">Add project</button>
+    <div class="card-body" data-body="coop"></div>
+    <div class="quick-add owner-only" data-add="coop" hidden>
+      <input type="text" placeholder="Add to your active work…" data-input="coop" />
+      <label class="proj-toggle" title="Add as a project (can hold tasks)"><input type="checkbox" data-proj="coop" /> Project</label>
+      <button class="btn primary" data-addbtn="coop">Add</button>
+    </div>
+  </section>
+
+  <section class="card" data-list="brian">
+    <div class="card-head sage">
+      <div class="card-title">Brian — AI Intern Queue</div>
+      <div class="count" data-count="brian">0</div>
+    </div>
+    <div class="card-body" data-body="brian"></div>
+    <div class="quick-add owner-only" data-add="brian" hidden>
+      <input type="text" placeholder="Assign a task to Brian…" data-input="brian" />
+      <label class="proj-toggle" title="Add as a project (can hold tasks)"><input type="checkbox" data-proj="brian" /> Project</label>
+      <button class="btn primary" data-addbtn="brian">Add</button>
     </div>
   </section>
 
   <section class="card col-span" data-list="questions">
     <div class="card-head clay">
-      <div class="card-title">Questions</div>
+      <div class="card-title">Open Questions</div>
       <div class="card-sub" style="flex:1">Running list — things I'm chasing an answer on</div>
       <div class="count" data-count="questions">0</div>
     </div>
     <div class="card-body" data-body="questions"></div>
     <div class="quick-add owner-only" data-add="questions" hidden>
       <input type="text" placeholder="Log an open question…" data-input="questions" />
+      <label class="proj-toggle" title="Add as a project (can hold tasks)"><input type="checkbox" data-proj="questions" /> Project</label>
       <button class="btn primary" data-addbtn="questions">Add</button>
     </div>
   </section>
 
-  <section class="card col-span">
-    <div class="card-head sage">
-      <div class="card-title">Timeline</div>
-      <div class="card-sub" style="flex:1">Project schedule · start to estimated launch</div>
+  <section class="card">
+    <div class="card-head">
+      <div class="card-title">Add an Item</div>
+      <div class="card-sub">Public</div>
     </div>
-    <div class="card-body" id="ganttBody"></div>
+    <div class="form-grid">
+      <p class="form-note">Add something to the board. It lands with a “new” tag for Coop to review. You can’t edit or remove anything else — add only.</p>
+      <div class="two-up">
+        <div class="field"><label>Your name</label><input type="text" id="add_name" placeholder="Jane Okafor" /></div>
+        <div class="field"><label>Your email</label><input type="email" id="add_email" placeholder="jane@enduring.co" /></div>
+      </div>
+      <div class="field"><label>The item</label><textarea id="add_text" rows="2" placeholder="What should be added to the board?"></textarea></div>
+      <div class="route-row">
+        <span class="card-sub">Add to</span>
+        <select class="route" id="add_target">
+          <option value="coop">Coop — Active Work</option>
+          <option value="brian">Brian — AI Intern Queue</option>
+          <option value="questions">Open Questions</option>
+        </select>
+      </div>
+      <div class="form-foot">
+        <span class="toast" id="add_toast"></span>
+        <button class="btn primary" id="add_submit">Submit item</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <div class="card-title">Ask Coop a Question</div>
+      <div class="card-sub">Public</div>
+    </div>
+    <div class="form-grid">
+      <p class="form-note">Send a question straight to Coop’s inbox on this board. He sees it live and can clear it once answered.</p>
+      <div class="two-up">
+        <div class="field"><label>Your name</label><input type="text" id="ask_name" placeholder="Jane Okafor" /></div>
+        <div class="field"><label>Your email</label><input type="email" id="ask_email" placeholder="jane@enduring.co" /></div>
+      </div>
+      <div class="field"><label>Your question</label><textarea id="ask_text" rows="2" placeholder="What do you want to ask Coop?"></textarea></div>
+      <div class="form-foot">
+        <span class="toast" id="ask_toast"></span>
+        <button class="btn primary" id="ask_submit">Send to Coop</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card col-span owner-only" data-list="inbox" hidden>
+    <div class="card-head">
+      <div class="card-title">Coop’s Inbox</div>
+      <div class="card-sub" style="flex:1">Questions submitted through the board</div>
+      <div class="count" data-count="inbox">0</div>
+    </div>
+    <div class="card-body" data-body="inbox"></div>
   </section>
 
   <section class="card col-span owner-only" id="trashCard" hidden>
@@ -403,7 +326,7 @@
   <div class="foot-inner">
     <span class="foot-logo">ENDURING</span>
     <span>Enduring Daily · Operations Board</span>
-    <span class="lock-hint" id="lockHint"></span>
+    <span class="lock-hint" id="lockHint">Owner? Unlock editing →</span>
   </div>
 </footer>
 
@@ -425,88 +348,67 @@ const FIREBASE_CONFIG = {
   appId: "1:1050464636884:web:5e975f663e53847fd51041"
 };
 
-/* Owner UID — full edit rights. Everyone else on the domain is view + notes. */
-const OWNER_UID = "pvnOeV3RdLOIcdTAZEwCR0cEke72";
-const ALLOWED_DOMAIN = "enduring.co";
+/* Your private edit key. Owner unlocks with  #edit=YOUR_KEY */
+const EDIT_KEY = "bonesbrigade";
 /* ============================================================ */
 
-const LISTS = ["questions", "projects"];
+const LISTS = ["coop", "brian", "questions", "inbox"];
 let db = null, LIVE = false;
 let drag = null;
-let isOwner = false;
-let ME = null;
+
+function readEditGrant() {
+  const h = new URLSearchParams(location.hash.replace(/^#/, ""));
+  if (h.get("edit") === EDIT_KEY) {
+    try { sessionStorage.setItem("enduring_edit", "1"); } catch(e){}
+    return true;
+  }
+  try { return sessionStorage.getItem("enduring_edit") === "1"; } catch(e){ return false; }
+}
+let isOwner = readEditGrant();
+
 let store = {};
+const localSeed = {
+  coop: {
+    a1: { text: "Finalize portfolio AI tooling rollout plan (KoSA, AllRec, School Apparel)", done: false, ts: Date.now()-8.6e7, order: 1, reviewed: true },
+    a2: { text: "First-week operating cadence with Jory + Jake", done: false, ts: Date.now()-7e7, order: 2, reviewed: true },
+    a3: { text: "Stand up Enduring Daily for the team", done: true, ts: Date.now()-6e7, order: 3, reviewed: true }
+  },
+  brian: {
+    b1: { text: "Pull competitor pricing across the three portfolio verticals", done: false, ts: Date.now()-5e7, order: 1, reviewed: true },
+    b2: { text: "Draft weekly ops digest template", done: false, ts: Date.now()-4e7, order: 2, reviewed: true }
+  },
+  questions: {
+    q1: { text: "Which portfolio company is the right pilot for the AI workflow rollout?", done: false, ts: Date.now()-3e7, order: 1, reviewed: true }
+  },
+  inbox: {}
+};
 
 function initBackend() {
-  if (!window.firebase) {
-    setSync(false, "Offline");
-    gateErr("Couldn't reach the sign-in service. Check your connection and reload.");
-    document.getElementById("gateBtn").disabled = true;
-    return false;
-  }
-  try {
-    firebase.initializeApp(FIREBASE_CONFIG);
-    db = firebase.database();
-    LIVE = true;
-    setSync(true, "Live");
-    return true;
-  } catch (e) {
-    console.warn("Firebase init failed:", e);
-    setSync(false, "Offline");
-    gateErr("Sign-in service failed to start. Reload the page.");
-    return false;
-  }
-}
-
-function attachListeners() {
-  LISTS.forEach(list => {
-    db.ref("board/" + list).on("value", snap => {
-      store[list] = snap.val() || {};
-      renderList(list);
-      renderTrash();
-    });
-  });
-}
-
-function gateErr(msg) { document.getElementById("gateErr").textContent = msg || ""; }
-
-function signIn() {
-  gateErr("");
-  const p = new firebase.auth.GoogleAuthProvider();
-  p.setCustomParameters({ hd: ALLOWED_DOMAIN, prompt: "select_account" });
-  firebase.auth().signInWithPopup(p).catch(err => {
-    if (err.code === "auth/popup-closed-by-user") return;
-    gateErr(err.message || "Sign-in failed.");
-  });
-}
-
-function signOutNow() { firebase.auth().signOut(); }
-
-function startAuth() {
-  firebase.auth().onAuthStateChanged(user => {
-    const gate = document.getElementById("gate");
-    if (!user) {
-      ME = null; isOwner = false;
-      store = {};
-      gate.hidden = false;
-      document.getElementById("whoBox").innerHTML = "";
+  const hasConfig = FIREBASE_CONFIG && FIREBASE_CONFIG.databaseURL;
+  if (hasConfig && window.firebase) {
+    try {
+      firebase.initializeApp(FIREBASE_CONFIG);
+      db = firebase.database();
+      LIVE = true;
+      // If owner, sign in anonymously so writes carry your auth UID.
+      // (Public visitors never sign in — they only add items, which the
+      //  security rules allow unauthenticated.)
+      if (isOwner && firebase.auth) {
+        firebase.auth().signInAnonymously()
+          .then(() => { const u = firebase.auth().currentUser; if (u) console.log("Owner UID:", u.uid); })
+          .catch(err => console.warn("Auth sign-in failed:", err));
+      }
+      LISTS.forEach(list => {
+        db.ref("board/" + list).on("value", snap => { store[list] = snap.val() || {}; renderList(list); renderTrash(); });
+      });
+      setSync(true, "Live");
       return;
-    }
-    const email = (user.email || "").toLowerCase();
-    if (!email.endsWith("@" + ALLOWED_DOMAIN) || !user.emailVerified) {
-      gateErr("That account isn't an @" + ALLOWED_DOMAIN + " address. Signed out.");
-      firebase.auth().signOut();
-      return;
-    }
-    ME = { uid: user.uid, email, name: user.displayName || email.split("@")[0] };
-    isOwner = user.uid === OWNER_UID;
-    gate.hidden = true;
-    document.getElementById("whoBox").innerHTML =
-      `<b>${esc(ME.name)}</b><button class="signout" id="soBtn">Sign out</button>`;
-    document.getElementById("soBtn").addEventListener("click", signOutNow);
-    applyOwnerUI();
-    attachListeners();
-  });
+    } catch (e) { console.warn("Firebase init failed, local mode:", e); }
+  }
+  store = JSON.parse(JSON.stringify(localSeed));
+  LIVE = false;
+  setSync(false, "Demo");
+  LISTS.forEach(renderList);
 }
 
 function setSync(on, label) {
@@ -518,16 +420,6 @@ function pushItem(list, obj) {
   if (LIVE) { db.ref("board/" + list).push(obj); }
   else { const id = "loc" + Math.random().toString(36).slice(2, 9); store[list] = store[list] || {}; store[list][id] = obj; renderList(list); }
 }
-function addNote(list, itemId, text) {
-  if (!ME || !text.trim()) return;
-  db.ref("board/" + list + "/" + itemId + "/notes").push({
-    text: text.trim(), ts: Date.now(), author: ME.name, uid: ME.uid
-  });
-}
-function delNote(list, itemId, noteId) {
-  if (!isOwner) return;
-  db.ref("board/" + list + "/" + itemId + "/notes/" + noteId).remove();
-}
 function updateItem(list, id, patch) {
   if (LIVE) { db.ref("board/" + list + "/" + id).update(patch); }
   else { Object.assign(store[list][id], patch); renderList(list); }
@@ -538,17 +430,27 @@ function removeItem(list, id) {
 }
 // Soft delete: hide from view but keep recoverable
 function softDelete(list, id) {
-  updateItem(list, id, { deleted: true, deletedAt: Date.now() });
+  const it = store[list] && store[list][id];
+  const stamp = Date.now();
+  // Deleting a project takes its tasks with it
+  if (it && it.isProject) {
+    childrenOf(list, id).forEach(([kid]) => updateItem(list, kid, { deleted: true, deletedAt: stamp, deletedWith: id }));
+  }
+  updateItem(list, id, { deleted: true, deletedAt: stamp });
   renderTrash();
 }
 function restoreItem(list, id) {
   updateItem(list, id, { deleted: false, deletedAt: null });
+  // Restoring a project brings back the tasks that went with it
+  Object.entries(store[list] || {}).forEach(([kid, k]) => {
+    if (k.deleted && k.deletedWith === id) updateItem(list, kid, { deleted: false, deletedAt: null, deletedWith: null });
+  });
   renderTrash();
 }
 // Permanently remove everything in the trash
 function purgeTrash() {
   let n = 0;
-  ["questions","projects"].forEach(list => {
+  ["coop","brian","questions","inbox"].forEach(list => {
     Object.entries(store[list] || {}).forEach(([id, it]) => {
       if (it.deleted) { removeItem(list, id); n++; }
     });
@@ -566,224 +468,107 @@ function ago(ts){
   return Math.floor(d/86400)+"d ago";
 }
 
-function notesHTML(list, id, it) {
-  const notes = Object.entries(it.notes || {}).sort((a,b) => (a[1].ts||0)-(b[1].ts||0));
-  const rows = notes.map(([nid, n]) => `
-    <div class="note">
-      <div class="note-text">${esc(n.text)}</div>
-      <div class="note-meta"><span>${esc(n.author||"Someone")}</span><span>${ago(n.ts)}</span>
-        ${isOwner?`<button class="note-del" title="Delete note" data-act="delnote" data-list="${list}" data-id="${id}" data-nid="${nid}">✕</button>`:""}
-      </div>
-    </div>`).join("");
-  return `<div class="notes" data-notes="${list}:${id}" hidden>
-      ${rows || `<div class="note-meta" style="padding-left:2px">No notes yet.</div>`}
-      <div class="note-add">
-        <input type="text" placeholder="Add a note…" data-noteinput="${list}:${id}" />
-        <button class="btn primary" data-noteadd="${list}:${id}">Note</button>
+function itemRow(list, id, it, depth) {
+  const isNew = it.source === "public" && !it.reviewed;
+  const submitter = it.name ? `<span>added by ${esc(it.name)}</span>` : "";
+  const checkCls = "check" + (it.done?" done":"") + (isOwner?"":" readonly");
+  const kids = it.isProject ? childrenOf(list, id) : [];
+  const openKids = kids.filter(([_,k]) => !k.done).length;
+  const collapsed = !!it.collapsed;
+  return `<div class="item ${it.done?"done":""} ${it.isProject?"is-project":""} ${depth?"is-child":""}"
+       data-id="${id}" data-list="${list}" data-project="${it.isProject?1:0}">
+    ${isOwner?`<div class="drag-handle" title="Drag to reorder" data-drag="${list}" data-id="${id}">⠿</div>`:`<div class="drag-spacer"></div>`}
+    ${it.isProject
+      ? `<div class="twisty ${collapsed?"closed":""}" data-act="collapse" data-list="${list}" data-id="${id}" title="${collapsed?"Expand":"Collapse"}">▾</div>`
+      : ``}
+    <div class="${checkCls}" ${isOwner?`data-act="toggle" data-list="${list}" data-id="${id}"`:""}></div>
+    <div class="item-main">
+      <div class="item-text">${esc(it.text)}</div>
+      <div class="item-meta">
+        ${isNew?`<span class="pill new">New</span>`:""}
+        ${it.isProject && kids.length?`<span class="pill">${openKids}/${kids.length} open</span>`:""}
+        ${submitter}<span>${ago(it.ts)}</span>
       </div>
     </div>
-    <button class="note-toggle" data-act="togglenotes" data-target="${list}:${id}">${notes.length?`${notes.length} note${notes.length>1?"s":""}`:"Add a note"} ▾</button>`;
-}
-
-function stageBadge(id, stage, state, url) {
-  const s = state || "todo";
-  const label = stage.toUpperCase();
-  const cls = "sb" + (s === "done" ? " done" : s === "na" ? " na" : "") + (isOwner ? " owner" : "");
-  const title = s === "done" ? (url ? "Open the doc — click badge text to change state" : "Marked done (no link)")
-              : s === "na" ? "Not applicable" : "Not started";
-  if (s === "done" && url) {
-    return `<span class="stages-wrap"><a class="${cls}" href="${esc(url)}" target="_blank" rel="noopener" title="${title}">${label}<span class="lnk">↗</span></a>${
-      isOwner?`<button class="sb owner" style="padding:3px 4px" data-act="stage" data-id="${id}" data-stage="${stage}" title="Change state">•</button>`:""}</span>`;
-  }
-  return isOwner
-    ? `<button class="${cls}" data-act="stage" data-id="${id}" data-stage="${stage}" title="${title}">${label}${s==="na"?" —":""}</button>`
-    : `<span class="${cls}" title="${title}">${label}${s==="na"?" —":""}</span>`;
-}
-
-const STATUS_CYCLE = ["red", "yellow", "blue", "green"];
-
-function subRow(pid, sid, s, canEdit, ownerCtl) {
-  const st = STATUS_CYCLE.includes(s.status) ? s.status : "red";
-  return `<div class="sub" data-sid="${sid}">
-    <span class="s-dot ${st}${canEdit ? " click" : ""}" ${canEdit ? `data-act="substatus" data-pid="${pid}" data-sid="${sid}"` : ""} title="${st}"></span>
-    <div class="s-text">${esc(s.text)}</div>
-    <div class="ini"><input maxlength="3" value="${esc(s.driver || "")}" placeholder="—" ${canEdit ? `data-ini="driver" data-pid="${pid}" data-sid="${sid}"` : "disabled"} /></div>
-    <div class="ini"><input maxlength="3" value="${esc(s.approved || "")}" placeholder="—" ${canEdit ? `data-ini="approved" data-pid="${pid}" data-sid="${sid}"` : "disabled"} /></div>
-    ${ownerCtl ? `<div class="s-arrows">
-      <button data-act="subup" data-pid="${pid}" data-sid="${sid}" title="Move up">▴</button>
-      <button data-act="subdown" data-pid="${pid}" data-sid="${sid}" title="Move down">▾</button>
-    </div>
-    <button class="s-del" data-act="subdel" data-pid="${pid}" data-sid="${sid}" title="Delete">✕</button>` : ""}
+    ${isOwner?`<div class="item-actions">
+      ${it.isProject?`<button class="iconbtn" title="Add task to this project" data-act="addchild" data-list="${list}" data-id="${id}">+</button>`:""}
+      <button class="iconbtn" title="${it.isProject?"Make a plain item":"Make this a project"}" data-act="toggleproject" data-list="${list}" data-id="${id}">${it.isProject?"◇":"◆"}</button>
+      ${isNew?`<button class="iconbtn accept" title="Mark reviewed" data-act="review" data-list="${list}" data-id="${id}">✓</button>`:""}
+      <button class="iconbtn danger" title="Delete" data-act="remove" data-list="${list}" data-id="${id}">✕</button>
+    </div>`:""}
   </div>`;
 }
 
-
-// ---- Date helpers + Gantt ----
-const MON = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-function parseISO(s) { if (!s || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; const d = new Date(s + "T00:00:00"); return isNaN(d) ? null : d; }
-function fmtMonth(s) { const d = parseISO(s); return d ? MON[d.getMonth()] + " " + d.getFullYear() : esc(String(s).toUpperCase()); }
-function fmtMonthDay(s) { const d = parseISO(s); return d ? MON[d.getMonth()] + " " + d.getDate() : esc(String(s).toUpperCase()); }
-
-function renderGantt() {
-  const body = document.getElementById("ganttBody");
-  if (!body) return;
-  const projs = Object.entries(store.projects || {})
-    .filter(([_, p]) => !p.deleted)
-    .sort((a, b) => {
-      const ca = a[1].complete ? 1 : 0, cb = b[1].complete ? 1 : 0;
-      if (ca !== cb) return ca - cb;
-      return (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0);
-    });
-  const scheduled = [], unscheduled = [];
-  projs.forEach(([pid, p]) => {
-    const start = parseISO(p.start) || (p.launch ? new Date(p.ts) : null);
-    const end = parseISO(p.launch);
-    if (start && end && end > start) scheduled.push({ pid, p, start, end });
-    else unscheduled.push(p.text);
+function sortEntries(arr) {
+  return arr.sort((a,b) => {
+    const da = a[1].done ? 1 : 0, dbn = b[1].done ? 1 : 0;
+    if (da !== dbn) return da - dbn;
+    return (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0);
   });
-  if (!scheduled.length) {
-    body.innerHTML = `<div class="empty">No scheduled projects yet. Set a start and launch date to plot them.</div>` +
-      (unscheduled.length ? `<div class="g-unsched"><b>Unscheduled:</b> ${unscheduled.map(esc).join(" \u00b7 ")}</div>` : "");
-    return;
-  }
-  // Range: month boundaries, padded
-  let min = new Date(Math.min(...scheduled.map(x => x.start)));
-  let max = new Date(Math.max(...scheduled.map(x => x.end)));
-  min = new Date(min.getFullYear(), min.getMonth(), 1);
-  max = new Date(max.getFullYear(), max.getMonth() + 2, 1);
-  const span = max - min;
-  const months = [];
-  for (let d = new Date(min); d < max; d = new Date(d.getFullYear(), d.getMonth() + 1, 1)) {
-    months.push(MON[d.getMonth()] + (d.getMonth() === 0 || d.getTime() === min.getTime() ? " '" + String(d.getFullYear()).slice(2) : ""));
-  }
-  const now = new Date();
-  const todayPct = now >= min && now <= max ? ((now - min) / span * 100) : null;
-  body.innerHTML = `<div class="gantt">
-    <div class="g-months">${months.map(m => `<div class="g-month">${m}</div>`).join("")}</div>
-    <div class="g-wrap">
-      ${todayPct !== null ? `<div class="g-today" style="left: calc(260px + (100% - 260px) * ${(todayPct / 100).toFixed(4)})"></div>` : ""}
-      ${scheduled.map(({ pid, p, start, end }) => {
-        const l = ((start - min) / span * 100).toFixed(2);
-        const w = Math.max(((end - start) / span * 100), 0.8).toFixed(2);
-        return `<div class="g-row ${p.complete ? "complete" : ""}">
-          <div class="g-label" title="${esc(p.text)}">${esc(p.text)}</div>
-          <div class="g-track" style="--gm:${months.length}">
-            <div class="g-bar" style="left:${l}%; width:${w}%"><span class="g-cap">${fmtMonthDay(p.launch)}</span></div>
-          </div>
-        </div>`;
-      }).join("")}
-    </div>
-    ${unscheduled.length ? `<div class="g-unsched"><b>Unscheduled:</b> ${unscheduled.map(esc).join(" \u00b7 ")}</div>` : ""}
-  </div>`;
 }
-
-function renderProjects() {
-  const body = document.querySelector('[data-body="projects"]');
-  const countEl = document.querySelector('[data-count="projects"]');
-  if (!body) return;
-  if (drag && drag.list === "projects") return;
-  const entries = Object.entries(store.projects || {})
-    .filter(([_, p]) => !p.deleted)
-    .sort((a, b) => {
-      const ca = a[1].complete ? 1 : 0, cb = b[1].complete ? 1 : 0;
-      if (ca !== cb) return ca - cb;
-      return (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0);
-    });
-  if (countEl) countEl.textContent = entries.filter(([_, p]) => !p.complete).length;
-  if (!entries.length) { body.innerHTML = `<div class="empty">No projects yet.</div>`; renderGantt(); return; }
-  const canEdit = !!ME;
-  body.innerHTML = entries.map(([pid, p]) => {
-    const subs = Object.entries(p.subs || {})
-      .sort((a, b) => (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0));
-    const driveChip = p.driveUrl
-      ? `<a class="chip drive" href="${esc(p.driveUrl)}" target="_blank" rel="noopener">DRIVE ↗</a>${isOwner ? `<span class="chip click" data-act="setdrive" data-pid="${pid}" title="Change link">•</span>` : ""}`
-      : (isOwner ? `<span class="chip click" data-act="setdrive" data-pid="${pid}">+ DRIVE</span>` : "");
-    const startChip = p.start
-      ? (isOwner ? `<span class="chip launch click" data-act="setstart" data-pid="${pid}">START: ${fmtMonthDay(p.start)}</span>` : "")
-      : (isOwner ? `<span class="chip launch click" data-act="setstart" data-pid="${pid}">+ START</span>` : "");
-    const launchChip = p.launch
-      ? `<span class="chip launch${isOwner ? " click" : ""}" ${isOwner ? `data-act="setlaunch" data-pid="${pid}"` : ""}>LAUNCH: ${fmtMonth(p.launch)}</span>`
-      : (isOwner ? `<span class="chip launch click" data-act="setlaunch" data-pid="${pid}">+ LAUNCH</span>` : "");
-    return `<div class="proj ${p.complete ? "complete" : ""}" data-id="${pid}" data-list="projects">
-      <div class="p-head">
-        ${isOwner ? `<div class="drag-handle" title="Drag to re-rank" data-drag="projects" data-id="${pid}">⠿</div>` : ""}
-        <span class="p-check ${p.complete ? "on" : ""}${isOwner ? "" : " readonly"}" ${isOwner ? `data-act="pcomplete" data-pid="${pid}"` : ""} title="${p.complete ? "Complete" : "Mark complete"}">✓</span>
-        <div class="p-name">${esc(p.text)}</div>
-        <div class="p-chips">
-          ${driveChip}
-          ${stageBadge(pid, "s1", p.s1, p.s1url)}
-          ${stageBadge(pid, "s2", p.s2, p.s2url)}
-          ${startChip}
-          ${launchChip}
-          ${isOwner ? `<button class="iconbtn danger" title="Remove project" data-act="remove" data-list="projects" data-id="${pid}">✕</button>` : ""}
-        </div>
-      </div>
-      <div class="p-body">
-        ${subs.length ? `<div class="s-cols"><span style="width:13px"></span><span class="spacer"></span><span class="ini-h">Driver</span><span class="ini-h">Appr</span>${isOwner ? `<span style="width:52px"></span>` : ""}</div>` : ""}
-        ${subs.map(([sid, s]) => subRow(pid, sid, s, canEdit, isOwner)).join("")}
-        ${isOwner ? `<div class="sub-add">
-          <input type="text" placeholder="Add a sub-item…" data-subinput="${pid}" />
-          <button class="btn primary" data-subadd="${pid}">Add</button>
-        </div>` : ""}
-        ${notesHTML("projects", pid, p)}
-      </div>
-    </div>`;
-  }).join("");
-  renderGantt();
+function childrenOf(list, parentId) {
+  return sortEntries(Object.entries(store[list] || {})
+    .filter(([_, it]) => !it.deleted && it.parent === parentId));
 }
 
 function renderList(list) {
-  if (list === "projects") return renderProjects();
   const body = document.querySelector(`[data-body="${list}"]`);
   const countEl = document.querySelector(`[data-count="${list}"]`);
   if (!body) return;
   // Don't redraw the list the user is actively dragging within.
   if (drag && drag.list === list) return;
-  const entries = Object.entries(store[list] || {})
-    .filter(([_, it]) => !it.deleted)
-    .sort((a,b) => {
-      // open items first, checked items sink to the bottom
-      const da = a[1].done ? 1 : 0, dbn = b[1].done ? 1 : 0;
-      if (da !== dbn) return da - dbn;
-      return (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0);
-    });
-  const openCount = entries.filter(([_,it]) => !it.done).length;
-  if (countEl) countEl.textContent = openCount;
 
-  if (!entries.length) {
-    const msg = { questions:"No open questions." }[list] || "Empty.";
+  const all = Object.entries(store[list] || {}).filter(([_, it]) => !it.deleted);
+  const openCount = all.filter(([_,it]) => !it.done).length;
+  if (countEl) countEl.textContent = list === "inbox" ? all.length : openCount;
+
+  if (!all.length) {
+    const msg = { coop:"Nothing active yet.", brian:"Brian's queue is clear.", questions:"No open questions.", inbox:"No questions in your inbox." }[list] || "Empty.";
     body.innerHTML = `<div class="empty">${msg}</div>`;
     return;
   }
 
-  body.innerHTML = entries.map(([id, it]) => {
-    const submitter = it.name ? `<span>added by ${esc(it.name)}</span>` : "";
-    const checkCls = "check" + (it.done?" done":"") + (isOwner?"":" readonly");
-    return `<div class="item ${it.done?"done":""}" data-id="${id}" data-list="${list}">
-      ${isOwner?`<div class="drag-handle" title="Drag to reorder" data-drag="${list}" data-id="${id}">⠿</div>`:""}
-      <div class="${checkCls}" ${isOwner?`data-act="toggle" data-list="${list}" data-id="${id}"`:""}></div>
+  if (list === "inbox") {
+    body.innerHTML = sortEntries(all).map(([id, it]) => `<div class="item">
       <div class="item-main">
         <div class="item-text">${esc(it.text)}</div>
-        <div class="item-meta">${submitter}<span>${ago(it.ts)}</span></div>
-        ${notesHTML(list, id, it)}
+        <div class="item-meta"><span>${esc(it.name||"Anonymous")}</span>${it.email?`<span>${esc(it.email)}</span>`:""}<span>${ago(it.ts)}</span></div>
       </div>
-      ${isOwner?`<div class="item-actions">
-        <button class="iconbtn danger" title="Delete" data-act="remove" data-list="${list}" data-id="${id}">✕</button>
-      </div>`:""}
-    </div>`;
-  }).join("");
+      ${isOwner?`<div class="item-actions"><button class="iconbtn danger" title="Clear" data-act="remove" data-list="${list}" data-id="${id}">✕</button></div>`:""}
+    </div>`).join("");
+    return;
+  }
+
+  // Top level = items with no parent (or whose parent no longer exists)
+  const ids = new Set(all.map(([id]) => id));
+  const roots = sortEntries(all.filter(([_, it]) => !it.parent || !ids.has(it.parent)));
+
+  let html = "";
+  roots.forEach(([id, it]) => {
+    html += itemRow(list, id, it, 0);
+    if (it.isProject && !it.collapsed) {
+      const kids = childrenOf(list, id);
+      html += `<div class="children" data-children="${id}">`;
+      html += kids.length
+        ? kids.map(([kid, kit]) => itemRow(list, kid, kit, 1)).join("")
+        : `<div class="empty-child">No tasks yet — use + to add one.</div>`;
+      html += `</div>`;
+    }
+  });
+  body.innerHTML = html;
 }
 
-const LIST_LABELS = { questions: "Questions", projects: "Projects" };
+const LIST_LABELS = { coop: "Coop", brian: "Brian", questions: "Questions", inbox: "Inbox" };
 function renderTrash() {
   const card = document.getElementById("trashCard");
   const body = document.getElementById("trashBody");
   const countEl = document.getElementById("trashCount");
   if (!body || !isOwner) { if (card) card.hidden = true; return; }
   const deleted = [];
-  ["questions","projects"].forEach(list => {
+  ["coop","brian","questions","inbox"].forEach(list => {
     Object.entries(store[list] || {}).forEach(([id, it]) => {
-      if (it.deleted) deleted.push({ list, id, it });
+      // Skip tasks that were removed as part of their project — restoring the project brings them back
+      if (it.deleted && !it.deletedWith) deleted.push({ list, id, it });
     });
   });
   deleted.sort((a,b) => (b.it.deletedAt||0) - (a.it.deletedAt||0));
@@ -804,121 +589,38 @@ function renderTrash() {
 
 document.addEventListener("click", (e) => {
   const el = e.target.closest("[data-act]");
-  if (!el) return;
-  const { act, list, id, nid, target } = el.dataset;
-
-  // Anyone signed in can open/close notes
-  if (act === "togglenotes") {
-    const box = document.querySelector(`[data-notes="${target}"]`);
-    if (box) { box.hidden = !box.hidden; el.textContent = el.textContent.replace(box.hidden ? "▴" : "▾", box.hidden ? "▾" : "▴"); }
-    return;
+  if (!el || !isOwner) return;
+  const { act, list, id } = el.dataset;
+  const it = store[list] && store[list][id];
+  if (!it) return;
+  if (act === "toggle") {
+    const nowDone = !it.done;
+    updateItem(list, id, { done: nowDone });
+    // Completing a project completes its tasks
+    if (it.isProject && nowDone) childrenOf(list, id).forEach(([kid]) => updateItem(list, kid, { done: true }));
   }
-  if (act === "delnote") { delNote(list, id, nid); return; }
-
-  // Sub-item status cycle: any signed-in user
-  if (act === "substatus") {
-    if (!ME) return;
-    const { pid, sid } = el.dataset;
-    const cur = (((store.projects || {})[pid] || {}).subs || {})[sid];
-    if (!cur) return;
-    const next = STATUS_CYCLE[(STATUS_CYCLE.indexOf(cur.status || "red") + 1) % STATUS_CYCLE.length];
-    db.ref(projPath(pid) + "/subs/" + sid + "/status").set(next);
-    return;
-  }
-
-  if (!isOwner) return;
-
-  if (act === "pcomplete") {
-    const pid = el.dataset.pid;
-    updateItem("projects", pid, { complete: !(store.projects[pid] || {}).complete });
-    return;
-  }
-  if (act === "setdrive") {
-    const pid = el.dataset.pid;
-    const cur = (store.projects[pid] || {}).driveUrl || "";
-    const url = prompt("Google Drive folder URL for this project:", cur);
-    if (url === null) return;
-    const clean = url.trim();
-    if (clean && !/^https?:\/\//i.test(clean)) { alert("That doesn't look like a URL."); return; }
-    updateItem("projects", pid, { driveUrl: clean || null });
-    return;
-  }
-  if (act === "setlaunch" || act === "setstart") {
-    const pid = el.dataset.pid;
-    const key = act === "setlaunch" ? "launch" : "start";
-    const cur = (store.projects[pid] || {})[key] || "";
-    const v = prompt((key === "launch" ? "Estimated launch" : "Start") + " date (YYYY-MM-DD):", cur);
-    if (v === null) return;
-    const clean = v.trim();
-    if (clean && !/^\d{4}-\d{2}-\d{2}$/.test(clean)) { alert("Use YYYY-MM-DD, e.g. 2026-09-15"); return; }
-    updateItem("projects", pid, { [key]: clean || null });
-    return;
-  }
-  if (act === "subdel") {
-    const { pid, sid } = el.dataset;
-    if (confirm("Delete this sub-item?")) db.ref(projPath(pid) + "/subs/" + sid).remove();
-    return;
-  }
-  if (act === "subup" || act === "subdown") {
-    const { pid, sid } = el.dataset;
-    const subs = Object.entries((store.projects[pid] || {}).subs || {})
-      .sort((a, b) => (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0));
-    const idx = subs.findIndex(([id]) => id === sid);
-    const swap = act === "subup" ? idx - 1 : idx + 1;
-    if (swap < 0 || swap >= subs.length) return;
-    const A = subs[idx], B = subs[swap];
-    const ao = A[1].order ?? A[1].ts, bo = B[1].order ?? B[1].ts;
-    db.ref(projPath(pid) + "/subs/" + A[0] + "/order").set(bo);
-    db.ref(projPath(pid) + "/subs/" + B[0] + "/order").set(ao);
-    return;
-  }
-
-  // Cycle a stage badge: todo -> done (asks for Drive link) -> n/a -> todo
-  if (act === "stage") {
-    const stage = el.dataset.stage;
-    const it = (store.projects || {})[id];
-    if (!it) return;
-    const cur = it[stage] || "todo";
-    const patch = {};
-    if (cur === "todo") {
-      const url = prompt("Link to the " + stage.toUpperCase() + " doc in Drive (paste the URL, or leave blank to just mark it done):", it[stage+"url"] || "");
-      if (url === null) return;
-      const clean = url.trim();
-      if (clean && !/^https?:\/\//i.test(clean)) { alert("That doesn't look like a URL. It should start with https://"); return; }
-      patch[stage] = "done";
-      patch[stage + "url"] = clean || null;
-    } else if (cur === "done") {
-      patch[stage] = "na";
-      patch[stage + "url"] = null;
-    } else {
-      patch[stage] = null;
-      patch[stage + "url"] = null;
-    }
-    updateItem("projects", id, patch);
-    return;
-  }
-
-  if (act === "toggle") updateItem(list, id, { done: !store[list][id].done });
   if (act === "review") updateItem(list, id, { reviewed: true });
   if (act === "remove") softDelete(list, id);
-});
-
-// Add a note to an item
-document.addEventListener("click", (e) => {
-  const b = e.target.closest("[data-noteadd]");
-  if (!b) return;
-  const key = b.dataset.noteadd;
-  const input = document.querySelector(`[data-noteinput="${key}"]`);
-  if (!input || !input.value.trim()) return;
-  const [list, id] = key.split(":");
-  addNote(list, id, input.value);
-  input.value = "";
-});
-document.addEventListener("keydown", (e) => {
-  const i = e.target.closest("[data-noteinput]");
-  if (!i || e.key !== "Enter") return;
-  const [list, id] = i.dataset.noteinput.split(":");
-  if (i.value.trim()) { addNote(list, id, i.value); i.value = ""; }
+  if (act === "collapse") updateItem(list, id, { collapsed: !it.collapsed });
+  if (act === "toggleproject") {
+    if (it.isProject) {
+      // Demoting: orphan its children back to top level
+      childrenOf(list, id).forEach(([kid]) => updateItem(list, kid, { parent: null }));
+      updateItem(list, id, { isProject: false, collapsed: null });
+    } else {
+      updateItem(list, id, { isProject: true, parent: null });
+    }
+  }
+  if (act === "addchild") {
+    const text = prompt("New task under: " + it.text);
+    if (text && text.trim()) {
+      pushItem(list, {
+        text: text.trim(), done: false, ts: Date.now(), order: Date.now(),
+        source: "owner", reviewed: true, parent: id
+      });
+      if (it.collapsed) updateItem(list, id, { collapsed: false });
+    }
+  }
 });
 
 // Restore / purge handlers for the Recently Deleted drawer
@@ -937,112 +639,150 @@ document.addEventListener("pointerdown", (e) => {
   const handle = e.target.closest("[data-drag]");
   if (!handle) return;
   e.preventDefault();
-  const item = handle.closest(".item, .proj");
-  const listEl = handle.dataset.drag;
-  drag = { list: listEl, id: handle.dataset.id, el: item, startY: e.clientY };
+  const item = handle.closest(".item");
+  const list = handle.dataset.drag;
+  const id = handle.dataset.id;
+  const it = store[list][id];
+  // If dragging a project, carry its children block along
+  const kidsEl = it && it.isProject ? document.querySelector(`[data-children="${id}"]`) : null;
+  drag = { list, id, el: item, kidsEl, isProject: !!(it && it.isProject) };
   item.classList.add("dragging");
+  if (kidsEl) kidsEl.classList.add("dragging-kids");
   handle.setPointerCapture(e.pointerId);
 });
+
 document.addEventListener("pointermove", (e) => {
   if (!drag) return;
   const container = document.querySelector(`[data-body="${drag.list}"]`);
-  const siblings = [...container.querySelectorAll(".item, .proj")].filter(x => x !== drag.el);
-  container.querySelectorAll(".item, .proj").forEach(x => x.classList.remove("drop-target"));
-  let placed = false;
-  for (const sib of siblings) {
-    const r = sib.getBoundingClientRect();
-    if (e.clientY < r.top + r.height / 2) {
-      container.insertBefore(drag.el, sib);
-      placed = true; break;
-    }
+  if (!container) return;
+  // Candidate drop rows: everything except the thing we're dragging
+  const rows = [...container.querySelectorAll(".item")].filter(x => x !== drag.el);
+  let target = null;
+  for (const r of rows) {
+    const box = r.getBoundingClientRect();
+    if (e.clientY < box.top + box.height / 2) { target = r; break; }
   }
-  if (!placed) container.appendChild(drag.el);
+  const move = (node) => {
+    if (!node) return;
+    if (target) container.insertBefore(node, target);
+    else container.appendChild(node);
+  };
+  move(drag.el);
+  // keep the project's children immediately beneath it
+  if (drag.kidsEl) {
+    if (drag.el.nextSibling) container.insertBefore(drag.kidsEl, drag.el.nextSibling);
+    else container.appendChild(drag.kidsEl);
+  }
 });
+
 document.addEventListener("pointerup", () => {
   if (!drag) return;
   const container = document.querySelector(`[data-body="${drag.list}"]`);
   drag.el.classList.remove("dragging");
-  // Write new order for every item in this list based on current DOM position
-  const ids = [...container.querySelectorAll(".item, .proj")].map(x => x.dataset.id);
-  ids.forEach((id, i) => {
-    const newOrder = (i + 1) * 1000;
-    if (store[drag.list][id] && store[drag.list][id].order !== newOrder) {
-      updateItem(drag.list, id, { order: newOrder });
-    }
-  });
+  if (drag.kidsEl) drag.kidsEl.classList.remove("dragging-kids");
+
+  if (container) {
+    // Walk the DOM top to bottom and rewrite order + parent from actual position
+    const rows = [...container.children];
+    let counter = 0;
+    let currentProject = null;
+    rows.forEach(node => {
+      if (node.classList.contains("item")) {
+        const id = node.dataset.id;
+        const isProj = node.dataset.project === "1";
+        const patch = { order: (++counter) * 1000 };
+        if (isProj) {
+          currentProject = id;
+          patch.parent = null;                 // projects always sit at top level
+        } else {
+          // A non-project row directly following a project's children block belongs to it;
+          // a row sitting between projects at root level has no parent.
+          const inChildren = node.parentElement && node.parentElement.classList.contains("children");
+          patch.parent = inChildren ? (node.parentElement.dataset.children || null) : null;
+        }
+        const cur = store[drag.list][id] || {};
+        const changed = cur.order !== patch.order || (cur.parent ?? null) !== (patch.parent ?? null);
+        if (changed) updateItem(drag.list, id, patch);
+      }
+    });
+  }
+  const finishedList = drag.list;
   drag = null;
+  renderList(finishedList);
 });
 
 document.querySelectorAll("[data-addbtn]").forEach(btn => {
   const list = btn.dataset.addbtn;
   const input = document.querySelector(`[data-input="${list}"]`);
+  const projBox = document.querySelector(`[data-proj="${list}"]`);
   const submit = () => {
     const t = input.value.trim();
-    if (!t || !isOwner) return;
-    pushItem(list, { text: t, done: false, ts: Date.now(), order: Date.now(), source: "owner", reviewed: true });
+    if (!t) return;
+    const asProject = projBox && projBox.checked;
+    pushItem(list, {
+      text: t, done: false, ts: Date.now(), order: Date.now(),
+      source: "owner", reviewed: true, isProject: !!asProject
+    });
     input.value = ""; input.focus();
   };
   btn.addEventListener("click", submit);
   input.addEventListener("keydown", e => { if (e.key === "Enter") submit(); });
 });
 
-// ---- Project tracker handlers ----
-function projPath(pid) { return "board/projects/" + pid; }
+function toast(el, msg, isErr) {
+  el.textContent = msg;
+  el.className = "toast show" + (isErr?" err":"");
+  setTimeout(() => { el.className = "toast" + (isErr?" err":""); }, 3200);
+}
+function validEmail(s){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
 
-document.getElementById("p_add").addEventListener("click", () => {
-  if (!isOwner) return;
-  const name = document.getElementById("p_name").value.trim();
-  if (!name) return;
-  const obj = { text: name, ts: Date.now(), order: Date.now() };
-  const drive = document.getElementById("p_drive").value.trim();
-  const launch = document.getElementById("p_launch").value;
-  if (drive) {
-    if (!/^https?:\/\//i.test(drive)) { alert("Drive link should start with https://"); return; }
-    obj.driveUrl = drive;
-  }
-  const start = document.getElementById("p_start").value;
-  if (start) obj.start = start;
-  if (launch) obj.launch = launch;
-  pushItem("projects", obj);
-  ["p_name","p_drive","p_start","p_launch"].forEach(i => document.getElementById(i).value = "");
+document.getElementById("add_submit").addEventListener("click", () => {
+  const name = document.getElementById("add_name").value.trim();
+  const email = document.getElementById("add_email").value.trim();
+  const text = document.getElementById("add_text").value.trim();
+  const target = document.getElementById("add_target").value;
+  const t = document.getElementById("add_toast");
+  if (!name || !email || !text) return toast(t, "Name, email, and item are all required.", true);
+  if (!validEmail(email)) return toast(t, "That email doesn't look right.", true);
+  pushItem(target, { text, name, email, done: false, ts: Date.now(), order: Date.now(), source: "public", reviewed: false });
+  document.getElementById("add_text").value = "";
+  toast(t, "Added to the board ✓");
 });
 
-// Add a sub-item
-document.addEventListener("click", (e) => {
-  const b = e.target.closest("[data-subadd]");
-  if (!b || !isOwner) return;
-  const pid = b.dataset.subadd;
-  const input = document.querySelector(`[data-subinput="${pid}"]`);
-  if (!input || !input.value.trim()) return;
-  db.ref(projPath(pid) + "/subs").push({ text: input.value.trim(), ts: Date.now(), order: Date.now(), status: "red" });
-  input.value = "";
+document.getElementById("ask_submit").addEventListener("click", () => {
+  const name = document.getElementById("ask_name").value.trim();
+  const email = document.getElementById("ask_email").value.trim();
+  const text = document.getElementById("ask_text").value.trim();
+  const t = document.getElementById("ask_toast");
+  if (!name || !email || !text) return toast(t, "Name, email, and question are all required.", true);
+  if (!validEmail(email)) return toast(t, "That email doesn't look right.", true);
+  pushItem("inbox", { text, name, email, ts: Date.now(), order: Date.now(), source: "public" });
+  document.getElementById("ask_text").value = "";
+  toast(t, "Sent to Coop ✓");
 });
-document.addEventListener("keydown", (e) => {
-  const i = e.target.closest("[data-subinput]");
-  if (!i || e.key !== "Enter" || !isOwner) return;
-  if (i.value.trim()) {
-    db.ref(projPath(i.dataset.subinput) + "/subs").push({ text: i.value.trim(), ts: Date.now(), order: Date.now(), status: "red" });
-    i.value = "";
-  }
-});
-
-// Driver / Approved initials — any signed-in user
-document.addEventListener("change", (e) => {
-  const i = e.target.closest("[data-ini]");
-  if (!i || !ME) return;
-  const v = i.value.trim().toUpperCase().slice(0, 3);
-  db.ref(projPath(i.dataset.pid) + "/subs/" + i.dataset.sid + "/" + i.dataset.ini).set(v || null);
-});
-
 
 function applyOwnerUI() {
   document.querySelectorAll(".owner-only").forEach(el => { el.hidden = !isOwner; });
   const tag = document.getElementById("modeTag");
-  if (isOwner) { tag.textContent = "Owner — full edit"; tag.className = "mode-tag owner"; }
-  else { tag.textContent = "View + notes"; tag.className = "mode-tag"; }
-  document.getElementById("lockHint").textContent = isOwner ? "Owner access" : "View + status + notes";
+  if (isOwner) { tag.textContent = "Editing unlocked"; tag.className = "mode-tag owner"; }
+  else { tag.textContent = "Read-only view"; tag.className = "mode-tag"; }
+  document.getElementById("lockHint").textContent = isOwner ? "Editing on — lock this device" : "Owner? Unlock editing →";
   renderTrash();
 }
+document.getElementById("lockHint").addEventListener("click", () => {
+  if (isOwner) {
+    try { sessionStorage.removeItem("enduring_edit"); } catch(e){}
+    location.hash = ""; isOwner = false; applyOwnerUI(); LISTS.forEach(renderList);
+  } else {
+    const k = prompt("Enter your edit key:");
+    if (k === EDIT_KEY) { try { sessionStorage.setItem("enduring_edit","1"); } catch(e){} isOwner = true; applyOwnerUI(); LISTS.forEach(renderList); }
+    else if (k !== null) { alert("That key isn't right."); }
+  }
+});
+window.addEventListener("hashchange", () => {
+  const now = readEditGrant();
+  if (now !== isOwner) { isOwner = now; applyOwnerUI(); LISTS.forEach(renderList); }
+});
 
 function tick(){
   const now = new Date();
@@ -1052,8 +792,8 @@ function tick(){
 }
 tick(); setInterval(tick, 30000);
 
-document.getElementById("gateBtn").addEventListener("click", signIn);
-if (initBackend()) startAuth();
+applyOwnerUI();
+initBackend();
 </script>
 </body>
 </html>
