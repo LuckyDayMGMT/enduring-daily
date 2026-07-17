@@ -273,6 +273,9 @@
   .sub-add input:focus { outline: none; border-color: var(--brass); }
   .sub-add button { font-size: 11px; padding: 4px 10px; }
   .p-arrows button { font-size: 15px; padding: 0 4px; }
+  .pencil { background: none; border: none; cursor: pointer; color: var(--gray); font-size: 13px; padding: 0 4px; font-family: var(--sans); }
+  .pencil:hover { color: var(--brass); }
+  .sub .pencil { font-size: 12px; }
   .p-form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); flex-wrap: wrap; }
   .p-form input { background: var(--white); border: 1px solid var(--gray-md); border-radius: 5px;
     padding: 8px 10px; font-size: 13px; font-family: var(--sans); min-width: 140px; }
@@ -408,7 +411,7 @@
 <footer>
   <div class="foot-inner">
     <span class="foot-logo">ENDURING</span>
-    <span>Enduring Daily · Operations Board · v8</span>
+    <span>Enduring Daily · Operations Board · v9</span>
     <span class="lock-hint" id="lockHint"></span>
   </div>
 </footer>
@@ -615,7 +618,8 @@ function subRow(pid, sid, s, canEdit, ownerCtl) {
     <div class="s-text">${esc(s.text)}</div>
     <div class="ini"><input maxlength="3" value="${esc(s.driver || "")}" placeholder="—" ${canEdit ? `data-ini="driver" data-pid="${pid}" data-sid="${sid}"` : "disabled"} /></div>
     <div class="ini"><input maxlength="3" value="${esc(s.approved || "")}" placeholder="—" ${canEdit ? `data-ini="approved" data-pid="${pid}" data-sid="${sid}"` : "disabled"} /></div>
-    ${ownerCtl ? `<div class="s-arrows">
+    ${ownerCtl ? `<button class="pencil" title="Edit text" data-act="subrename" data-pid="${pid}" data-sid="${sid}">✎</button>
+    <div class="s-arrows">
       <button data-act="subup" data-pid="${pid}" data-sid="${sid}" title="Move up">▴</button>
       <button data-act="subdown" data-pid="${pid}" data-sid="${sid}" title="Move down">▾</button>
     </div>
@@ -715,6 +719,7 @@ function renderProjects() {
         ${isOwner ? `<div class="drag-handle" title="Drag to re-rank" data-drag="projects" data-id="${pid}">⠿</div>` : ""}
         <span class="p-check ${p.complete ? "on" : ""}${isOwner ? "" : " readonly"}" ${isOwner ? `data-act="pcomplete" data-pid="${pid}"` : ""} title="${p.complete ? "Complete" : "Mark complete"}">✓</span>
         <div class="p-name">${esc(p.text)}</div>
+        ${isOwner ? `<button class="pencil" title="Rename project" data-act="rename" data-pid="${pid}">✎</button>` : ""}
         <div class="p-chips">
           ${driveChip}
           ${stageBadge(pid, "s1", p.s1, p.s1url)}
@@ -838,6 +843,22 @@ document.addEventListener("click", (e) => {
 
   if (!isOwner) return;
 
+  if (act === "rename") {
+    const pid = el.dataset.pid;
+    const cur = (store.projects[pid] || {}).text || "";
+    const v = prompt("Project name:", cur);
+    if (v === null || !v.trim() || v.trim() === cur) return;
+    updateItem("projects", pid, { text: v.trim() });
+    return;
+  }
+  if (act === "subrename") {
+    const { pid, sid } = el.dataset;
+    const cur = ((((store.projects || {})[pid] || {}).subs || {})[sid] || {}).text || "";
+    const v = prompt("Sub-item text:", cur);
+    if (v === null || !v.trim() || v.trim() === cur) return;
+    db.ref(projPath(pid) + "/subs/" + sid + "/text").set(v.trim());
+    return;
+  }
   if (act === "pcomplete") {
     const pid = el.dataset.pid;
     updateItem("projects", pid, { complete: !(store.projects[pid] || {}).complete });
