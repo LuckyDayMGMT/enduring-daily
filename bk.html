@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>From the Desk of Bob Cooper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  @font-face {
+    font-family: "Sc";
+    src: url("assets/Sc-Regular.ttf") format("truetype");
+    font-display: swap;
+  }
+  :root {
+    --pad: #B9D9EB;           /* Pantone 290 C */
+    --ink: #23324e;           /* pen ink */
+    --header-ink: #4a5568;
+    --navy: #193661;
+    --brass: #A6832C;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; font-family: Roboto, Arial, sans-serif;
+    background: #2b241c url("assets/desk.jpg") center / cover no-repeat fixed;
+    min-height: 100vh;
+    display: grid; place-items: center;
+    padding: 40px 16px;
+  }
+
+  /* ---- sign-in gate (same model as the board) ---- */
+  #gate { position: fixed; inset: 0; background: rgba(20,28,44,0.72); display: grid; place-items: center; z-index: 99; backdrop-filter: blur(3px); }
+  #gate[hidden] { display: none; }
+  [hidden] { display: none !important; }
+  .gate-card { background: #fff; border-radius: 10px; padding: 30px 28px; max-width: 360px; width: 100%; text-align: center; box-shadow: 0 24px 70px -20px rgba(0,0,0,0.6); }
+  .gate-card h1 { font-family: Georgia, serif; color: var(--navy); font-size: 22px; margin: 0 0 6px; font-weight: 400; }
+  .gate-card p { font-size: 13px; color: #666; margin: 0 0 18px; }
+  .gsi { display: inline-flex; align-items: center; justify-content: center; gap: 9px; width: 100%;
+    background: #fff; border: 1px solid #c9ccd1; border-radius: 5px; padding: 10px 14px;
+    font: 500 14px Roboto, Arial, sans-serif; color: #1a1a1a; cursor: pointer; }
+  .gsi:hover { border-color: var(--brass); }
+  .gate-err { margin-top: 12px; font-size: 12px; color: #7a1f1f; min-height: 16px; }
+
+  /* ---- top corner nav ---- */
+  .backlink {
+    position: fixed; top: 18px; left: 20px; z-index: 5;
+    font-size: 12px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;
+    color: #f2ede4; text-decoration: none; background: rgba(25,54,97,0.82);
+    padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.25);
+  }
+  .backlink:hover { border-color: var(--brass); color: #fff; }
+
+  /* ---- the pad ---- */
+  .pad {
+    position: relative;
+    width: min(560px, 94vw);
+    min-height: 680px;
+    background: var(--pad);
+    border-radius: 4px 4px 6px 6px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.5) inset,
+      0 22px 55px -12px rgba(15,10,5,0.65),
+      0 4px 14px rgba(15,10,5,0.35);
+    transform: rotate(-1.6deg);
+    padding: 46px 48px 120px;
+  }
+  /* subtle torn top edge */
+  .pad::before {
+    content: ""; position: absolute; top: -6px; left: 8px; right: 8px; height: 8px;
+    background: linear-gradient(#dceaf3, var(--pad));
+    border-radius: 3px 3px 0 0; opacity: .8;
+  }
+
+  .pad-head { margin-bottom: 8px; }
+  .fromdesk {
+    font-family: "Kaushan Script", cursive;
+    font-size: 30px; color: var(--header-ink); margin: 0;
+    transform: rotate(-0.5deg);
+  }
+  .bobname {
+    font-family: Roboto, Arial, sans-serif; font-weight: 700;
+    font-size: 17px; letter-spacing: 3.5px; color: var(--header-ink);
+    margin: 4px 0 0 34px; text-transform: uppercase;
+  }
+  .weekline {
+    font-family: "Sc", cursive; font-size: 21px; color: var(--ink);
+    margin: 22px 0 4px; opacity: .85; text-align: right;
+  }
+
+  .todo { list-style: none; margin: 6px 0 0; padding: 0; }
+  .todo li {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 7px 2px; cursor: default;
+  }
+  .todo li .mark { flex: 0 0 auto; font-family: "Sc", cursive; font-size: 22px; color: var(--ink); }
+  .todo li .t {
+    flex: 1; font-family: "Sc", cursive; font-size: 26px; line-height: 1.35; color: var(--ink);
+    word-wrap: break-word; min-width: 0;
+  }
+  .todo li.done .t, .todo li.done .mark { color: #6d7f96; text-decoration: line-through; text-decoration-thickness: 2px; }
+  .todo li.can-check { cursor: pointer; }
+  .todo li.can-check:hover .t { text-shadow: 0 0 1px rgba(35,50,78,0.4); }
+  .todo li .del {
+    flex: 0 0 auto; visibility: hidden; background: none; border: none; cursor: pointer;
+    color: #8296ad; font-size: 14px; padding: 0 4px;
+  }
+  .todo li:hover .del { visibility: visible; }
+  .todo li .del:hover { color: #23324e; }
+  .empty-pad { font-family: "Sc", cursive; font-size: 24px; color: var(--ink); opacity: .55; margin-top: 30px; }
+
+  /* owner tools pinned to pad bottom */
+  .pad-tools {
+    position: absolute; left: 48px; right: 48px; bottom: 40px;
+    display: flex; gap: 8px; align-items: center;
+  }
+  .pad-tools input {
+    flex: 1; background: rgba(255,255,255,0.55); border: none; border-bottom: 2px solid rgba(35,50,78,0.35);
+    border-radius: 3px 3px 0 0; padding: 9px 10px;
+    font-family: "Sc", cursive; font-size: 22px; color: var(--ink);
+  }
+  .pad-tools input:focus { outline: none; border-bottom-color: var(--ink); }
+  .pad-tools button {
+    font: 700 12px Roboto, Arial, sans-serif; letter-spacing: .6px;
+    background: var(--navy); color: #fff; border: none; border-radius: 5px;
+    padding: 9px 14px; cursor: pointer;
+  }
+  .pad-tools button:hover { background: #10233f; }
+  .freshpad {
+    position: absolute; right: 48px; top: 46px;
+    background: none; border: none; cursor: pointer;
+    font: 700 10.5px Roboto, Arial, sans-serif; letter-spacing: 1px; text-transform: uppercase;
+    color: #7d92a8;
+  }
+  .freshpad:hover { color: var(--ink); }
+
+  @media (max-width: 480px) {
+    .pad { padding: 36px 26px 110px; min-height: 560px; }
+    .pad-tools { left: 26px; right: 26px; }
+    .freshpad { right: 26px; }
+    .todo li .t { font-size: 23px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="gate-card">
+    <h1>From the Desk of Bob Cooper</h1>
+    <p>Sign in with your Enduring Co account.</p>
+    <button class="gsi" id="gateBtn">
+      <svg width="16" height="16" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.7-2 5-4.4 6.6v5.5h7.1c4.1-3.8 6.6-9.4 6.6-16.1z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.4l-7.1-5.5c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9h-7.3v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C2.9 17.3 2 20.5 2 24s.9 6.7 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 11.4c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.8 29.9 2.7 24 2.7 15.5 2.7 8.1 7.6 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>
+      Sign in with Google
+    </button>
+    <div class="gate-err" id="gateErr"></div>
+  </div>
+</div>
+
+<a class="backlink" href="index.html">&larr; Enduring Daily</a>
+
+<div class="pad" id="pad" hidden>
+  <button class="freshpad owner-only" id="freshBtn" hidden>Fresh pad</button>
+  <div class="pad-head">
+    <p class="fromdesk">From the Desk of:</p>
+    <p class="bobname">Bob Cooper</p>
+  </div>
+  <div class="weekline" id="weekline"></div>
+  <ul class="todo" id="todo"></ul>
+  <div class="pad-tools owner-only" hidden>
+    <input type="text" id="newItem" placeholder="Add to Brian&rsquo;s week&hellip;" maxlength="200" />
+    <button id="addBtn">Add</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBtZiXmmL_rA51xFvS50xWM-W1jbygpkn4",
+  authDomain: "enduring-daily.firebaseapp.com",
+  databaseURL: "https://enduring-daily-default-rtdb.firebaseio.com",
+  projectId: "enduring-daily",
+  storageBucket: "enduring-daily.firebasestorage.app",
+  appId: "1:1050464636884:web:5e975f663e53847fd51041"
+};
+const OWNER_UID = "pvnOeV3RdLOIcdTAZEwCR0cEke72";
+const ALLOWED_DOMAIN = "enduring.co";
+
+let db = null, ME = null, isOwner = false, items = {};
+
+function gateErr(m) { document.getElementById("gateErr").textContent = m || ""; }
+function esc(s) { const d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
+
+function weekLabel() {
+  const now = new Date();
+  const mon = new Date(now);
+  mon.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+  return "Week of " + mon.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+function render() {
+  const ul = document.getElementById("todo");
+  const entries = Object.entries(items).sort((a, b) => (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0));
+  if (!entries.length) {
+    ul.innerHTML = `<li class="empty-pad">${isOwner ? "Write Brian\u2019s week below." : "Nothing on the pad yet."}</li>`;
+    return;
+  }
+  ul.innerHTML = entries.map(([id, it]) => `
+    <li class="${it.done ? "done" : ""} ${ME ? "can-check" : ""}" data-id="${id}" title="${it.done ? "Crossed off" : "Click to cross off"}">
+      <span class="mark">${it.done ? "\u2713" : "\u2013"}</span>
+      <span class="t">${esc(it.text)}</span>
+      ${isOwner ? `<button class="del" data-del="${id}" title="Remove">\u2715</button>` : ""}
+    </li>`).join("");
+}
+
+document.getElementById("todo").addEventListener("click", (e) => {
+  const del = e.target.closest("[data-del]");
+  if (del && isOwner) { db.ref("board/bk/" + del.dataset.del).remove(); return; }
+  const li = e.target.closest("li[data-id]");
+  if (li && ME) db.ref("board/bk/" + li.dataset.id + "/done").set(!items[li.dataset.id].done);
+});
+
+function addItem() {
+  const inp = document.getElementById("newItem");
+  const t = inp.value.trim();
+  if (!t || !isOwner) return;
+  db.ref("board/bk").push({ text: t, ts: Date.now(), order: Date.now(), done: false });
+  inp.value = ""; inp.focus();
+}
+document.getElementById("addBtn").addEventListener("click", addItem);
+document.getElementById("newItem").addEventListener("keydown", e => { if (e.key === "Enter") addItem(); });
+document.getElementById("freshBtn").addEventListener("click", () => {
+  if (!isOwner) return;
+  if (!confirm("Tear off this page and start a fresh pad? This clears every item.")) return;
+  Object.keys(items).forEach(id => db.ref("board/bk/" + id).remove());
+});
+
+function signIn() {
+  gateErr("");
+  const p = new firebase.auth.GoogleAuthProvider();
+  p.setCustomParameters({ hd: ALLOWED_DOMAIN, prompt: "select_account" });
+  firebase.auth().signInWithPopup(p).catch(err => {
+    if (err.code !== "auth/popup-closed-by-user") gateErr(err.message || "Sign-in failed.");
+  });
+}
+document.getElementById("gateBtn").addEventListener("click", signIn);
+
+firebase.initializeApp(FIREBASE_CONFIG);
+db = firebase.database();
+firebase.auth().onAuthStateChanged(user => {
+  const gate = document.getElementById("gate");
+  const pad = document.getElementById("pad");
+  if (!user) { ME = null; isOwner = false; gate.hidden = false; pad.hidden = true; return; }
+  const email = (user.email || "").toLowerCase();
+  if (!email.endsWith("@" + ALLOWED_DOMAIN) || !user.emailVerified) {
+    gateErr("That account isn't an @" + ALLOWED_DOMAIN + " address.");
+    firebase.auth().signOut();
+    return;
+  }
+  ME = { uid: user.uid, email };
+  isOwner = user.uid === OWNER_UID;
+  gate.hidden = true; pad.hidden = false;
+  document.querySelectorAll(".owner-only").forEach(el => { el.hidden = !isOwner; });
+  document.getElementById("weekline").textContent = weekLabel();
+  db.ref("board/bk").on("value", s => { items = s.val() || {}; render(); });
+});
+</script>
+</body>
+</html>
