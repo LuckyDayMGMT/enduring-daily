@@ -265,9 +265,11 @@
     padding: 3px 0; font-family: var(--sans); }
   .ini input:focus { outline: none; border-color: var(--brass); }
   .ini input:disabled { background: var(--gray-lt); color: var(--gray-dk); border-color: var(--line); }
-  .ini-h { flex: 0 0 auto; width: 42px; text-align: center; font-size: 10.5px; font-weight: 900;
+  .ini-h { flex: 0 0 auto; width: 42px; text-align: left; font-size: 10.5px; font-weight: 900;
     letter-spacing: .5px; color: var(--brass); text-transform: uppercase; }
-  .s-cols { display: flex; align-items: center; gap: 8px; padding: 0 6px 2px; }
+  .s-cols { display: flex; align-items: center; gap: 10px; padding: 0 6px 2px; }
+  .s-cols .ghost { visibility: hidden; }
+  .s-cols .pencil { font-size: 13.5px; }
   .s-cols .spacer { flex: 1; }
   .s-arrows { flex: 0 0 auto; display: flex; gap: 2px; }
   .s-arrows button, .s-del { background: none; border: none; cursor: pointer; color: var(--gray);
@@ -417,7 +419,7 @@
 <footer>
   <div class="foot-inner">
     <span class="foot-logo">ENDURING</span>
-    <span>Enduring Daily · Operations Board · v11</span>
+    <span>Enduring Daily · Operations Board · v12</span>
     <span class="lock-hint" id="lockHint"></span>
   </div>
 </footer>
@@ -752,7 +754,7 @@ function renderProjects() {
         </div>
       </div>
       <div class="p-body">
-        ${subs.length ? `<div class="s-cols"><span style="width:16px"></span><span class="spacer"></span><span class="ini-h">Driver</span><span class="ini-h">Appr</span>${isOwner ? `<span style="width:78px"></span>` : ""}</div>` : ""}
+        ${subs.length ? `<div class="s-cols"><span style="width:16px"></span><span class="spacer"></span><span class="ini-h">Driver</span><span class="ini-h">Appr</span>${isOwner ? `<span class="ghost"><button class="pencil">✎</button></span><span class="ghost s-arrows"><button>▴</button><button>▾</button></span><button class="ghost s-del">✕</button>` : ""}</div>` : ""}
         ${subs.map(([sid, s]) => subRow(pid, sid, s, canEdit, isOwner)).join("")}
         ${isOwner ? `<div class="sub-add">
           <input type="text" placeholder="Add a sub-item…" data-subinput="${pid}" />
