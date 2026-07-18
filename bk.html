@@ -159,7 +159,6 @@
 <a class="backlink" href="index.html">&larr; Enduring Daily</a>
 
 <div class="pad" id="pad" hidden>
-  <button class="freshpad owner-only" id="freshBtn" hidden>Fresh pad</button>
   <div class="pad-head">
     <p class="fromdesk">From the Desk of:</p>
     <p class="bobname">Bob Cooper</p>
@@ -167,7 +166,7 @@
   <div class="weekline" id="weekline"></div>
   <ul class="todo" id="todo"></ul>
   <div class="pad-tools owner-only" hidden>
-    <input type="text" id="newItem" placeholder="Add to Brian&rsquo;s week&hellip;" maxlength="200" />
+    <input type="text" id="newItem" placeholder="" maxlength="200" />
     <button id="addBtn">Add</button>
   </div>
 </div>
@@ -230,7 +229,8 @@ function addItem() {
 }
 document.getElementById("addBtn").addEventListener("click", addItem);
 document.getElementById("newItem").addEventListener("keydown", e => { if (e.key === "Enter") addItem(); });
-document.getElementById("freshBtn").addEventListener("click", () => {
+const _fresh = document.getElementById("freshBtn");
+if (_fresh) _fresh.addEventListener("click", () => {
   if (!isOwner) return;
   if (!confirm("Tear off this page and start a fresh pad? This clears every item.")) return;
   Object.keys(items).forEach(id => db.ref("board/bk/" + id).remove());
