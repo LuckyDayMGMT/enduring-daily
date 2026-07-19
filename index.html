@@ -223,6 +223,13 @@
   .note-toggle:hover { color: var(--brass); }
 
   /* ---- Project tracker ---- */
+  .proj-search { margin-right: 16px; min-width: 240px; background: var(--white); border: 1px solid var(--gray-md);
+    border-radius: 6px; padding: 7px 12px; font-size: 13.5px; font-family: var(--sans); color: var(--ink); }
+  .proj-search:focus { outline: none; border-color: var(--brass); }
+  .proj-search::placeholder { color: var(--gray); }
+  .proj.search-hit .p-name { background: rgba(166,131,44,0.16); border-radius: 3px; padding: 0 3px; }
+  .sub.search-hit .s-text { background: rgba(166,131,44,0.16); border-radius: 3px; }
+  .search-none { padding: 20px 10px; color: var(--gray-dk); font-size: 14px; font-style: italic; }
   .legend { display: flex; gap: 12px; align-items: center; margin-right: 14px; }
   .lg { font-size: 15px; font-weight: 500; color: var(--gray-dk); display: inline-flex; align-items: center; gap: 4px; }
   .dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
@@ -371,6 +378,7 @@
   <section class="card col-span" data-list="projects">
     <div class="card-head">
       <div class="card-title" style="flex:1">Projects</div>
+      <input type="search" id="projSearch" class="proj-search" placeholder="Search projects & sub-items…" autocomplete="off" />
       <div class="legend">
         <span class="lg"><i class="dot red"></i>Not started</span>
         <span class="lg"><i class="dot yellow"></i>Working</span>
@@ -424,7 +432,7 @@
 <footer>
   <div class="foot-inner">
     <span class="foot-logo">ENDURING</span>
-    <span>Enduring Daily · Operations Board · v14</span>
+    <span>Enduring Daily · Operations Board · v15</span>
     <span class="lock-hint" id="lockHint"></span>
   </div>
 </footer>
@@ -458,6 +466,7 @@ let drag = null;
 let isOwner = false;
 let ME = null;
 let store = {};
+let projQuery = "";
 
 function initBackend() {
   if (!window.firebase) {
@@ -624,9 +633,10 @@ function stageBadge(id, stage, state, url) {
 
 const STATUS_CYCLE = ["red", "yellow", "blue", "green"];
 
-function subRow(pid, sid, s, canEdit, ownerCtl) {
+function subRow(pid, sid, s, canEdit, ownerCtl, q) {
   const st = STATUS_CYCLE.includes(s.status) ? s.status : "red";
-  return `<div class="sub" data-sid="${sid}">
+  const hit = q && (s.text || "").toLowerCase().includes(q);
+  return `<div class="sub ${hit ? "search-hit" : ""}" data-sid="${sid}">
     <span class="s-dot ${st}${canEdit ? " click" : ""}" ${canEdit ? `data-act="substatus" data-pid="${pid}" data-sid="${sid}"` : ""} title="${st}"></span>
     <div class="s-text">${esc(s.text)}</div>
     <div class="ini"><input maxlength="3" value="${esc(s.driver || "")}" placeholder="—" ${canEdit ? `data-ini="driver" data-pid="${pid}" data-sid="${sid}"` : "disabled"} /></div>
@@ -714,8 +724,18 @@ function renderProjects() {
     });
   if (countEl) countEl.textContent = entries.filter(([_, p]) => !p.complete).length;
   if (!entries.length) { body.innerHTML = `<div class="empty">No projects yet.</div>`; renderGantt(); return; }
+
+  const q = projQuery;
+  let shown = entries;
+  if (q) {
+    shown = entries.filter(([_, p]) =>
+      (p.text || "").toLowerCase().includes(q) ||
+      Object.values(p.subs || {}).some(s => (s.text || "").toLowerCase().includes(q)));
+    if (!shown.length) { body.innerHTML = `<div class="search-none">No projects or sub-items match \u201c${esc(projQuery)}\u201d.</div>`; renderGantt(); return; }
+  }
+
   const canEdit = !!ME;
-  body.innerHTML = entries.map(([pid, p]) => {
+  body.innerHTML = shown.map(([pid, p]) => {
     const subs = Object.entries(p.subs || {})
       .sort((a, b) => (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0));
     const driveChip = p.driveUrl
@@ -727,7 +747,8 @@ function renderProjects() {
     const launchChip = p.launch
       ? `<span class="chip launch${isOwner ? " click" : ""}" ${isOwner ? `data-act="setlaunch" data-pid="${pid}"` : ""}>LAUNCH: ${fmtMonth(p.launch)}</span>`
       : (isOwner ? `<span class="chip launch click" data-act="setlaunch" data-pid="${pid}">+ LAUNCH</span>` : "");
-    return `<div class="proj ${p.complete ? "complete" : ""}" data-id="${pid}" data-list="projects">
+    const pNameHit = q && (p.text || "").toLowerCase().includes(q);
+    return `<div class="proj ${p.complete ? "complete" : ""} ${pNameHit ? "search-hit" : ""}" data-id="${pid}" data-list="projects">
       <div class="p-head">
         ${isOwner ? `<div class="drag-handle" title="Drag to re-rank" data-drag="projects" data-id="${pid}">⠿</div>` : ""}
         <span class="p-check ${p.complete ? "on" : ""}${isOwner ? "" : " readonly"}" ${isOwner ? `data-act="pcomplete" data-pid="${pid}"` : ""} title="${p.complete ? "Complete" : "Mark complete"}">✓</span>
@@ -760,7 +781,7 @@ function renderProjects() {
       </div>
       <div class="p-body">
         ${subs.length ? `<div class="s-cols"><span style="width:16px"></span><span class="spacer"></span><span class="ini-h">Driver</span><span class="ini-h">Appr</span>${isOwner ? `<span class="ghost"><button class="pencil">✎</button></span><span class="ghost s-arrows"><button>▴</button><button>▾</button></span><button class="ghost s-del">✕</button>` : ""}</div>` : ""}
-        ${subs.map(([sid, s]) => subRow(pid, sid, s, canEdit, isOwner)).join("")}
+        ${subs.map(([sid, s]) => subRow(pid, sid, s, canEdit, isOwner, q)).join("")}
         ${isOwner ? `<div class="sub-add">
           <input type="text" placeholder="Add a sub-item…" data-subinput="${pid}" />
           <button class="btn primary" data-subadd="${pid}">Add</button>
@@ -1124,6 +1145,8 @@ function tick(){
 }
 tick(); setInterval(tick, 30000);
 
+const _ps = document.getElementById("projSearch");
+if (_ps) _ps.addEventListener("input", (e) => { projQuery = e.target.value.trim().toLowerCase(); renderProjects(); });
 document.getElementById("gateBtn").addEventListener("click", signIn);
 if (initBackend()) startAuth();
 </script>
