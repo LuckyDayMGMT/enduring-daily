@@ -24,6 +24,8 @@
     justify-items: start;
     padding: 40px clamp(24px, 6vw, 130px);
   }
+  .pad { margin-left: clamp(24px, 8vw, 200px); margin-top: 70px;
+  }
 
   /* ---- sign-in gate (same model as the board) ---- */
   #gate { position: fixed; inset: 0; background: rgba(20,28,44,0.72); display: grid; place-items: center; z-index: 99; backdrop-filter: blur(3px); }
@@ -131,7 +133,7 @@
   .freshpad:hover { color: var(--ink); }
 
   @media (max-width: 480px) {
-    .pad { padding: 36px 26px 110px; min-height: 560px; }
+    .pad { padding: 36px 26px 110px; min-height: 560px; margin-left: auto; margin-right: auto; margin-top: 24px; }
     .pad-tools { left: 26px; right: 26px; }
     .freshpad { right: 26px; }
     .todo li .t { font-size: 16px; }
