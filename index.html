@@ -293,6 +293,11 @@
   .sub-add input:focus { outline: none; border-color: var(--brass); }
   .sub-add button { font-size: 11px; padding: 4px 10px; }
   .p-arrows button { font-size: 17px; padding: 0 4px; }
+  .caret { flex: 0 0 auto; background: none; border: none; cursor: pointer; color: var(--gray-dk);
+    font-size: 15px; padding: 0 4px 0 0; transition: transform .15s ease; line-height: 1; }
+  .caret.open { transform: rotate(90deg); color: var(--blue); }
+  .caret:hover { color: var(--brass); }
+  .proj.collapsed .p-body { display: none; }
   .pencil { background: none; border: none; cursor: pointer; color: var(--gray); font-size: 15px; padding: 0 4px; font-family: var(--sans); }
   .pencil:hover { color: var(--brass); }
   .sub .pencil { font-size: 13.5px; }
@@ -432,7 +437,7 @@
 <footer>
   <div class="foot-inner">
     <span class="foot-logo">ENDURING</span>
-    <span>Enduring Daily · Operations Board · v15</span>
+    <span>Enduring Daily · Operations Board · v16</span>
     <span class="lock-hint" id="lockHint"></span>
   </div>
 </footer>
@@ -467,6 +472,7 @@ let isOwner = false;
 let ME = null;
 let store = {};
 let projQuery = "";
+const expandedProjects = new Set();  // per-session; collapsed by default
 
 function initBackend() {
   if (!window.firebase) {
@@ -748,8 +754,10 @@ function renderProjects() {
       ? `<span class="chip launch${isOwner ? " click" : ""}" ${isOwner ? `data-act="setlaunch" data-pid="${pid}"` : ""}>LAUNCH: ${fmtMonth(p.launch)}</span>`
       : (isOwner ? `<span class="chip launch click" data-act="setlaunch" data-pid="${pid}">+ LAUNCH</span>` : "");
     const pNameHit = q && (p.text || "").toLowerCase().includes(q);
-    return `<div class="proj ${p.complete ? "complete" : ""} ${pNameHit ? "search-hit" : ""}" data-id="${pid}" data-list="projects">
+    const isOpen = !!q || expandedProjects.has(pid);
+    return `<div class="proj ${isOpen ? "open" : "collapsed"} ${p.complete ? "complete" : ""} ${pNameHit ? "search-hit" : ""}" data-id="${pid}" data-list="projects">
       <div class="p-head">
+        <button class="caret ${isOpen ? "open" : ""}" data-act="toggleproj" data-pid="${pid}" title="${isOpen ? "Collapse" : "Expand"}" aria-label="Toggle">▸</button>
         ${isOwner ? `<div class="drag-handle" title="Drag to re-rank" data-drag="projects" data-id="${pid}">⠿</div>` : ""}
         <span class="p-check ${p.complete ? "on" : ""}${isOwner ? "" : " readonly"}" ${isOwner ? `data-act="pcomplete" data-pid="${pid}"` : ""} title="${p.complete ? "Complete" : "Mark complete"}">✓</span>
         <div class="p-name">${esc(p.text)}</div>
@@ -872,6 +880,13 @@ document.addEventListener("click", (e) => {
   if (act === "togglenotes") {
     const box = document.querySelector(`[data-notes="${target}"]`);
     if (box) { box.hidden = !box.hidden; el.textContent = el.textContent.replace(box.hidden ? "▴" : "▾", box.hidden ? "▾" : "▴"); }
+    return;
+  }
+  if (act === "toggleproj") {
+    const pid = el.dataset.pid;
+    if (expandedProjects.has(pid)) expandedProjects.delete(pid);
+    else expandedProjects.add(pid);
+    renderProjects();
     return;
   }
   if (act === "delnote") { delNote(list, id, nid); return; }
