@@ -345,6 +345,68 @@
   .sb.na { border-style: dashed; color: var(--gray-md); border-color: var(--gray-md); }
   .sb .lnk { font-size: 8px; opacity: .85; }
   .stages-wrap { display: inline-flex; align-items: center; gap: 2px; }
+  /* ============ MOBILE ============ */
+  @media (max-width: 640px) {
+    /* Masthead: compact, single column */
+    .mast-inner { padding: 16px 16px 14px; gap: 10px; flex-direction: column; }
+    .mast-right { text-align: left; width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
+    .mast-left .product { margin-top: 8px; font-size: 23px; }
+    .mast-left .tagline { display: none; }
+    .logo-box { font-size: 18px; padding: 6px 12px; letter-spacing: 2px; }
+    .clock { font-size: 13px; }
+    .sync { font-size: 12px; }
+    .mast-right > div { margin-top: 0 !important; }
+
+    /* Body padding trim */
+    main { padding: 16px 12px 70px; gap: 14px; }
+
+    /* Card head: search drops to its own full-width line */
+    .card-head { flex-wrap: wrap; padding: 13px 14px 11px; gap: 8px; }
+    .card-title { font-size: 20px; }
+    .proj-search { order: 3; width: 100%; min-width: 0; margin-right: 0; }
+    .legend { flex-wrap: wrap; gap: 8px 12px; margin-right: 0; order: 2; }
+    .lg { font-size: 12px; }
+
+    /* Project header: name row, then a second row for meta */
+    .proj { padding: 10px 8px 12px; }
+    .p-head { flex-wrap: wrap; gap: 6px 8px; row-gap: 8px; }
+    .p-name { font-size: 18px; flex: 1 1 auto; }
+    .caret { font-size: 17px; padding: 10px 12px 10px 4px; margin: -6px 0; }
+    /* progress bar + chips wrap to full-width second line */
+    .p-prog { order: 10; flex: 1 1 100%; margin: 4px 0 0; min-width: 0; }
+    .p-chips { order: 11; flex: 1 1 100%; margin-left: 0; gap: 6px; }
+    .p-chips .chip, .p-chips .sb { font-size: 11px; padding: 6px 11px; }
+    /* owner controls stay on the name row, pushed right */
+    .drag-handle { display: none; }  /* drag is unreliable on touch; use arrows */
+    .p-arrows button { font-size: 20px; padding: 8px 12px; }
+    .pencil { font-size: 17px; padding: 8px 12px; }
+
+    /* Sub-items: give the TEXT the room; shrink fixed columns */
+    .p-body { padding-left: 8px; }
+    .s-cols { display: none; }  /* header labels hidden on mobile; boxes self-explain */
+    .sub { gap: 8px; padding: 10px 4px; flex-wrap: wrap; }
+    .s-dot { width: 26px; height: 26px; }
+    .s-text { font-size: 15px; flex: 1 1 100%; order: 2; padding-left: 34px; }
+    .sub .s-dot { order: 1; }
+    .ini { order: 3; width: auto; display: flex; align-items: center; gap: 4px; margin-left: 34px; }
+    .ini::before { content: attr(data-lbl); font-size: 9px; font-weight: 900; letter-spacing: .5px;
+      color: var(--gray); text-transform: uppercase; }
+    .ini input { width: 48px; font-size: 15px; padding: 9px 0; }
+    .s-arrows { order: 4; }
+    .s-arrows button { font-size: 18px; padding: 8px 12px; }
+    .s-del { order: 5; font-size: 16px; padding: 8px 12px; }
+    .sub-add input { font-size: 15px; padding: 8px 10px; }
+
+    /* Notes + questions add rows */
+    .note-add input, .quick-add input { font-size: 15px; }
+
+    /* Gantt: let it scroll horizontally rather than crush */
+    #ganttBody { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .gantt { min-width: 560px; }
+
+    /* Recently-deleted + trash */
+    .restore-btn { font-size: 12px; }
+  }
 </style>
 </head>
 <body>
@@ -437,7 +499,7 @@
 <footer>
   <div class="foot-inner">
     <span class="foot-logo">ENDURING</span>
-    <span>Enduring Daily · Operations Board · v16</span>
+    <span>Enduring Daily · Operations Board · v17</span>
     <span class="lock-hint" id="lockHint"></span>
   </div>
 </footer>
@@ -645,8 +707,8 @@ function subRow(pid, sid, s, canEdit, ownerCtl, q) {
   return `<div class="sub ${hit ? "search-hit" : ""}" data-sid="${sid}">
     <span class="s-dot ${st}${canEdit ? " click" : ""}" ${canEdit ? `data-act="substatus" data-pid="${pid}" data-sid="${sid}"` : ""} title="${st}"></span>
     <div class="s-text">${esc(s.text)}</div>
-    <div class="ini"><input maxlength="3" value="${esc(s.driver || "")}" placeholder="—" ${canEdit ? `data-ini="driver" data-pid="${pid}" data-sid="${sid}"` : "disabled"} /></div>
-    <div class="ini"><input maxlength="3" value="${esc(s.approved || "")}" placeholder="—" ${canEdit ? `data-ini="approved" data-pid="${pid}" data-sid="${sid}"` : "disabled"} /></div>
+    <div class="ini" data-lbl="Driver"><input maxlength="3" value="${esc(s.driver || "")}" placeholder="—" ${canEdit ? `data-ini="driver" data-pid="${pid}" data-sid="${sid}"` : "disabled"} /></div>
+    <div class="ini" data-lbl="Appr"><input maxlength="3" value="${esc(s.approved || "")}" placeholder="—" ${canEdit ? `data-ini="approved" data-pid="${pid}" data-sid="${sid}"` : "disabled"} /></div>
     ${ownerCtl ? `<button class="pencil" title="Edit text" data-act="subrename" data-pid="${pid}" data-sid="${sid}">✎</button>
     <div class="s-arrows">
       <button data-act="subup" data-pid="${pid}" data-sid="${sid}" title="Move up">▴</button>
