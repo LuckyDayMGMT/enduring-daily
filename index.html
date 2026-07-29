@@ -339,6 +339,7 @@
   .chip.co-school   { border-color: #C9A227; color: #8a6f16; background: rgba(201,162,39,0.12); }
   .chip.co-allrec   { border-color: #993C1D; color: #993C1D; background: rgba(153,60,29,0.08); }
   .chip.co-kinetico { border-color: #7fb2d4; color: #2f6d94; background: rgba(185,217,235,0.28); }
+  .chip.co-ebs      { border-color: #000000; color: #000000; background: rgba(0,0,0,0.06); }
   .chip.co-none     { border-style: dashed; color: var(--gray); }
   .g-filter { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; padding: 4px 4px 10px; }
   .g-filter .gf { font-size: 11px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase;
@@ -349,11 +350,13 @@
   .g-filter .gf.on.co-school   { background: #C9A227; border-color: #C9A227; color: #33270a; }
   .g-filter .gf.on.co-allrec   { background: #993C1D; border-color: #993C1D; }
   .g-filter .gf.on.co-kinetico { background: #7fb2d4; border-color: #7fb2d4; color: #10314a; }
+  .g-filter .gf.on.co-ebs      { background: #000000; border-color: #000000; color: #ffffff; }
   .g-label .co-tag { font-size: 8px; font-weight: 900; letter-spacing: .4px; padding: 1px 5px; border-radius: 3px;
     margin-right: 6px; text-transform: uppercase; vertical-align: middle; }
   .co-tag.co-school   { background: rgba(201,162,39,0.20); color: #8a6f16; }
   .co-tag.co-allrec   { background: rgba(153,60,29,0.16); color: #993C1D; }
   .co-tag.co-kinetico { background: rgba(185,217,235,0.45); color: #2f6d94; }
+  .co-tag.co-ebs      { background: rgba(0,0,0,0.12); color: #000000; }
 
   /* ---- Stage doc badges ---- */
   .stages { flex: 0 0 auto; display: flex; gap: 4px; align-items: center; }
@@ -521,7 +524,7 @@
 <footer>
   <div class="foot-inner">
     <span class="foot-logo">ENDURING</span>
-    <span>Enduring Daily · Operations Board · v19</span>
+    <span>Enduring Daily · Operations Board · v20</span>
     <span class="lock-hint" id="lockHint"></span>
   </div>
 </footer>
@@ -727,9 +730,10 @@ const STATUS_CYCLE = ["red", "yellow", "blue", "green"];
 const PORTCOS = {
   school:   { label: "School Apparel", short: "SCHOOL" },
   allrec:   { label: "AllRec",         short: "ALLREC" },
-  kinetico: { label: "Kinetico",       short: "KINETICO" }
+  kinetico: { label: "Kinetico",       short: "KINETICO" },
+  ebs:      { label: "EBS",            short: "EBS" }
 };
-const CO_CYCLE = ["", "school", "allrec", "kinetico"];
+const CO_CYCLE = ["", "school", "allrec", "kinetico", "ebs"];
 let ganttFilter = "";  // "" = all; else a portco key
 
 function subRow(pid, sid, s, canEdit, ownerCtl, q) {
