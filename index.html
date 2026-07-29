@@ -333,6 +333,28 @@
     font-size: 12px; color: var(--gray-dk); }
   .g-unsched b { color: var(--navy, #193661); font-weight: 700; }
 
+  /* ---- PortCo tags ---- */
+  .chip.co { border-width: 1px; cursor: default; }
+  .chip.co.click { cursor: pointer; }
+  .chip.co-school   { border-color: #C9A227; color: #8a6f16; background: rgba(201,162,39,0.12); }
+  .chip.co-allrec   { border-color: #993C1D; color: #993C1D; background: rgba(153,60,29,0.08); }
+  .chip.co-kinetico { border-color: #7fb2d4; color: #2f6d94; background: rgba(185,217,235,0.28); }
+  .chip.co-none     { border-style: dashed; color: var(--gray); }
+  .g-filter { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; padding: 4px 4px 10px; }
+  .g-filter .gf { font-size: 11px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase;
+    padding: 5px 11px; border-radius: 999px; border: 1px solid var(--gray-md); color: var(--gray-dk);
+    background: var(--white); cursor: pointer; font-family: var(--sans); }
+  .g-filter .gf:hover { border-color: var(--brass); }
+  .g-filter .gf.on { color: var(--white); background: var(--blue); border-color: var(--blue); }
+  .g-filter .gf.on.co-school   { background: #C9A227; border-color: #C9A227; color: #33270a; }
+  .g-filter .gf.on.co-allrec   { background: #993C1D; border-color: #993C1D; }
+  .g-filter .gf.on.co-kinetico { background: #7fb2d4; border-color: #7fb2d4; color: #10314a; }
+  .g-label .co-tag { font-size: 8px; font-weight: 900; letter-spacing: .4px; padding: 1px 5px; border-radius: 3px;
+    margin-right: 6px; text-transform: uppercase; vertical-align: middle; }
+  .co-tag.co-school   { background: rgba(201,162,39,0.20); color: #8a6f16; }
+  .co-tag.co-allrec   { background: rgba(153,60,29,0.16); color: #993C1D; }
+  .co-tag.co-kinetico { background: rgba(185,217,235,0.45); color: #2f6d94; }
+
   /* ---- Stage doc badges ---- */
   .stages { flex: 0 0 auto; display: flex; gap: 4px; align-items: center; }
   .sb { font-weight: 900; font-size: 10.5px; letter-spacing: .6px; padding: 3px 7px; border-radius: 4px;
@@ -499,7 +521,7 @@
 <footer>
   <div class="foot-inner">
     <span class="foot-logo">ENDURING</span>
-    <span>Enduring Daily · Operations Board · v17</span>
+    <span>Enduring Daily · Operations Board · v18</span>
     <span class="lock-hint" id="lockHint"></span>
   </div>
 </footer>
@@ -701,6 +723,15 @@ function stageBadge(id, stage, state, url) {
 
 const STATUS_CYCLE = ["red", "yellow", "blue", "green"];
 
+// PortCo tagging. Cycle order: none -> school -> allrec -> kinetico -> none
+const PORTCOS = {
+  school:   { label: "School Apparel", short: "SCHOOL" },
+  allrec:   { label: "AllRec",         short: "ALLREC" },
+  kinetico: { label: "Kinetico",       short: "KINETICO" }
+};
+const CO_CYCLE = ["", "school", "allrec", "kinetico"];
+let ganttFilter = "";  // "" = all; else a portco key
+
 function subRow(pid, sid, s, canEdit, ownerCtl, q) {
   const st = STATUS_CYCLE.includes(s.status) ? s.status : "red";
   const hit = q && (s.text || "").toLowerCase().includes(q);
@@ -735,15 +766,21 @@ function renderGantt() {
       if (ca !== cb) return ca - cb;
       return (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0);
     });
+  const filtered = ganttFilter ? projs.filter(([_, p]) => p.co === ganttFilter) : projs;
   const scheduled = [], unscheduled = [];
-  projs.forEach(([pid, p]) => {
+  filtered.forEach(([pid, p]) => {
     const start = parseISO(p.start) || (p.launch ? new Date(p.ts) : null);
     const end = parseISO(p.launch);
     if (start && end && end > start) scheduled.push({ pid, p, start, end });
     else unscheduled.push(p.text);
   });
+  const filterBar = `<div class="g-filter">
+    <button class="gf ${ganttFilter === "" ? "on" : ""}" data-gfilter="">All</button>
+    ${Object.entries(PORTCOS).map(([k, v]) => `<button class="gf co-${k} ${ganttFilter === k ? "on" : ""}" data-gfilter="${k}">${v.label}</button>`).join("")}
+  </div>`;
   if (!scheduled.length) {
-    body.innerHTML = `<div class="empty">No scheduled projects yet. Set a start and launch date to plot them.</div>` +
+    body.innerHTML = filterBar +
+      `<div class="empty">${ganttFilter ? "No scheduled projects for " + PORTCOS[ganttFilter].label + " yet." : "No scheduled projects yet. Set a start and launch date to plot them."}</div>` +
       (unscheduled.length ? `<div class="g-unsched"><b>Unscheduled:</b> ${unscheduled.map(esc).join(" \u00b7 ")}</div>` : "");
     return;
   }
@@ -759,7 +796,7 @@ function renderGantt() {
   }
   const now = new Date();
   const todayPct = now >= min && now <= max ? ((now - min) / span * 100) : null;
-  body.innerHTML = `<div class="gantt">
+  body.innerHTML = filterBar + `<div class="gantt">
     <div class="g-months">${months.map(m => `<div class="g-month">${m}</div>`).join("")}</div>
     <div class="g-wrap">
       ${todayPct !== null ? `<div class="g-today" style="left: calc(260px + (100% - 260px) * ${(todayPct / 100).toFixed(4)})"></div>` : ""}
@@ -767,7 +804,7 @@ function renderGantt() {
         const l = ((start - min) / span * 100).toFixed(2);
         const w = Math.max(((end - start) / span * 100), 0.8).toFixed(2);
         return `<div class="g-row ${p.complete ? "complete" : ""}">
-          <div class="g-label" title="${esc(p.text)}">${esc(p.text)}</div>
+          <div class="g-label" title="${esc(p.text)}">${p.co && PORTCOS[p.co] ? `<span class="co-tag co-${p.co}">${PORTCOS[p.co].short}</span>` : ""}${esc(p.text)}</div>
           <div class="g-track" style="--gm:${months.length}">
             <div class="g-bar" style="left:${l}%; width:${w}%"><span class="g-cap">${fmtMonthDay(p.launch)}</span></div>
           </div>
@@ -815,6 +852,10 @@ function renderProjects() {
     const launchChip = p.launch
       ? `<span class="chip launch${isOwner ? " click" : ""}" ${isOwner ? `data-act="setlaunch" data-pid="${pid}"` : ""}>LAUNCH: ${fmtMonth(p.launch)}</span>`
       : (isOwner ? `<span class="chip launch click" data-act="setlaunch" data-pid="${pid}">+ LAUNCH</span>` : "");
+    const co = p.co && PORTCOS[p.co] ? p.co : "";
+    const coChip = co
+      ? `<span class="chip co co-${co}${isOwner ? " click" : ""}" ${isOwner ? `data-act="setco" data-pid="${pid}"` : ""} title="Portfolio company">${PORTCOS[co].short}</span>`
+      : (isOwner ? `<span class="chip co co-none click" data-act="setco" data-pid="${pid}" title="Assign a portfolio company">+ PORTCO</span>` : "");
     const pNameHit = q && (p.text || "").toLowerCase().includes(q);
     const isOpen = !!q || expandedProjects.has(pid);
     return `<div class="proj ${isOpen ? "open" : "collapsed"} ${p.complete ? "complete" : ""} ${pNameHit ? "search-hit" : ""}" data-id="${pid}" data-list="projects">
@@ -842,6 +883,7 @@ function renderProjects() {
           ${stageBadge(pid, "s2", p.s2, p.s2url)}
           ${startChip}
           ${launchChip}
+          ${coChip}
           ${isOwner ? `<span class="s-arrows p-arrows">
             <button data-act="projup" data-pid="${pid}" title="Move up">▴</button>
             <button data-act="projdown" data-pid="${pid}" title="Move down">▾</button>
@@ -980,6 +1022,13 @@ document.addEventListener("click", (e) => {
     const v = prompt("Sub-item text:", cur);
     if (v === null || !v.trim() || v.trim() === cur) return;
     db.ref(projPath(pid) + "/subs/" + sid + "/text").set(v.trim());
+    return;
+  }
+  if (act === "setco") {
+    const pid = el.dataset.pid;
+    const cur = (store.projects[pid] || {}).co || "";
+    const next = CO_CYCLE[(CO_CYCLE.indexOf(cur) + 1) % CO_CYCLE.length];
+    updateItem("projects", pid, { co: next || null });
     return;
   }
   if (act === "pcomplete") {
@@ -1224,6 +1273,12 @@ tick(); setInterval(tick, 30000);
 
 const _ps = document.getElementById("projSearch");
 if (_ps) _ps.addEventListener("input", (e) => { projQuery = e.target.value.trim().toLowerCase(); renderProjects(); });
+document.addEventListener("click", (e) => {
+  const gf = e.target.closest("[data-gfilter]");
+  if (!gf) return;
+  ganttFilter = gf.dataset.gfilter;
+  renderGantt();
+});
 document.getElementById("gateBtn").addEventListener("click", signIn);
 if (initBackend()) startAuth();
 </script>
