@@ -1,1 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enpower — You, Enpowered</title>
+<style>
+  :root{
+    --bg:#0f0f0f; --panel:#161616;
+    --trigger:#3B82F6; --trigger-bg:#1e3a5f;
+    --process:#10B981; --process-bg:#1a3d2e;
+    --tool:#F59E0B;    --tool-bg:#3d2e1a;
+    --output:#EF4444;  --output-bg:#3d1a1a;
+    --store:#6366F1;   --store-bg:#1a1a2e;
+    --decide:#A855F7;  --decide-bg:#2e1a3d;
+    --brass:#A6832C;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:#fff;
+       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  header{padding:26px 30px 16px;border-bottom:1px solid #242424}
+  .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);font-weight:700}
+  h1{margin:8px 0 6px;font-size:27px;letter-spacing:-.3px}
+  header p{margin:0;color:#8a8a8a;font-size:14px;max-width:860px;line-height:1.6}
+  .legend{display:flex;flex-wrap:wrap;gap:18px;padding:14px 30px;border-bottom:1px solid #242424;font-size:12px;color:#9a9a9a}
+  .legend span{display:flex;align-items:center;gap:7px}
+  .dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+  .hint{padding:14px 30px 0;color:#6d6d6d;font-size:12px}
+  .stage{padding:16px 30px 40px;overflow-x:auto}
+  .canvas{position:relative;width:1560px;height:1900px;transform-origin:top left}
+  svg.wires{position:absolute;inset:0;width:1560px;height:1900px;pointer-events:none;z-index:1}
+  .lane{position:absolute;border:1px dashed #2c2c2c;border-radius:18px;pointer-events:none;z-index:0}
+  .lane b{position:absolute;top:-11px;left:24px;background:var(--bg);padding:0 12px;
+          font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#616161;font-weight:700}
+  .node{position:absolute;border-radius:13px;padding:15px 17px;border:1.5px solid;
+        background:var(--panel);cursor:pointer;z-index:2;
+        transition:transform .16s,box-shadow .16s,opacity .16s}
+  .node:hover{transform:scale(1.045);z-index:6}
+  .node .ico{font-size:16px;line-height:1;margin-bottom:8px;display:block}
+  .node .lbl{font-size:14px;font-weight:700;line-height:1.25}
+  .node .sub{font-size:11.5px;color:#9d9d9d;margin-top:6px;line-height:1.45}
+  .node ul{margin:9px 0 0;padding:0;list-style:none}
+  .node ul li{font-size:11.5px;color:#c4c4c4;line-height:1.4;margin-bottom:5px;padding-left:13px;position:relative}
+  .node ul li:before{content:"";position:absolute;left:0;top:6px;width:5px;height:5px;
+                     border-radius:50%;background:var(--brass)}
+  .node.dim{opacity:.14}
+  .n-trigger{border-color:var(--trigger);background:var(--trigger-bg)}
+  .n-process{border-color:var(--process);background:var(--process-bg)}
+  .n-tool{border-color:var(--tool);background:var(--tool-bg)}
+  .n-output{border-color:var(--output);background:var(--output-bg)}
+  .n-store{border-color:var(--store);background:var(--store-bg)}
+  .n-decide{border-color:var(--decide);background:var(--decide-bg)}
+  .n-trigger:hover{box-shadow:0 0 0 4px rgba(59,130,246,.18)}
+  .n-process:hover{box-shadow:0 0 0 4px rgba(16,185,129,.18)}
+  .n-tool:hover{box-shadow:0 0 0 4px rgba(245,158,11,.18)}
+  .n-output:hover{box-shadow:0 0 0 4px rgba(239,68,68,.18)}
+  .n-store:hover{box-shadow:0 0 0 4px rgba(99,102,241,.18)}
+  .n-decide:hover{box-shadow:0 0 0 4px rgba(168,85,247,.18)}
+  .elabel{font-size:11px;fill:#8a8a8a;font-weight:600;paint-order:stroke;
+          stroke:#0f0f0f;stroke-width:5px;stroke-linejoin:round}
+  .elabel.hot{fill:#ffffff}
+  #tip{position:fixed;max-width:340px;background:#1c1c1c;border:1px solid #3a3a3a;border-radius:10px;
+       padding:13px 15px;font-size:12.5px;line-height:1.6;color:#d8d8d8;pointer-events:none;
+       opacity:0;transition:opacity .12s;z-index:60;box-shadow:0 12px 38px rgba(0,0,0,.65)}
+  #tip b{color:#fff;display:block;margin-bottom:6px;font-size:13px}
+  footer{padding:0 30px 34px;color:#5c5c5c;font-size:11.5px}
+</style>
+</head>
+<body>
 
+<header>
+  <div class="eyebrow">Enduring Co · Enpower</div>
+  <h1>You, Enpowered</h1>
+  <p>You already know your job better than any tool does. This is what you have behind you now, and there are only two paths to learn. Both run off the same platform. The left path is what you do <b>today</b>, on the task in front of you: the information decides the tool. The right path is The Forge: you have an idea worth doing but you can’t run it yourself, so you hand the problem to Coop and Brian and they build it. You can cross from the left path to the right at any point. Click any box to trace its connections. Hover for the rule behind it.</p>
+</header>
+
+<div class="legend">
+  <span><i class="dot" style="background:var(--trigger)"></i>Where it starts</span>
+  <span><i class="dot" style="background:var(--decide)"></i>A decision you make</span>
+  <span><i class="dot" style="background:var(--store)"></i>Information layer</span>
+  <span><i class="dot" style="background:var(--tool)"></i>Tool or destination</span>
+  <span><i class="dot" style="background:var(--process)"></i>What happens</span>
+  <span><i class="dot" style="background:var(--output)"></i>The result</span>
+</div>
+
+<div class="hint">Click a box to isolate its path · click empty space to reset</div>
+
+<div class="stage">
+  <div class="canvas" id="canvas">
+    <svg class="wires" id="wires">
+      <defs>
+        <marker id="ah" markerWidth="10" markerHeight="10" refX="7.5" refY="5" orient="auto">
+          <path d="M0,0.5 L10,5 L0,9.5 z" fill="#525252"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+</div>
+
+<div id="tip"></div>
+
+<footer>
+  Enduring Co — Enpower AI Workflow Map — Confidential. Pairs with the Enpower Employee Guide, the AI Governance &amp; Master Rollout Plan, and The Gateway. When in doubt: stop and ask Coop or Brian.
+</footer>
+
+<script>
+const MAIN = 214;   // width of a main-column node
+const TRI  = 166;   // width of a node in a three-across row
+
+const NODES=[
+ {id:'hub', x:670,y:20,w:220,t:'tool',ico:'🏠',lbl:'Enpower',
+  sub:'The internal site. Sign in with your company login.',
+  det:'Home base for everything: Enduring\u2019s Claude, Enduring\u2019s Eco, EBS Meetings, EBS Tracker, and The Forge. If you are looking for an AI tool, you start here — not in a browser tab someone sent you.'},
+
+ // ---------- LEFT LANE: everyday use ----------
+ {id:'t1', x:183,y:210,w:MAIN,t:'trigger',ico:'⚡',lbl:'You have a task',
+  sub:'A draft, a summary, an analysis, a question.',
+  det:'Any normal piece of work. You do not need permission and you do not need to tell anyone. What you do need is to know which tool the information belongs in.'},
+
+ {id:'d1', x:183,y:400,w:MAIN,t:'decide',ico:'❓',lbl:'What kind of use is it?',
+  sub:'Everyday assist, repeatable workflow, or built solution.',
+  det:'Everyday assist: just do it — that is this lane. Repeatable workflow — the same task, the same way, again and again — is a Forge submission, which is the track on the right. Built solution (an automation, integration, or custom tool) requires the Gateway and is built by Coop and Brian only. Never assemble an unofficial tool around a critical process.'},
+
+ {id:'d2', x:183,y:600,w:MAIN,t:'decide',ico:'🔍',lbl:'Classify the information',
+  sub:'One question decides it: how sensitive is this?',
+  det:'Not "which tool do I like." Not "which tool is already open." The sensitivity of the information determines the tool, and it is the same rule for everyone in every company.'},
+
+ {id:'l3', x:32, y:800,w:TRI,t:'store',ico:'🌐',lbl:'Layer 3 · Public',
+  sub:'Research, brainstorming, sanitized drafts.',
+  det:'Public or non-sensitive. No confidential content of any kind. Any approved tool is fine.'},
+ {id:'l2', x:210,y:800,w:TRI,t:'store',ico:'🔒',lbl:'Layer 2 · Confidential',
+  sub:'Customers, sales, pricing, SOPs, contracts.',
+  det:'Everyday confidential company information. Baseline policy allows Enduring\u2019s Claude, but during the beta it goes to Enduring\u2019s Eco only — deliberately stricter while we learn.'},
+ {id:'l1', x:388,y:800,w:TRI,t:'store',ico:'⛔',lbl:'Layer 1 · Restricted',
+  sub:'Deal data, LP info, board material.',
+  det:'On-premises only, always. Never a cloud tool under any routing model. Also stop-and-ask: passwords, banking, SSNs, medical, personnel files, privileged material, anything under contractual restriction — and anything you are unsure about.'},
+
+ {id:'claude', x:32, y:1010,w:TRI,t:'tool',ico:'☁️',lbl:'Enduring\u2019s Claude',
+  sub:'Cloud. Does not train on our data.',
+  det:'The everyday power source: drafting, research, analysis, summarizing, and the most capable general reasoning. Public and sanitized information only during the beta.'},
+ {id:'eco', x:210,y:1010,w:TRI,t:'tool',ico:'🖥️',lbl:'Enduring\u2019s Eco',
+  sub:'Our local AI, on our own equipment.',
+  det:'Nothing entered ever leaves the building. Permission-aware, sealed boundary, fully audited. This is where confidential company information goes.'},
+ {id:'ask', x:388,y:1010,w:TRI,t:'tool',ico:'✋',lbl:'Stop and Ask',
+  sub:'Coop or Brian clear it first.',
+  det:'Not a failure — it is the correct answer. Asking costs a message. Guessing wrong costs a customer, a contract, or a deal. A paid account does not make every use acceptable.'},
+
+ {id:'p1', x:183,y:1225,w:MAIN,t:'process',ico:'🎯',lbl:'Brief it properly',
+  sub:'Audience, the context it cannot see, what "good" looks like.',
+  det:'Say who it is for and what it is for. Give it the situation it cannot see. Say the length, tone, and format you want. If the first answer misses, correct it — "shorter," "more formal," "you got the date wrong" — do not start over.'},
+
+ {id:'p2', x:183,y:1425,w:MAIN,t:'process',ico:'🔬',lbl:'Verify the draft',
+  sub:'Guilty until proven innocent.',
+  det:'AI is always confident. That is not the same as correct. The mistakes do not look like mistakes — they look exactly like the correct parts. Check the facts and fix the numbers before anything leaves your hands.'},
+
+ {id:'o1', x:183,y:1615,w:MAIN,t:'output',ico:'✅',lbl:'You own the final work',
+  sub:'The judgment stays yours. Always.',
+  det:'AI produces the draft; a person decides what goes out. Used that way it makes you faster and better. Trusted blindly, it will eventually embarrass you — and the name on it is still yours.'},
+
+ // ---------- RIGHT LANE: the build track ----------
+ {id:'t2', x:1043,y:210,w:MAIN,t:'trigger',ico:'💡',lbl:'An idea you can\u2019t build alone',
+  sub:'It would cut a cost, save time, or drive revenue. Any one of these:',
+  list:['You don\u2019t know how to execute it','It involves sensitive material','Other portcos would need it too'],
+  det:'This is the front door to The Forge, and it is the same door whether the idea arrived in a meeting, on a job site, or halfway through a Claude session that stalled. You do not need to be right, you do not need a solution, and you do not need permission. If it would cut a cost, save time, or drive revenue and you cannot simply go do it yourself, that is the whole qualification. Coop and Brian handle execution, the security controls, and the measurement.'},
+
+ {id:'p3', x:1043,y:500,w:MAIN,t:'process',ico:'🔨',lbl:'Submit to The Forge',
+  sub:'Bring the problem, not the blueprint.',
+  det:'Six questions: what problem, who does it today, how often, what it costs now, what systems are involved, what success looks like. You do not have to design the solution. Coop and Brian build it — safely, securely, and measured.'},
+
+ {id:'p4', x:1043,y:700,w:MAIN,t:'process',ico:'📋',lbl:'Stage 1 Screener',
+  sub:'Ten minutes. Every idea, no exceptions.',
+  det:'Five red-line questions: real named problem, estimable run-rate profit impact, named owner, rides existing infrastructure, sensitive data stays local. One "no" must be resolved. Two or more unresolved and it stops here, logged as declined.'},
+
+ {id:'d3', x:1043,y:900,w:MAIN,t:'decide',ico:'⚖️',lbl:'Over the threshold?',
+  sub:'Two weeks of build · new recurring cost · sensitive data · multi-portco.',
+  det:'Any one of those four triggers a full Stage 2 Pressure Test. Below that line, a passed Screener plus operator judgment is enough to pilot.'},
+
+ {id:'p5', x:1043,y:1118,w:MAIN,t:'process',ico:'🧪',lbl:'Stage 2 Pressure Test',
+  sub:'Weighted 0–100 score plus the growth-ceiling flag.',
+  det:'Value, adoption, integration, scope, risk, validation — scored 1 to 5 across nine weighted categories. Separately: can the company scale without it? Growth-blocking earns sequencing priority independent of the score. Coop owns the score; Jory ratifies.'},
+
+ {id:'p6', x:1043,y:1323,w:MAIN,t:'process',ico:'📊',lbl:'Prioritization queue',
+  sub:'One ranked backlog across the whole holdco.',
+  det:'One portfolio company in active build at a time. Growth-blockers jump the line. Cost savings outrank equal-dollar revenue — savings flow to profit at roughly 100%, revenue only at contribution margin. No Stage 1 on file, no queue slot.'},
+
+ {id:'p7', x:1043,y:1523,w:MAIN,t:'process',ico:'⚙️',lbl:'Build and pilot',
+  sub:'30–60 days, against a captured baseline.',
+  det:'The baseline is captured before the tool exists — once AI use begins, the before state is unrecoverable. Named run owner, distinct from the builder. Definition of done: runbook, alerts, rollback path.'},
+
+ {id:'o2', x:1043,y:1713,w:MAIN,t:'output',ico:'📈',lbl:'Trackable value',
+  sub:'Identify the KPIs, the costs retired, or the revenue gained.',
+  det:'Nothing counts until it has a number attached. Name the KPI it moves, the cost it retires, or the revenue it captures \u2014 measured against the baseline we captured before the tool existed. Leading indicators at 90 days, EBITDA confirmed at two to three quarters so slow-burn winners are not judged too early. Count only realized savings, net of what it costs to run. And if the numbers do not hold, we write down what we learned and put the effort somewhere better \u2014 that is still worth having.'},
+];
+
+// [from, to, label, options]
+//   cor  : vertical corridor x for an upward hop (enters target from the left)
+//   rail : vertical rail x for a downward bypass (enters target from the right)
+//   dy   : vertical offset at the target, to separate converging wires
+//   drop : how far to drop before turning, on down-and-across hops
+const EDGES=[
+ ['hub','t1','sign in',{drop:44}],
+ ['hub','t2','sign in',{drop:44}],
+ ['t1','d1',''],
+ ['d1','d2','everyday assist'],
+ ['d2','l3','public',{drop:52}],
+ ['d2','l2','confidential',{ly:-30}],
+ ['d2','l1','restricted',{drop:52,lx:42}],
+ ['l3','claude',''],
+ ['l2','eco','beta rule'],
+ ['l1','ask',''],
+ ['claude','p1','',{drop:62}],
+ ['eco','p1',''],
+ ['ask','p1','once cleared',{drop:62}],
+ ['p1','t2','stuck? hand it over',{cor:648,dy:-32}],
+ ['p1','p2','the draft'],
+ ['p2','o1','checked'],
+ ['o1','t2','if it keeps coming back',{cor:712,dy:32}],
+ ['t2','p3',''],
+ ['p3','p4',''],
+ ['p4','d3','passed'],
+ ['d3','p5','yes'],
+ ['d3','p6','no — pilot it',{rail:1330}],
+ ['p5','p6','scored'],
+ ['p6','p7',''],
+ ['p7','o2',''],
+];
+
+const LANES=[
+ {x:16, y:150,w:556,h:1610,label:'Every day · the information decides the tool'},
+ {x:1000,y:150,w:300,h:1740,label:'The Forge · you bring the problem, they build it'},
+];
+
+const COLOR={trigger:'#3B82F6',process:'#10B981',tool:'#F59E0B',output:'#EF4444',store:'#6366F1',decide:'#A855F7'};
+
+const canvas=document.getElementById('canvas');
+const svg=document.getElementById('wires');
+const tip=document.getElementById('tip');
+const byId={};
+
+LANES.forEach(L=>{
+  const d=document.createElement('div');
+  d.className='lane';
+  d.style.cssText='left:'+L.x+'px;top:'+L.y+'px;width:'+L.w+'px;height:'+L.h+'px';
+  d.innerHTML='<b>'+L.label+'</b>';
+  canvas.appendChild(d);
+});
+
+NODES.forEach(n=>{
+  const d=document.createElement('div');
+  d.className='node n-'+n.t;
+  d.style.cssText='left:'+n.x+'px;top:'+n.y+'px;width:'+n.w+'px';
+  const li = n.list ? '<ul>'+n.list.map(x=>'<li>'+x+'</li>').join('')+'</ul>' : '';
+  d.innerHTML='<span class="ico">'+n.ico+'</span><div class="lbl">'+n.lbl+'</div><div class="sub">'+n.sub+'</div>'+li;
+  canvas.appendChild(d);
+  byId[n.id]=d;
+  d.addEventListener('mousemove',e=>{
+    tip.innerHTML='<b>'+n.lbl+'</b>'+n.det;
+    tip.style.opacity=1;
+    tip.style.left=Math.min(e.clientX+18, window.innerWidth-360)+'px';
+    tip.style.top =Math.min(e.clientY+18, window.innerHeight-190)+'px';
+  });
+  d.addEventListener('mouseleave',()=>tip.style.opacity=0);
+  d.addEventListener('click',e=>{e.stopPropagation();focusNode(n.id);});
+});
+
+requestAnimationFrame(drawWires);
+window.addEventListener('resize',fit);
+
+function box(id){
+  const el=byId[id], n=NODES.find(v=>v.id===id), h=el.offsetHeight;
+  return {x:n.x,y:n.y,w:n.w,h:h,cx:n.x+n.w/2,cy:n.y+h/2,bottom:n.y+h,right:n.x+n.w};
+}
+
+function drawWires(){
+  [...svg.querySelectorAll('.wire,.elabel')].forEach(e=>e.remove());
+  EDGES.forEach(([a,b,lab,o])=>{
+    o=o||{};
+    const A=box(a), B=box(b);
+    const type=NODES.find(n=>n.id===a).t;
+    let d, mx, my, anchor='middle';
+
+    if(o.cor!==undefined){                                   // upward hop via centre corridor
+      const ty=B.cy+(o.dy||0);
+      d='M'+A.right+','+A.cy+' L'+o.cor+','+A.cy+' L'+o.cor+','+ty+' L'+(B.x-9)+','+ty;
+      mx=o.cor+9; my=(A.cy+ty)/2; anchor='start';
+    } else if(o.rail!==undefined){                            // downward bypass via right rail
+      const ty=B.cy+(o.dy||0);
+      d='M'+A.right+','+A.cy+' L'+o.rail+','+A.cy+' L'+o.rail+','+ty+' L'+(B.right+9)+','+ty;
+      mx=o.rail+9; my=(A.cy+ty)/2; anchor='start';
+    } else if(Math.abs(A.cx-B.cx)<6){                         // straight down
+      d='M'+A.cx+','+A.bottom+' L'+B.cx+','+(B.y-9);
+      mx=A.cx+10; my=(A.bottom+B.y)/2+3; anchor='start';
+    } else {                                                  // down, across, down
+      const turn=A.bottom+(o.drop||48);
+      d='M'+A.cx+','+A.bottom+' L'+A.cx+','+turn+' L'+B.cx+','+turn+' L'+B.cx+','+(B.y-9);
+      mx=(A.cx+B.cx)/2; my=turn-14;
+    }
+
+    mx+=(o.lx||0); my+=(o.ly||0);
+
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',d);
+    p.setAttribute('class','wire');
+    p.setAttribute('fill','none');
+    p.setAttribute('stroke','#464646');
+    p.setAttribute('stroke-width','1.9');
+    p.setAttribute('stroke-linejoin','round');
+    p.setAttribute('marker-end','url(#ah)');
+    p.dataset.a=a; p.dataset.b=b; p.dataset.color=COLOR[type];
+    svg.appendChild(p);
+
+    if(lab){
+      const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+      t.setAttribute('x',mx); t.setAttribute('y',my);
+      t.setAttribute('text-anchor',anchor);
+      t.setAttribute('class','elabel');
+      t.dataset.a=a; t.dataset.b=b;
+      t.textContent=lab;
+      svg.appendChild(t);
+    }
+  });
+  fit();
+}
+
+function focusNode(id){
+  const keep=new Set([id]);
+  EDGES.forEach(([a,b])=>{ if(a===id) keep.add(b); if(b===id) keep.add(a); });
+  NODES.forEach(n=>byId[n.id].classList.toggle('dim',!keep.has(n.id)));
+  svg.querySelectorAll('.wire').forEach(p=>{
+    const on = p.dataset.a===id || p.dataset.b===id;
+    p.setAttribute('stroke', on ? p.dataset.color : '#2a2a2a');
+    p.setAttribute('stroke-width', on ? '2.8' : '1.3');
+    p.style.opacity = on ? 1 : .22;
+  });
+  svg.querySelectorAll('.elabel').forEach(t=>{
+    const on = t.dataset.a===id || t.dataset.b===id;
+    t.classList.toggle('hot',on);
+    t.style.opacity = on ? 1 : .18;
+  });
+}
+
+function reset(){
+  NODES.forEach(n=>byId[n.id].classList.remove('dim'));
+  svg.querySelectorAll('.wire').forEach(p=>{
+    p.setAttribute('stroke','#464646'); p.setAttribute('stroke-width','1.9'); p.style.opacity=1;
+  });
+  svg.querySelectorAll('.elabel').forEach(t=>{t.classList.remove('hot');t.style.opacity=1;});
+}
+document.addEventListener('click',reset);
+
+function fit(){
+  const stage=document.querySelector('.stage');
+  const s=Math.min(1,(stage.clientWidth-4)/1560);
+  canvas.style.transform='scale('+s+')';
+  stage.style.height=(1900*s+40)+'px';
+}
+</script>
+</body>
+</html>
