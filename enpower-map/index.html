@@ -100,7 +100,7 @@
 <div id="tip"></div>
 
 <footer>
-  Enduring Co — Enpower AI Workflow Map — Confidential. Pairs with the Enpower Employee Guide and the AI Governance &amp; Master Rollout Plan. When in doubt: stop and ask Coop or Brian.
+  Enduring Co — Enpower AI Workflow Map — Confidential. Pairs with the Enpower Employee Guide, the AI Governance &amp; Master Rollout Plan, and The Gateway. When in doubt: stop and ask Coop or Brian.
 </footer>
 
 <script>
@@ -110,7 +110,7 @@ const TRI  = 166;   // width of a node in a three-across row
 const NODES=[
  {id:'hub', x:670,y:20,w:220,t:'tool',ico:'🏠',lbl:'Enpower',
   sub:'The internal site. Sign in with your company login.',
-  det:'Home base for everything: Enduring\u2019s Claude, Enduring\u2019s Eco, EBS Meetings, EBS Tracker, and The Forge. If you are looking for an AI tool, you start here — not in a browser tab someone sent you.'},
+  det:'Home base for everything: Enduring\u2019s Claude, Enduring\u2019s Eco, the four EBS systems — EBS Meetings, EBS Tracker, the EBS Accountability Chart, and the EBS Roadmap — and The Forge. The Accountability Chart is the year\u2019s gameplan: every priority and project with one name on point, next steps, status, and its timeline across the year. The Roadmap is the strategic picture: where the company is, where it is going, the moat, and the one- and five-year goals. Leadership teams own their own chart and roadmap and send changes to Coop or Brian to publish; the version here is the one that counts. If you are looking for an AI tool, you start here — not in a browser tab someone sent you.'},
 
  // ---------- LEFT LANE: everyday use ----------
  {id:'t1', x:183,y:210,w:MAIN,t:'trigger',ico:'⚡',lbl:'You have a task',
@@ -119,7 +119,7 @@ const NODES=[
 
  {id:'d1', x:183,y:400,w:MAIN,t:'decide',ico:'❓',lbl:'What kind of use is it?',
   sub:'Everyday assist, repeatable workflow, or built solution.',
-  det:'Everyday assist: just do it — that is this lane. Anything bigger — a repeatable workflow you run the same way again and again, or a built solution like an automation, integration, or custom tool — goes in as a Forge request, the track on the right. Built solutions are executed by Coop and Brian only. Never assemble an unofficial tool around a critical process.'},
+  det:'Everyday assist: just do it — that is this lane. Repeatable workflow — the same task, the same way, again and again — is a Forge submission, which is the track on the right. Built solution (an automation, integration, or custom tool) requires the Gateway and is built by Coop and Brian only. Never assemble an unofficial tool around a critical process.'},
 
  {id:'d2', x:183,y:600,w:MAIN,t:'decide',ico:'🔍',lbl:'Classify the information',
   sub:'One question decides it: how sensitive is this?',
@@ -127,7 +127,7 @@ const NODES=[
 
  {id:'l3', x:32, y:800,w:TRI,t:'store',ico:'🌐',lbl:'Layer 3 · Public',
   sub:'Research, brainstorming, sanitized drafts.',
-  det:'Public or non-sensitive. No confidential content of any kind. Any approved tool is fine. The gut check: are you OK with your #1 competitor or a hacker having the info you put in there? If yes, it belongs here.'},
+  det:'Public or non-sensitive. No confidential content of any kind. Any approved tool is fine.'},
  {id:'l2', x:210,y:800,w:TRI,t:'store',ico:'🔒',lbl:'Layer 2 · Confidential',
   sub:'Customers, sales, pricing, SOPs, contracts.',
   det:'Everyday confidential company information. Baseline policy allows Enduring\u2019s Claude, but during the beta it goes to Enduring\u2019s Eco only — deliberately stricter while we learn.'},
