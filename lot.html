@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Parking Lot · Enduring</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --blue: #193661; --blue-deep: #122a4d; --brass: #A6832C; --black: #000; --white: #fff;
+    --gray: #A7A9AC; --gray-lt: #f3f4f6; --gray-md: #d8dade; --gray-dk: #6b6d72;
+    --paper: #f7f8fa; --ink: #14161a; --line: #e4e6ea; --cone: #F26B1D;
+    --serif: "Tiempos Headline", Georgia, "Times New Roman", serif;
+    --sans: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --lot-school: #C9A227; --lot-allrec: #993C1D; --lot-kinetico: #7fb2d4;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.5; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  [hidden] { display: none !important; }
+  a { color: inherit; }
+  button { font-family: var(--sans); }
+
+  /* ---- masthead ---- */
+  header { background: var(--blue); color: var(--white); border-bottom: 3px solid var(--brass); }
+  .mast { max-width: 1100px; margin: 0 auto; padding: 18px 20px 16px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .logo-box { display: inline-block; background: var(--blue); border: 1px solid rgba(255,255,255,.28); padding: 7px 14px; font-family: var(--serif); font-size: 19px; letter-spacing: 3px; line-height: 1; }
+  .title { display: flex; align-items: center; gap: 12px; }
+  .title h1 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 0; letter-spacing: .2px; }
+  .cone { width: 26px; height: 26px; flex: 0 0 auto; }
+  .mast-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .who { font-size: 13.5px; color: #cdd6e4; }
+  .who b { color: var(--white); font-weight: 500; }
+  .pill { font-weight: 900; text-transform: uppercase; letter-spacing: 1px; font-size: 10.5px; padding: 5px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.3); color: #cdd6e4; background: none; cursor: pointer; text-decoration: none; }
+  .pill:hover { color: var(--brass); background: var(--white); border-color: var(--white); }
+  .pill.role { cursor: default; color: var(--blue); background: var(--white); border-color: var(--white); }
+  .pill.role:hover { color: var(--blue); }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 18px 20px 80px; }
+
+  /* ---- gate ---- */
+  #gate { position: fixed; inset: 0; background: var(--blue); display: grid; place-items: center; z-index: 999; padding: 20px; }
+  .gate-card { width: 100%; max-width: 420px; background: var(--white); border-radius: 6px; padding: 30px 26px; text-align: center; box-shadow: 0 20px 60px -20px rgba(0,0,0,.5); }
+  .gate-card::before { content: ""; display: block; width: 44px; height: 3px; background: var(--brass); margin: 0 auto 14px; }
+  .gate-card h1 { font-family: var(--serif); font-size: 24px; color: var(--blue); margin: 10px 0 6px; font-weight: 400; }
+  .gate-card p { font-size: 13.5px; color: var(--gray-dk); margin: 0 0 18px; }
+  .gsi, .gbtn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: var(--white); border: 1px solid var(--gray-md); border-radius: 5px; padding: 12px 14px; font-size: 14.5px; font-weight: 500; color: var(--ink); cursor: pointer; }
+  .gsi:hover, .gbtn:hover { border-color: var(--brass); background: var(--gray-lt); }
+  .or { margin: 16px 0 10px; font-size: 10.5px; font-weight: 900; letter-spacing: 1.2px; color: var(--gray); text-transform: uppercase; }
+  .gate-card input[type=email] { width: 100%; border: 1px solid var(--gray-md); border-radius: 5px; padding: 12px; font-size: 15px; font-family: var(--sans); margin-bottom: 8px; }
+  .gate-card input:focus { outline: none; border-color: var(--brass); }
+  .gbtn.primary { background: var(--blue); color: var(--white); border-color: var(--blue); }
+  .gbtn.primary:hover { background: var(--blue-deep); }
+  .gate-msg { margin-top: 14px; font-size: 13px; color: var(--ink); min-height: 18px; }
+  .gate-msg.ok { color: #0F6E56; font-weight: 500; }
+  .gate-msg.err { color: #993C1D; font-weight: 500; }
+  .gate-foot { margin-top: 18px; font-size: 11px; color: var(--gray); }
+
+  /* ---- lot tabs (enduring users only) ---- */
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .tab { font-weight: 900; text-transform: uppercase; letter-spacing: .7px; font-size: 12px; padding: 9px 16px; border-radius: 999px; border: 2px solid var(--gray-md); background: var(--white); color: var(--gray-dk); cursor: pointer; }
+  .tab.on { color: var(--white); }
+  .tab.on.school { background: var(--lot-school); border-color: var(--lot-school); color: #33270a; }
+  .tab.on.allrec { background: var(--lot-allrec); border-color: var(--lot-allrec); }
+  .tab.on.kinetico { background: var(--lot-kinetico); border-color: var(--lot-kinetico); color: #10314a; }
+
+  /* ---- card ---- */
+  .card { background: var(--white); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 1px 2px rgba(16,24,40,.06); overflow: hidden; margin-bottom: 16px; }
+  .card-head { display: flex; align-items: center; gap: 10px; padding: 14px 16px 12px; border-bottom: 3px solid var(--blue); flex-wrap: wrap; }
+  .card-head.school { border-bottom-color: var(--lot-school); }
+  .card-head.allrec { border-bottom-color: var(--lot-allrec); }
+  .card-head.kinetico { border-bottom-color: var(--lot-kinetico); }
+  .card-title { font-family: var(--serif); font-size: 21px; color: var(--blue); flex: 1; min-width: 160px; }
+  .count { font-weight: 500; font-size: 12px; color: var(--white); background: var(--blue); border-radius: 5px; padding: 3px 10px; }
+  .btn { font-size: 13px; font-weight: 500; border-radius: 5px; padding: 9px 14px; cursor: pointer; border: 1px solid transparent; white-space: nowrap; }
+  .btn.primary { background: var(--blue); color: var(--white); border-color: var(--blue); }
+  .btn.primary:hover { background: var(--blue-deep); }
+  .btn.ghost { background: transparent; color: var(--gray-dk); border-color: var(--gray-md); }
+  .btn.ghost:hover { color: var(--black); border-color: var(--gray-dk); }
+  .btn.small { font-size: 11.5px; padding: 6px 10px; }
+
+  /* ---- toolbar: filters + sort ---- */
+  .toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 10px 12px; border-bottom: 1px solid var(--line); background: var(--gray-lt); }
+  .tb-label { font-size: 9.5px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-dk); }
+  .fchip { font-size: 11px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--gray-md); background: var(--white); color: var(--gray-dk); cursor: pointer; }
+  .fchip.on { color: var(--white); background: var(--blue); border-color: var(--blue); }
+  .fchip.rev.on { background: #0F6E56; border-color: #0F6E56; }
+  .fchip.risk.on { background: #185FA5; border-color: #185FA5; }
+  .fchip.cost.on { background: #993C1D; border-color: #993C1D; }
+  select.sort { border: 1px solid var(--gray-md); border-radius: 5px; padding: 6px 8px; font-size: 12px; font-family: var(--sans); background: var(--white); }
+  .tb-spacer { flex: 1; }
+
+  /* ---- add + import ---- */
+  .add-row { display: flex; gap: 8px; padding: 12px; border-bottom: 1px solid var(--line); }
+  .add-row input { flex: 1; border: 1px solid var(--gray-md); border-radius: 5px; padding: 11px 12px; font-size: 15px; font-family: var(--sans); min-width: 0; }
+  .add-row input:focus { outline: none; border-color: var(--brass); }
+
+  /* ---- items ---- */
+  .list { padding: 6px 8px 10px; }
+  .item { display: flex; gap: 10px; padding: 12px 8px; border-bottom: 1px solid var(--line); align-items: flex-start; }
+  .item:last-child { border-bottom: none; }
+  .item.promoted { background: rgba(166,131,44,.06); }
+  .i-main { flex: 1; min-width: 0; }
+  .i-text { font-size: 15.5px; color: var(--ink); word-wrap: break-word; line-height: 1.4; }
+  .i-meta { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+  .tag { font-size: 10.5px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; border: 1.5px solid var(--gray-md); color: var(--gray); background: var(--white); cursor: pointer; user-select: none; }
+  .tag.on.rev { border-color: #0F6E56; color: #0F6E56; background: rgba(15,110,86,.08); }
+  .tag.on.risk { border-color: #185FA5; color: #185FA5; background: rgba(24,95,165,.08); }
+  .tag.on.cost { border-color: #993C1D; color: #993C1D; background: rgba(153,60,29,.08); }
+  .date-wrap { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 900; letter-spacing: .5px; color: var(--gray-dk); text-transform: uppercase; }
+  .date-wrap input { border: 1px dashed var(--gray-md); border-radius: 4px; padding: 4px 6px; font-size: 12.5px; font-family: var(--sans); color: var(--ink); background: var(--white); }
+  .date-wrap input:focus { outline: none; border-color: var(--brass); border-style: solid; }
+  .by { font-size: 11px; color: var(--gray-dk); }
+  .promoted-tag { font-size: 10px; font-weight: 900; letter-spacing: .5px; color: var(--brass); text-transform: uppercase; }
+  .i-actions { display: flex; flex-direction: column; gap: 6px; flex: 0 0 auto; }
+  .ib { background: var(--white); border: 1px solid var(--gray-md); color: var(--gray-dk); border-radius: 5px; width: 34px; height: 34px; font-size: 15px; cursor: pointer; display: grid; place-items: center; }
+  .ib:hover { color: var(--brass); border-color: var(--brass); }
+  .ib.danger:hover { color: var(--white); background: var(--black); border-color: var(--black); }
+  .ib.promote { color: var(--brass); border-color: var(--brass); font-size: 13px; }
+  .ib.promote:hover { color: var(--white); background: var(--brass); }
+  .empty { padding: 26px 12px; color: var(--gray-dk); text-align: center; font-size: 14px; }
+
+  /* ---- import panel ---- */
+  .import { padding: 14px 12px; border-bottom: 1px solid var(--line); background: var(--gray-lt); }
+  .import h3 { font-size: 11px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: var(--brass); margin: 0 0 8px; }
+  .import p { font-size: 12.5px; color: var(--gray-dk); margin: 0 0 10px; }
+  .drop { border: 2px dashed var(--gray-md); border-radius: 6px; padding: 18px; text-align: center; background: var(--white); cursor: pointer; font-size: 13.5px; color: var(--gray-dk); }
+  .drop.over { border-color: var(--brass); background: rgba(166,131,44,.06); }
+  .drop input { display: none; }
+  .import textarea { width: 100%; min-height: 90px; border: 1px solid var(--gray-md); border-radius: 5px; padding: 10px; font-size: 14px; font-family: var(--sans); margin-top: 10px; resize: vertical; }
+  .import textarea:focus { outline: none; border-color: var(--brass); }
+  .import-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .preview { margin-top: 12px; background: var(--white); border: 1px solid var(--line); border-radius: 6px; padding: 10px; max-height: 320px; overflow: auto; }
+  .prow { display: flex; gap: 10px; align-items: flex-start; padding: 6px 4px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .prow:last-child { border-bottom: none; }
+  .prow input[type=checkbox] { width: 18px; height: 18px; margin-top: 2px; flex: 0 0 auto; }
+  .prow.off span { color: var(--gray); text-decoration: line-through; }
+
+  /* ---- trash ---- */
+  .trash-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 2px solid var(--black); }
+  .trash-head .card-title { font-size: 17px; }
+  .titem { display: flex; gap: 10px; align-items: center; padding: 9px 12px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .titem:last-child { border-bottom: none; }
+  .titem .t { flex: 1; color: var(--gray-dk); }
+
+  /* ---- access panel (owner) ---- */
+  .access { padding: 12px 16px; }
+  .access .row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .access input, .access select { border: 1px solid var(--gray-md); border-radius: 5px; padding: 9px 10px; font-size: 14px; font-family: var(--sans); }
+  .access input { flex: 1; min-width: 200px; }
+  .arow { display: flex; align-items: center; gap: 10px; padding: 8px 4px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .arow:last-child { border-bottom: none; }
+  .arow .e { flex: 1; font-weight: 500; }
+  .arow .l { font-size: 10.5px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; color: var(--white); }
+  .l.school { background: var(--lot-school); color: #33270a; } .l.allrec { background: var(--lot-allrec); } .l.kinetico { background: var(--lot-kinetico); color: #10314a; }
+  .hint { font-size: 12px; color: var(--gray-dk); margin: 0 0 10px; }
+
+  footer { background: var(--blue); border-top: 3px solid var(--black); color: #cdd6e4; }
+  .foot { max-width: 1100px; margin: 0 auto; padding: 14px 20px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 11.5px; }
+  .foot b { font-family: var(--serif); letter-spacing: 2.5px; color: var(--white); font-weight: 400; font-size: 13px; }
+
+  @media (max-width: 640px) {
+    .mast { padding: 14px 14px 12px; }
+    .title h1 { font-size: 21px; }
+    main { padding: 12px 10px 70px; }
+    .card-title { font-size: 19px; }
+    .i-actions { flex-direction: row; }
+    .ib { width: 40px; height: 40px; font-size: 17px; }
+    .tag { padding: 8px 12px; font-size: 11px; }
+    .date-wrap input { padding: 7px 8px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="gate-card">
+    <span class="logo-box">ENDURING</span>
+    <h1>Parking Lot</h1>
+    <p>A shared place for ideas, so none of them get lost. Sign in to see your company's lot.</p>
+    <button class="gsi" id="googleBtn">
+      <svg width="17" height="17" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.7-2 5-4.4 6.6v5.5h7.1c4.1-3.8 6.6-9.4 6.6-16.1z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.4l-7.1-5.5c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9h-7.3v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C2.9 17.3 2 20.5 2 24s.9 6.7 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 11.4c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.8 29.9 2.7 24 2.7 15.5 2.7 8.1 7.6 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>
+      Sign in with Google
+    </button>
+    <div class="or">or</div>
+    <input type="email" id="emailIn" placeholder="you@yourcompany.com" autocomplete="email" />
+    <button class="gbtn primary" id="linkBtn">Email me a sign-in link</button>
+    <div class="gate-msg" id="gateMsg"></div>
+    <div class="gate-foot">Access is by invitation. Enduring Co and portfolio company leadership only.</div>
+  </div>
+</div>
+
+<header>
+  <div class="mast">
+    <div class="title">
+      <span class="logo-box">ENDURING</span>
+      <svg class="cone" viewBox="0 0 32 32" aria-hidden="true"><path d="M13 4h6l6 22H7z" fill="#F26B1D"/><path d="M11.4 12h9.2l1.2 4.5H10.2zM9 21.5h14l1 3.5H8z" fill="#fff" opacity=".9"/><rect x="3" y="26" width="26" height="3.5" rx="1.2" fill="#3a3a3a"/></svg>
+      <h1>Parking Lot</h1>
+    </div>
+    <div class="mast-right">
+      <span class="pill role" id="roleTag"></span>
+      <span class="who" id="whoBox"></span>
+      <a class="pill" id="backLink" href="index.html" hidden>&larr; Enduring Daily</a>
+      <button class="pill" id="signOut">Sign out</button>
+    </div>
+  </div>
+</header>
+
+<main id="app" hidden>
+  <div class="tabs" id="tabs" hidden></div>
+
+  <section class="card">
+    <div class="card-head" id="lotHead">
+      <div class="card-title" id="lotTitle">Ideas</div>
+      <span class="count" id="lotCount">0</span>
+      <button class="btn ghost small" id="importToggle">Import</button>
+    </div>
+
+    <div class="import" id="importPanel" hidden>
+      <h3>Import ideas</h3>
+      <p>Upload a Word (.docx), Excel (.xlsx), or .csv file, or paste one idea per line. For a Google Doc or Sheet, download it as Word or Excel first, or copy and paste. You will review the list before anything is saved.</p>
+      <label class="drop" id="drop">
+        <input type="file" id="fileIn" accept=".docx,.xlsx,.xls,.csv,.txt" />
+        <span id="dropLabel">Tap to choose a file, or drag one here</span>
+      </label>
+      <textarea id="pasteIn" placeholder="Or paste ideas here, one per line"></textarea>
+      <div class="import-actions">
+        <button class="btn primary small" id="parsePaste">Preview pasted text</button>
+        <button class="btn ghost small" id="importCancel">Close</button>
+      </div>
+      <div class="preview" id="preview" hidden></div>
+      <div class="import-actions" id="previewActions" hidden>
+        <button class="btn primary" id="importCommit">Import selected</button>
+        <button class="btn ghost small" id="previewAll">Select all</button>
+        <button class="btn ghost small" id="previewNone">Select none</button>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <span class="tb-label">Show</span>
+      <button class="fchip on" data-f="">All</button>
+      <button class="fchip rev" data-f="revenue">Revenue</button>
+      <button class="fchip risk" data-f="risk">Risk</button>
+      <button class="fchip cost" data-f="cost">Costs</button>
+      <span class="tb-spacer"></span>
+      <span class="tb-label">Sort</span>
+      <select class="sort" id="sortSel">
+        <option value="new">Newest first</option>
+        <option value="old">Oldest first</option>
+        <option value="date">Timeline date</option>
+      </select>
+    </div>
+
+    <div class="add-row">
+      <input type="text" id="newIdea" placeholder="Add an idea" maxlength="500" />
+      <button class="btn primary" id="addBtn">Add</button>
+    </div>
+
+    <div class="list" id="list"></div>
+  </section>
+
+  <section class="card" id="trashCard" hidden>
+    <div class="trash-head">
+      <div class="card-title">Recently Deleted</div>
+      <span class="count" id="trashCount">0</span>
+      <span class="tb-spacer"></span>
+      <button class="btn ghost small owner-only" id="purgeBtn" hidden>Empty</button>
+    </div>
+    <div id="trashList"></div>
+  </section>
+
+  <section class="card owner-only" id="accessCard" hidden>
+    <div class="card-head">
+      <div class="card-title">Who Can See What</div>
+    </div>
+    <div class="access">
+      <p class="hint">Anyone with an @enduring.co address sees every lot automatically. Add portfolio company leaders here to give them their company's lot.</p>
+      <div class="row">
+        <input type="email" id="accEmail" placeholder="leader@portco.com" />
+        <select id="accLot">
+          <option value="allrec">AllRec</option>
+          <option value="school">School Apparel</option>
+          <option value="kinetico">Kinetico SA</option>
+        </select>
+        <button class="btn primary" id="accAdd">Add</button>
+      </div>
+      <div id="accList"></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="foot"><b>ENDURING</b><span>Parking Lot · v1</span><span id="footRole"></span></div></footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBtZiXmmL_rA51xFvS50xWM-W1jbygpkn4",
+  authDomain: "enduring-daily.firebaseapp.com",
+  databaseURL: "https://enduring-daily-default-rtdb.firebaseio.com",
+  projectId: "enduring-daily",
+  storageBucket: "enduring-daily.firebasestorage.app",
+  messagingSenderId: "1050464636884",
+  appId: "1:1050464636884:web:5e975f663e53847fd51041"
+};
+const OWNER_UID = "pvnOeV3RdLOIcdTAZEwCR0cEke72";
+const ENDURING_DOMAIN = "enduring.co";
+const LOTS = {
+  allrec:   { label: "AllRec",         cls: "allrec" },
+  school:   { label: "School Apparel", cls: "school" },
+  kinetico: { label: "Kinetico SA",    cls: "kinetico" }
+};
+const LOT_ORDER = ["allrec", "school", "kinetico"];
+
+let db = null, ME = null, isOwner = false, role = null;   // role: "enduring" | lot key
+let lot = null;               // currently viewed lot key
+let items = {};               // current lot's items
+let access = {};              // emailKey -> lot
+let filter = "", sort = "new";
+let lotRef = null;
+let pending = [];             // import preview rows
+
+const $ = id => document.getElementById(id);
+const esc = s => (s == null ? "" : String(s)).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const emailKey = e => (e || "").toLowerCase().replace(/\./g, ",");
+function ago(ts) { if (!ts) return ""; const d = Math.floor((Date.now() - ts) / 1000);
+  if (d < 60) return "just now"; if (d < 3600) return Math.floor(d/60) + "m ago"; if (d < 86400) return Math.floor(d/3600) + "h ago"; return Math.floor(d/86400) + "d ago"; }
+function fmtDate(s) { if (!s) return ""; const d = new Date(s + "T00:00:00"); return isNaN(d) ? s : d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); }
+
+/* ---------------- AUTH ---------------- */
+function gateMsg(m, cls) { const el = $("gateMsg"); el.textContent = m || ""; el.className = "gate-msg " + (cls || ""); }
+
+function signInGoogle() {
+  gateMsg("");
+  const p = new firebase.auth.GoogleAuthProvider();
+  p.setCustomParameters({ prompt: "select_account" });
+  firebase.auth().signInWithPopup(p).catch(err => { if (err.code !== "auth/popup-closed-by-user") gateMsg(err.message, "err"); });
+}
+function sendLink() {
+  const email = $("emailIn").value.trim().toLowerCase();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { gateMsg("Enter a valid email address.", "err"); return; }
+  gateMsg("Sending\u2026");
+  firebase.auth().sendSignInLinkToEmail(email, { url: location.origin + location.pathname, handleCodeInApp: true })
+    .then(() => { localStorage.setItem("lotEmail", email); gateMsg("Check your email for a sign-in link. It may land in spam the first time.", "ok"); })
+    .catch(err => gateMsg(err.message, "err"));
+}
+function completeLinkIfPresent() {
+  if (!firebase.auth().isSignInWithEmailLink(location.href)) return;
+  let email = localStorage.getItem("lotEmail");
+  if (!email) email = prompt("Confirm your email address to finish signing in:") || "";
+  firebase.auth().signInWithEmailLink(email.trim().toLowerCase(), location.href)
+    .then(() => { localStorage.removeItem("lotEmail"); history.replaceState(null, "", location.pathname); })
+    .catch(err => gateMsg(err.message, "err"));
+}
+
+function resolveRole(user) {
+  const email = (user.email || "").toLowerCase();
+  if (email.endsWith("@" + ENDURING_DOMAIN) && user.emailVerified) return Promise.resolve("enduring");
+  return db.ref("access/" + emailKey(email)).once("value").then(s => s.val() || null);
+}
+
+function startAuth() {
+  firebase.auth().onAuthStateChanged(user => {
+    if (!user) { ME = null; role = null; isOwner = false; $("gate").hidden = false; $("app").hidden = true; return; }
+    resolveRole(user).then(r => {
+      if (!r) {
+        gateMsg("This address is not on the access list. Ask Enduring Co to add you.", "err");
+        firebase.auth().signOut(); return;
+      }
+      ME = { uid: user.uid, email: (user.email || "").toLowerCase(), name: user.displayName || user.email.split("@")[0] };
+      isOwner = user.uid === OWNER_UID;
+      role = r;
+      $("gate").hidden = true; $("app").hidden = false;
+      $("whoBox").innerHTML = `<b>${esc(ME.name)}</b>`;
+      $("roleTag").textContent = role === "enduring" ? "Enduring Co" : LOTS[role].label;
+      $("footRole").textContent = isOwner ? "Owner" : (role === "enduring" ? "Enduring Co" : LOTS[role].label);
+      $("backLink").hidden = role !== "enduring";
+      document.querySelectorAll(".owner-only").forEach(el => el.hidden = !isOwner);
+      if (role === "enduring") { renderTabs(); openLot(LOT_ORDER[0]); if (isOwner) watchAccess(); }
+      else openLot(role);
+    }).catch(err => { gateMsg("Could not check access: " + err.message, "err"); firebase.auth().signOut(); });
+  });
+}
+$("googleBtn").addEventListener("click", signInGoogle);
+$("linkBtn").addEventListener("click", sendLink);
+$("emailIn").addEventListener("keydown", e => { if (e.key === "Enter") sendLink(); });
+$("signOut").addEventListener("click", () => firebase.auth().signOut());
+
+/* ---------------- LOTS ---------------- */
+function renderTabs() {
+  const t = $("tabs"); t.hidden = false;
+  t.innerHTML = LOT_ORDER.map(k => `<button class="tab ${k} ${lot === k ? "on" : ""}" data-lot="${k}">${LOTS[k].label}</button>`).join("");
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-lot]"); if (!b) return;
+  openLot(b.dataset.lot);
+});
+function openLot(k) {
+  if (lotRef) lotRef.off();
+  lot = k; items = {};
+  $("lotTitle").textContent = LOTS[k].label + " Ideas";
+  $("lotHead").className = "card-head " + LOTS[k].cls;
+  if (role === "enduring") renderTabs();
+  lotRef = db.ref("lots/" + k);
+  lotRef.on("value", s => { items = s.val() || {}; render(); });
+}
+function itemPath(id) { return "lots/" + lot + "/" + id; }
+
+function render() {
+  const live = Object.entries(items).filter(([_, it]) => !it.deleted);
+  $("lotCount").textContent = live.length;
+  let shown = filter ? live.filter(([_, it]) => it[filter]) : live;
+  shown.sort((a, b) => {
+    if (sort === "date") { const da = a[1].date || "9999", dbb = b[1].date || "9999"; return da < dbb ? -1 : da > dbb ? 1 : (b[1].ts||0) - (a[1].ts||0); }
+    return sort === "old" ? (a[1].ts||0) - (b[1].ts||0) : (b[1].ts||0) - (a[1].ts||0);
+  });
+  const list = $("list");
+  if (!shown.length) { list.innerHTML = `<div class="empty">${live.length ? "Nothing matches that filter." : "The lot is empty. Add the first idea above, or import a list."}</div>`; }
+  else list.innerHTML = shown.map(([id, it]) => `
+    <div class="item ${it.promoted ? "promoted" : ""}" data-id="${id}">
+      <div class="i-main">
+        <div class="i-text">${esc(it.text)}</div>
+        <div class="i-meta">
+          <span class="tag rev ${it.revenue ? "on" : ""}" data-tog="revenue" data-id="${id}">Increase revenue</span>
+          <span class="tag risk ${it.risk ? "on" : ""}" data-tog="risk" data-id="${id}">Reduce risk</span>
+          <span class="tag cost ${it.cost ? "on" : ""}" data-tog="cost" data-id="${id}">Cut costs</span>
+          <label class="date-wrap">Timeline <input type="date" value="${esc(it.date || "")}" data-date="${id}" /></label>
+          <span class="by">${esc(it.author || "")} \u00b7 ${ago(it.ts)}</span>
+          ${it.promoted ? `<span class="promoted-tag">\u2192 On the tracker</span>` : ""}
+        </div>
+      </div>
+      <div class="i-actions">
+        <button class="ib" title="Edit" data-edit="${id}">\u270e</button>
+        ${isOwner && !it.promoted ? `<button class="ib promote" title="Promote to the project tracker" data-promote="${id}">\u2192</button>` : ""}
+        <button class="ib danger" title="Remove" data-del="${id}">\u2715</button>
+      </div>
+    </div>`).join("");
+  renderTrash();
+}
+
+function renderTrash() {
+  const dead = Object.entries(items).filter(([_, it]) => it.deleted).sort((a, b) => (b[1].deletedAt||0) - (a[1].deletedAt||0));
+  $("trashCard").hidden = !dead.length;
+  $("trashCount").textContent = dead.length;
+  $("trashList").innerHTML = dead.map(([id, it]) => `
+    <div class="titem"><span class="t">${esc(it.text)}</span>
+      <button class="btn ghost small" data-restore="${id}">Restore</button></div>`).join("");
+}
+
+function addIdea(text) {
+  const t = (text || "").trim(); if (!t || !ME) return;
+  return db.ref("lots/" + lot).push({ text: t, ts: Date.now(), order: Date.now(), author: ME.name, email: ME.email, revenue: false, risk: false, cost: false });
+}
+$("addBtn").addEventListener("click", () => { addIdea($("newIdea").value); $("newIdea").value = ""; $("newIdea").focus(); });
+$("newIdea").addEventListener("keydown", e => { if (e.key === "Enter") { addIdea($("newIdea").value); $("newIdea").value = ""; } });
+
+document.addEventListener("click", e => {
+  const tog = e.target.closest("[data-tog]");
+  if (tog) { const id = tog.dataset.id, k = tog.dataset.tog; db.ref(itemPath(id) + "/" + k).set(!items[id][k]); return; }
+  const del = e.target.closest("[data-del]");
+  if (del) { db.ref(itemPath(del.dataset.del)).update({ deleted: true, deletedAt: Date.now() }); return; }
+  const res = e.target.closest("[data-restore]");
+  if (res) { db.ref(itemPath(res.dataset.restore)).update({ deleted: false, deletedAt: null }); return; }
+  const ed = e.target.closest("[data-edit]");
+  if (ed) { const id = ed.dataset.edit; const v = prompt("Edit idea:", items[id].text); if (v !== null && v.trim() && v.trim() !== items[id].text) db.ref(itemPath(id) + "/text").set(v.trim()); return; }
+  const pr = e.target.closest("[data-promote]");
+  if (pr && isOwner) { promote(pr.dataset.promote); return; }
+  const f = e.target.closest("[data-f]");
+  if (f) { filter = f.dataset.f; document.querySelectorAll(".fchip").forEach(x => x.classList.toggle("on", x.dataset.f === filter)); render(); return; }
+  if (e.target.id === "purgeBtn" && isOwner) {
+    if (confirm("Permanently delete everything in Recently Deleted for this lot?")) Object.entries(items).forEach(([id, it]) => { if (it.deleted) db.ref(itemPath(id)).remove(); });
+  }
+});
+document.addEventListener("change", e => {
+  const d = e.target.closest("[data-date]");
+  if (d) db.ref(itemPath(d.dataset.date) + "/date").set(d.value || null);
+});
+$("sortSel").addEventListener("change", e => { sort = e.target.value; render(); });
+
+/* Promote: creates a project on the tracker tagged with this PortCo. Owner only (matches tracker rules). */
+function promote(id) {
+  const it = items[id]; if (!it) return;
+  if (!confirm(`Send "${it.text}" to the project tracker as a new ${LOTS[lot].label} project?`)) return;
+  const ref = db.ref("board/projects").push();
+  ref.set({ text: it.text, ts: Date.now(), order: Date.now(), co: lot })
+    .then(() => db.ref(itemPath(id) + "/promoted").set(ref.key))
+    .catch(err => alert("Could not promote: " + err.message));
+}
+
+/* ---------------- ACCESS (owner) ---------------- */
+function watchAccess() {
+  db.ref("access").on("value", s => { access = s.val() || {}; renderAccess(); });
+}
+function renderAccess() {
+  const rows = Object.entries(access).sort((a, b) => a[0].localeCompare(b[0]));
+  $("accList").innerHTML = rows.length ? rows.map(([k, l]) => `
+    <div class="arow"><span class="e">${esc(k.replace(/,/g, "."))}</span><span class="l ${l}">${esc((LOTS[l]||{}).label || l)}</span>
+      <button class="btn ghost small" data-accdel="${esc(k)}">Remove</button></div>`).join("")
+    : `<div class="empty" style="padding:12px">No portfolio company leaders added yet.</div>`;
+}
+$("accAdd").addEventListener("click", () => {
+  const e = $("accEmail").value.trim().toLowerCase();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)) { alert("Enter a valid email."); return; }
+  db.ref("access/" + emailKey(e)).set($("accLot").value).then(() => { $("accEmail").value = ""; });
+});
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-accdel]"); if (!b || !isOwner) return;
+  if (confirm("Remove " + b.dataset.accdel.replace(/,/g, ".") + "?")) db.ref("access/" + b.dataset.accdel).remove();
+});
+
+/* ---------------- IMPORT ---------------- */
+$("importToggle").addEventListener("click", () => { $("importPanel").hidden = !$("importPanel").hidden; });
+$("importCancel").addEventListener("click", () => { $("importPanel").hidden = true; clearPreview(); });
+function clearPreview() { pending = []; $("preview").hidden = true; $("previewActions").hidden = true; $("preview").innerHTML = ""; }
+
+function cleanLines(lines) {
+  return lines.map(l => String(l || "").replace(/^[\s\u2022\u25e6\u25aa\u2013\u2014\-\*\d.)(]+\s*/, "").trim())
+    .filter(l => l.length >= 3 && !/^(notes?|ideas?|to ?do|list|items?|title|name|description)[:\s]*$/i.test(l));
+}
+function showPreview(lines) {
+  pending = cleanLines(lines).map(t => ({ text: t, on: true }));
+  if (!pending.length) { $("preview").hidden = false; $("preview").innerHTML = `<div class="empty">Nothing usable found. Try pasting the text instead.</div>`; $("previewActions").hidden = true; return; }
+  $("preview").hidden = false; $("previewActions").hidden = false;
+  $("preview").innerHTML = pending.map((p, i) => `<label class="prow ${p.on ? "" : "off"}"><input type="checkbox" ${p.on ? "checked" : ""} data-pi="${i}" /><span>${esc(p.text)}</span></label>`).join("");
+  $("importCommit").textContent = `Import ${pending.filter(p => p.on).length} idea${pending.filter(p => p.on).length === 1 ? "" : "s"}`;
+}
+document.addEventListener("change", e => {
+  const c = e.target.closest("[data-pi]"); if (!c) return;
+  pending[+c.dataset.pi].on = c.checked; c.closest(".prow").classList.toggle("off", !c.checked);
+  const n = pending.filter(p => p.on).length; $("importCommit").textContent = `Import ${n} idea${n === 1 ? "" : "s"}`;
+});
+$("previewAll").addEventListener("click", () => { pending.forEach(p => p.on = true); showPreview(pending.map(p => p.text)); });
+$("previewNone").addEventListener("click", () => { pending.forEach(p => p.on = false); document.querySelectorAll("[data-pi]").forEach(c => { c.checked = false; c.closest(".prow").classList.add("off"); }); $("importCommit").textContent = "Import 0 ideas"; });
+$("importCommit").addEventListener("click", () => {
+  const sel = pending.filter(p => p.on); if (!sel.length) return;
+  const base = Date.now();
+  Promise.all(sel.map((p, i) => db.ref("lots/" + lot).push({ text: p.text, ts: base + i, order: base + i, author: ME.name, email: ME.email, revenue: false, risk: false, cost: false })))
+    .then(() => { clearPreview(); $("pasteIn").value = ""; $("importPanel").hidden = true; })
+    .catch(err => alert("Import failed: " + err.message));
+});
+$("parsePaste").addEventListener("click", () => showPreview($("pasteIn").value.split(/\r?\n/)));
+
+function handleFile(file) {
+  if (!file) return;
+  const name = file.name.toLowerCase();
+  $("dropLabel").textContent = "Reading " + file.name + "\u2026";
+  const done = () => { $("dropLabel").textContent = "Tap to choose a file, or drag one here"; };
+  if (name.endsWith(".docx")) {
+    file.arrayBuffer().then(buf => mammoth.extractRawText({ arrayBuffer: buf }))
+      .then(r => { showPreview(r.value.split(/\r?\n/)); done(); })
+      .catch(err => { alert("Could not read that Word file: " + err.message); done(); });
+  } else if (name.endsWith(".xlsx") || name.endsWith(".xls") || name.endsWith(".csv")) {
+    file.arrayBuffer().then(buf => {
+      const wb = XLSX.read(buf, { type: "array" });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(ws, { header: 1, blankrows: false });
+      // first non-empty text cell in each row becomes the idea
+      const lines = rows.map(r => (r || []).map(c => String(c == null ? "" : c).trim()).find(c => c.length > 0) || "");
+      showPreview(lines); done();
+    }).catch(err => { alert("Could not read that spreadsheet: " + err.message); done(); });
+  } else {
+    file.text().then(t => { showPreview(t.split(/\r?\n/)); done(); });
+  }
+}
+$("fileIn").addEventListener("change", e => handleFile(e.target.files[0]));
+const drop = $("drop");
+["dragenter","dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave","drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => handleFile(e.dataTransfer.files[0]));
+
+/* ---------------- BOOT ---------------- */
+try {
+  firebase.initializeApp(FIREBASE_CONFIG);
+  db = firebase.database();
+  completeLinkIfPresent();
+  startAuth();
+} catch (e) {
+  gateMsg("Could not reach the sign-in service. Check your connection and reload.", "err");
+}
+</script>
+</body>
+</html>
