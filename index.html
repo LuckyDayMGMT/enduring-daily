@@ -210,6 +210,12 @@
     border: 1px solid #F26B1D; border-radius: 999px; padding: 4px 12px 4px 8px; }
   .lotchip svg { width: 16px; height: 16px; }
   .lotchip:hover { background: #F26B1D; color: var(--white); }
+  .gatechip { display: inline-flex; align-items: center; gap: 6px; font-weight: 900; letter-spacing: 1px; font-size: 11px;
+    text-transform: uppercase; color: var(--white); text-decoration: none; background: rgba(166,131,44,0.16);
+    border: 1px solid var(--brass); border-radius: 999px; padding: 4px 12px 4px 8px; }
+  .gatechip svg { width: 16px; height: 16px; }
+  .gatechip:hover { background: var(--brass); color: var(--white); }
+  .sb.linked { cursor: pointer; }
 
   /* ---- Notes ---- */
   .notes { margin-top: 8px; padding-left: 2px; display: flex; flex-direction: column; gap: 5px; }
@@ -345,6 +351,7 @@
   .chip.co-allrec   { border-color: #993C1D; color: #993C1D; background: rgba(153,60,29,0.08); }
   .chip.co-kinetico { border-color: #7fb2d4; color: #2f6d94; background: rgba(185,217,235,0.28); }
   .chip.co-ebs      { border-color: #000000; color: #000000; background: rgba(0,0,0,0.06); }
+  .chip.co-multi    { border-color: var(--brass); color: #7d5f16; background: rgba(166,131,44,0.10); }
   .chip.co-none     { border-style: dashed; color: var(--gray); }
   .g-filter { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; padding: 4px 4px 10px; }
   .g-filter .gf { font-size: 11px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase;
@@ -356,12 +363,14 @@
   .g-filter .gf.on.co-allrec   { background: #993C1D; border-color: #993C1D; }
   .g-filter .gf.on.co-kinetico { background: #7fb2d4; border-color: #7fb2d4; color: #10314a; }
   .g-filter .gf.on.co-ebs      { background: #000000; border-color: #000000; color: #ffffff; }
+  .g-filter .gf.on.co-multi    { background: var(--brass); border-color: var(--brass); color: #ffffff; }
   .g-label .co-tag { font-size: 8px; font-weight: 900; letter-spacing: .4px; padding: 1px 5px; border-radius: 3px;
     margin-right: 6px; text-transform: uppercase; vertical-align: middle; }
   .co-tag.co-school   { background: rgba(201,162,39,0.20); color: #8a6f16; }
   .co-tag.co-allrec   { background: rgba(153,60,29,0.16); color: #993C1D; }
   .co-tag.co-kinetico { background: rgba(185,217,235,0.45); color: #2f6d94; }
   .co-tag.co-ebs      { background: rgba(0,0,0,0.12); color: #000000; }
+  .co-tag.co-multi    { background: rgba(166,131,44,0.18); color: #7d5f16; }
 
   /* ---- Stage doc badges ---- */
   .stages { flex: 0 0 auto; display: flex; gap: 4px; align-items: center; }
@@ -468,7 +477,8 @@
       <div style="margin-top:10px"><span class="who" id="whoBox"></span></div>
       <div style="margin-top:9px; display:flex; gap:8px; align-items:center; justify-content:flex-end;">
         <a class="bkchip" href="bk.html" title="From the Desk of Steven Cooper">BK</a>
-        <a class="lotchip" href="lot.html" title="Parking Lot"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M13 4h6l6 22H7z" fill="#F26B1D"/><path d="M11.4 12h9.2l1.2 4.5H10.2zM9 21.5h14l1 3.5H8z" fill="#fff" opacity=".9"/><rect x="3" y="26" width="26" height="3.5" rx="1.2" fill="#3a3a3a"/></svg>Parking Lot</a>
+        <a class="lotchip" href="refinery.html" title="The Refinery: where ideas get forged into reality"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 12h20l-3 14H9z" fill="#A6832C"/><path d="M9 12l3-4h8l3 4z" fill="#C9A227"/><path d="M16 4c1.8 2.2 3 3.6 3 5.2A3 3 0 0 1 13 9.2c0-1.6 1.2-3 3-5.2z" fill="#F26B1D"/></svg>Refinery</a>
+        <a class="gatechip" href="gateway.html" title="The Gateway: screen, score, and prioritize"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 27V11l11-7 11 7v16h-6V17h-10v10z" fill="#A6832C"/><path d="M13 27v-7h6v7z" fill="#C9A227"/></svg>Gateway</a>
       </div>
     </div>
   </div>
@@ -532,7 +542,7 @@
 <footer>
   <div class="foot-inner">
     <span class="foot-logo">ENDURING</span>
-    <span>Enduring Daily · Operations Board · v21</span>
+    <span>Enduring Daily · Operations Board · v22</span>
     <span class="lock-hint" id="lockHint"></span>
   </div>
 </footer>
@@ -591,6 +601,7 @@ function initBackend() {
 }
 
 function attachListeners() {
+  db.ref("gateway").on("value", snap => { store.gateway = snap.val() || {}; renderList("projects"); });
   LISTS.forEach(list => {
     db.ref("board/" + list).on("value", snap => {
       store[list] = snap.val() || {};
@@ -717,7 +728,19 @@ function notesHTML(list, id, it) {
     <button class="note-toggle" data-act="togglenotes" data-target="${list}:${id}">${notes.length?`${notes.length} note${notes.length>1?"s":""}`:"Add a note"} ▾</button>`;
 }
 
+/* Projects promoted from The Refinery carry ideaId; their S1/S2 come from the Gateway record, not the manual cycle. */
 function stageBadge(id, stage, state, url) {
+  const p = (store.projects || {})[id];
+  if (p && p.ideaId) {
+    const g = (store.gateway || {})[p.ideaId] || {};
+    const fin = g.final || {}, dr = g.draft || {};
+    let st = "todo";
+    if (stage === "s1") st = fin.s1 ? "done" : (dr.s1 ? "draft" : "todo");
+    else st = fin.s2 ? "done" : (fin.s1 && fin.s1.decision === "pilot") ? "na" : (dr.s2 ? "draft" : "todo");
+    const label = stage.toUpperCase();
+    const title = st === "done" ? "Finalized in The Gateway" : st === "draft" ? "Draft in The Gateway" : st === "na" ? "Not required (pilot without Stage 2)" : "Not started";
+    return `<a class="sb linked${st === "done" ? " done" : st === "na" ? " na" : ""}" href="gateway.html#${esc(p.ideaId)}" title="${title}" ${st === "draft" ? 'style="border-color:var(--brass);color:var(--brass);border-style:dashed"' : ""}>${label}${st === "na" ? " —" : ""}</a>`;
+  }
   const s = state || "todo";
   const label = stage.toUpperCase();
   const cls = "sb" + (s === "done" ? " done" : s === "na" ? " na" : "") + (isOwner ? " owner" : "");
@@ -739,9 +762,10 @@ const PORTCOS = {
   school:   { label: "School Apparel", short: "SCHOOL" },
   allrec:   { label: "AllRec",         short: "ALLREC" },
   kinetico: { label: "Kinetico SA",    short: "KINETICO" },
-  ebs:      { label: "EBS",            short: "EBS" }
+  ebs:      { label: "EBS",            short: "EBS" },
+  multi:    { label: "Multiple",       short: "MULTI" }
 };
-const CO_CYCLE = ["", "school", "allrec", "kinetico", "ebs"];
+const CO_CYCLE = ["", "school", "allrec", "kinetico", "ebs", "multi"];
 let ganttFilter = "";  // "" = all; else a portco key
 
 function subRow(pid, sid, s, canEdit, ownerCtl, q) {

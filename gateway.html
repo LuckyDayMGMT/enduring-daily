@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Gateway · Enduring</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --blue: #193661; --blue-deep: #122a4d; --brass: #A6832C; --gold: #C9A227; --black: #000; --white: #fff;
+    --gray: #A7A9AC; --gray-lt: #f3f4f6; --gray-md: #d8dade; --gray-dk: #6b6d72;
+    --paper: #f7f8fa; --ink: #14161a; --line: #e4e6ea;
+    --serif: "Tiempos Headline", Georgia, "Times New Roman", serif;
+    --sans: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --lot-school: #C9A227; --lot-allrec: #993C1D; --lot-kinetico: #7fb2d4; --lot-ebs: #000;
+    --green: #0F6E56; --red: #993C1D;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.5; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  [hidden] { display: none !important; }
+  a { color: inherit; }
+  button, input, select, textarea { font-family: var(--sans); }
+
+  header { background: var(--blue); color: var(--white); border-bottom: 3px solid var(--brass); }
+  .mast { max-width: 1180px; margin: 0 auto; padding: 18px 20px 16px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .logo-box { display: inline-block; border: 1px solid rgba(255,255,255,.28); padding: 7px 14px; font-family: var(--serif); font-size: 19px; letter-spacing: 3px; line-height: 1; }
+  .title { display: flex; align-items: center; gap: 12px; }
+  .title h1 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 0; }
+  .title svg { width: 26px; height: 26px; }
+  .mast-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .who { font-size: 13.5px; color: #cdd6e4; }
+  .who b { color: var(--white); font-weight: 500; }
+  .pill { font-weight: 900; text-transform: uppercase; letter-spacing: 1px; font-size: 10.5px; padding: 5px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.3); color: #cdd6e4; background: none; cursor: pointer; text-decoration: none; }
+  .pill:hover { color: var(--brass); background: var(--white); border-color: var(--white); }
+  .pill.role { cursor: default; color: var(--blue); background: var(--white); border-color: var(--white); }
+
+  main { max-width: 1180px; margin: 0 auto; padding: 18px 20px 80px; }
+
+  #gate { position: fixed; inset: 0; background: var(--blue); display: grid; place-items: center; z-index: 999; padding: 20px; }
+  .gate-card { width: 100%; max-width: 420px; background: var(--white); border-radius: 6px; padding: 30px 26px; text-align: center; box-shadow: 0 20px 60px -20px rgba(0,0,0,.5); }
+  .gate-card::before { content: ""; display: block; width: 44px; height: 3px; background: var(--brass); margin: 0 auto 14px; }
+  .gate-card h1 { font-family: var(--serif); font-size: 24px; color: var(--blue); margin: 10px 0 6px; font-weight: 400; }
+  .gate-card p { font-size: 13.5px; color: var(--gray-dk); margin: 0 0 18px; }
+  .gsi { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: var(--white); border: 1px solid var(--gray-md); border-radius: 5px; padding: 12px 14px; font-size: 14.5px; font-weight: 500; color: var(--ink); cursor: pointer; }
+  .gsi:hover { border-color: var(--brass); background: var(--gray-lt); }
+  .gate-msg { margin-top: 14px; font-size: 13px; color: var(--red); min-height: 18px; font-weight: 500; }
+
+  /* summary */
+  .sum { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .sumc { background: var(--white); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; cursor: pointer; border-top: 3px solid var(--blue); }
+  .sumc:hover { border-color: var(--brass); }
+  .sumc.on { border-top-color: var(--gold); }
+  .sumc .n { font-family: var(--serif); font-size: 30px; color: var(--blue); line-height: 1; }
+  .sumc .l { font-size: 12px; color: var(--gray-dk); margin-top: 4px; }
+
+  .card { background: var(--white); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 1px 2px rgba(16,24,40,.06); overflow: hidden; margin-bottom: 16px; }
+  .card-head { display: flex; align-items: center; gap: 10px; padding: 14px 16px 12px; border-bottom: 3px solid var(--blue); flex-wrap: wrap; }
+  .card-title { font-family: var(--serif); font-size: 21px; color: var(--blue); flex: 1; min-width: 160px; }
+  .count { font-weight: 500; font-size: 12px; color: var(--white); background: var(--blue); border-radius: 5px; padding: 3px 10px; }
+  .btn { font-size: 13px; font-weight: 500; border-radius: 5px; padding: 9px 14px; cursor: pointer; border: 1px solid transparent; white-space: nowrap; }
+  .btn.primary { background: var(--blue); color: var(--white); border-color: var(--blue); }
+  .btn.primary:hover { background: var(--blue-deep); }
+  .btn.primary:disabled { background: var(--gray-md); border-color: var(--gray-md); cursor: not-allowed; }
+  .btn.brass { background: var(--brass); color: var(--white); border-color: var(--brass); }
+  .btn.brass:hover { background: #8a6c22; }
+  .btn.brass:disabled { background: var(--gray-md); border-color: var(--gray-md); cursor: not-allowed; }
+  .btn.ghost { background: transparent; color: var(--gray-dk); border-color: var(--gray-md); }
+  .btn.ghost:hover { color: var(--black); border-color: var(--gray-dk); }
+  .btn.small { font-size: 11.5px; padding: 6px 10px; }
+
+  .toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 10px 12px; border-bottom: 1px solid var(--line); background: var(--gray-lt); }
+  .tb-label { font-size: 9.5px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-dk); }
+  .fchip { font-size: 11px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--gray-md); background: var(--white); color: var(--gray-dk); cursor: pointer; }
+  .fchip.on { color: var(--white); background: var(--blue); border-color: var(--blue); }
+  .fchip.school.on { background: var(--lot-school); border-color: var(--lot-school); color: #33270a; }
+  .fchip.allrec.on { background: var(--lot-allrec); border-color: var(--lot-allrec); }
+  .fchip.kinetico.on { background: var(--lot-kinetico); border-color: var(--lot-kinetico); color: #10314a; }
+  .fchip.ebs.on { background: var(--lot-ebs); border-color: var(--lot-ebs); }
+  .tb-spacer { flex: 1; }
+  .search { border: 1px solid var(--gray-md); border-radius: 5px; padding: 6px 9px; font-size: 13px; min-width: 180px; }
+
+  /* queue rows */
+  .row { display: grid; grid-template-columns: 92px 1fr 150px 120px 72px 110px 40px; gap: 10px; align-items: center; padding: 11px 14px; border-bottom: 1px solid var(--line); cursor: pointer; }
+  .row:hover { background: rgba(166,131,44,.05); }
+  .row.on { background: rgba(201,162,39,.10); }
+  .row:last-child { border-bottom: none; }
+  .rhead { font-size: 9.5px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-dk); cursor: default; background: var(--gray-lt); }
+  .rhead:hover { background: var(--gray-lt); }
+  .co { font-size: 10px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; color: var(--white); display: inline-block; }
+  .co.school { background: var(--lot-school); color: #33270a; } .co.allrec { background: var(--lot-allrec); } .co.kinetico { background: var(--lot-kinetico); color: #10314a; } .co.ebs { background: var(--lot-ebs); }
+  .rtext { font-size: 14px; min-width: 0; }
+  .rtext .sub { font-size: 11.5px; color: var(--gray-dk); }
+  .st { font-size: 11px; font-weight: 500; }
+  .st.hot { color: #7d5f16; font-weight: 900; }
+  .st.declined, .st.hold { color: var(--red); }
+  .st.parked { color: var(--gray-dk); }
+  .sb { font-weight: 900; font-size: 10px; letter-spacing: .6px; padding: 3px 7px; border-radius: 4px; border: 1px solid var(--gray-md); color: var(--gray); background: var(--white); display: inline-block; }
+  .sb.done { background: var(--blue); border-color: var(--blue); color: var(--white); }
+  .sb.draft { border-color: var(--brass); color: var(--brass); border-style: dashed; }
+  .sb.na { border-style: dashed; color: var(--gray-md); }
+  .money { font-size: 13px; font-weight: 500; text-align: right; }
+  .empty { padding: 26px 12px; color: var(--gray-dk); text-align: center; font-size: 14px; }
+
+  /* detail */
+  .detail { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 900px) { .detail { grid-template-columns: 1fr; } .row { grid-template-columns: 80px 1fr 110px 40px; } .row .hide-m { display: none; } .sum { grid-template-columns: 1fr 1fr; } }
+  .dhead { padding: 14px 16px 12px; border-bottom: 3px solid var(--brass); }
+  .dhead h2 { font-family: var(--serif); font-weight: 400; font-size: 22px; color: var(--blue); margin: 0 0 4px; }
+  .dhead .meta { font-size: 12.5px; color: var(--gray-dk); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .dbody { padding: 14px 16px; }
+  .kv { display: grid; grid-template-columns: 170px 1fr; gap: 6px 12px; font-size: 13.5px; }
+  .kv dt { color: var(--gray-dk); font-size: 12px; }
+  .kv dd { margin: 0; white-space: pre-wrap; }
+  .sect { font-size: 10.5px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: var(--brass); margin: 14px 0 8px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .sect.first { border-top: none; padding-top: 0; margin-top: 0; }
+  .q { margin-bottom: 12px; }
+  .q label.ql { display: block; font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .q label.ql small { font-weight: 400; color: var(--gray-dk); }
+  .q input[type=text], .q input[type=number], .q input[type=date], .q textarea, .q select { width: 100%; border: 1px solid var(--gray-md); border-radius: 5px; padding: 8px 10px; font-size: 14px; background: var(--white); }
+  .q textarea { min-height: 56px; resize: vertical; }
+  .q input:focus, .q textarea:focus, .q select:focus { outline: none; border-color: var(--brass); }
+  .q .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .q .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .opts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .opt { font-size: 12.5px; padding: 6px 11px; border-radius: 999px; border: 1.5px solid var(--gray-md); background: var(--white); color: var(--gray-dk); cursor: pointer; user-select: none; }
+  .opt.on { border-color: var(--blue); color: var(--blue); background: rgba(25,54,97,.07); font-weight: 500; }
+  .opt.no.on { border-color: var(--red); color: var(--red); background: rgba(153,60,29,.08); }
+  .opt.yes.on { border-color: var(--green); color: var(--green); background: rgba(15,110,86,.08); }
+  .rl { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; align-items: center; font-size: 13px; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+  .rl:last-child { border-bottom: none; }
+  .verdict { margin-top: 8px; font-size: 13px; padding: 8px 10px; border-radius: 4px; background: var(--gray-lt); border-left: 3px solid var(--gray-md); }
+  .verdict.warn { border-left-color: var(--brass); background: rgba(166,131,44,.08); }
+  .verdict.stop { border-left-color: var(--red); background: rgba(153,60,29,.07); }
+  .verdict.go { border-left-color: var(--green); background: rgba(15,110,86,.07); }
+  .checks label { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; cursor: pointer; padding: 3px 0; }
+  .checks label input { margin-top: 3px; }
+  .final { margin-top: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 6px; background: var(--gray-lt); }
+  .final.locked { border-color: var(--blue); background: rgba(25,54,97,.05); }
+  .final h4 { margin: 0 0 8px; font-size: 13px; font-weight: 500; color: var(--blue); }
+  .savestate { font-size: 11px; color: var(--gray); margin-left: auto; }
+  .tag { font-size: 10.5px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; padding: 4px 9px; border-radius: 999px; border: 1.5px solid var(--gray-md); color: var(--gray); background: var(--white); }
+  .tag.on.rev { border-color: var(--green); color: var(--green); }
+  .tag.on.risk { border-color: #185FA5; color: #185FA5; }
+  .tag.on.cost { border-color: var(--red); color: var(--red); }
+  .tag.on.moat { border-color: var(--brass); color: #7d5f16; }
+  .moatline { font-size: 12.5px; color: var(--gray-dk); }
+  .moatline b { color: var(--ink); font-weight: 500; }
+  .phase { padding: 14px 16px; color: var(--gray-dk); font-size: 13px; }
+  .rev-row { display: flex; gap: 10px; align-items: center; padding: 9px 14px; border-bottom: 1px solid var(--line); font-size: 13.5px; cursor: pointer; }
+  .rev-row:hover { background: rgba(166,131,44,.05); }
+  .rev-row .d { font-weight: 500; color: var(--red); min-width: 90px; }
+  .rev-row .d.ok { color: var(--gray-dk); }
+
+  footer { background: var(--blue); border-top: 3px solid var(--black); color: #cdd6e4; }
+  .foot { max-width: 1180px; margin: 0 auto; padding: 14px 20px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 11.5px; }
+  .foot b { font-family: var(--serif); letter-spacing: 2.5px; color: var(--white); font-weight: 400; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="gate-card">
+    <span class="logo-box" style="color:var(--blue);border-color:var(--gray-md)">ENDURING</span>
+    <h1>The Gateway</h1>
+    <p>Every project passes through here before we build. Enduring Co accounts only.</p>
+    <button class="gsi" id="googleBtn">
+      <svg width="17" height="17" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.7-2 5-4.4 6.6v5.5h7.1c4.1-3.8 6.6-9.4 6.6-16.1z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.4l-7.1-5.5c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9h-7.3v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C2.9 17.3 2 20.5 2 24s.9 6.7 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 11.4c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.8 29.9 2.7 24 2.7 15.5 2.7 8.1 7.6 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>
+      Sign in with Google
+    </button>
+    <div class="gate-msg" id="gateMsg"></div>
+  </div>
+</div>
+
+<header>
+  <div class="mast">
+    <div class="title">
+      <span class="logo-box">ENDURING</span>
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 27V11l11-7 11 7v16h-6V17h-10v10z" fill="#A6832C"/><path d="M13 27v-7h6v7z" fill="#C9A227"/></svg>
+      <h1>The Gateway</h1>
+    </div>
+    <div class="mast-right">
+      <span class="pill role" id="roleTag"></span>
+      <span class="who" id="whoBox"></span>
+      <a class="pill" href="refinery.html">The Refinery</a>
+      <a class="pill" href="index.html">&larr; Enduring Daily</a>
+      <button class="pill" id="signOut">Sign out</button>
+    </div>
+  </div>
+</header>
+
+<main id="app" hidden>
+  <div class="sum" id="sum"></div>
+
+  <section class="card">
+    <div class="card-head">
+      <div class="card-title" id="listTitle">Forge inbox</div>
+      <span class="count" id="listCount">0</span>
+      <button class="btn ghost small" id="csvBtn" title="Export every idea with its Gateway state">Export CSV</button>
+    </div>
+    <div class="toolbar">
+      <span class="tb-label">Company</span>
+      <button class="fchip on" data-co="">All</button>
+      <button class="fchip allrec" data-co="allrec">AllRec</button>
+      <button class="fchip school" data-co="school">School Apparel</button>
+      <button class="fchip kinetico" data-co="kinetico">Kinetico SA</button>
+      <button class="fchip ebs" data-co="ebs">HoldCo</button>
+      <span class="tb-spacer"></span>
+      <input class="search" id="search" type="search" placeholder="Search ideas" />
+    </div>
+    <div id="list"></div>
+  </section>
+
+  <section class="card" id="revCard" hidden>
+    <div class="card-head" style="border-bottom-color:var(--gray-dk)">
+      <div class="card-title" style="font-size:17px">Parked, due for revisit</div>
+      <span class="count" id="revCount">0</span>
+    </div>
+    <div id="revList"></div>
+  </section>
+
+  <div class="detail" id="detail" hidden>
+    <section class="card" id="ideaCard">
+      <div class="dhead">
+        <h2 id="dTitle"></h2>
+        <div class="meta" id="dMeta"></div>
+      </div>
+      <div class="dbody" id="dBody"></div>
+    </section>
+    <section class="card" id="s1Card">
+      <div class="dhead">
+        <h2>Stage 1: The Screener</h2>
+        <div class="meta"><span>Every idea, without exception. Ten minutes.</span><span class="savestate" id="saveState"></span></div>
+      </div>
+      <div class="dbody" id="s1Body"></div>
+    </section>
+    <section class="card">
+      <div class="dhead"><h2>Stage 2: The Pressure Test</h2></div>
+      <div class="phase" id="s2Body">Phase 2. Live scoring across the nine categories, the growth-ceiling flag, and the moat scoresheet land here.</div>
+    </section>
+    <section class="card">
+      <div class="dhead"><h2>Value</h2></div>
+      <div class="phase" id="valBody">Phase 3. Declared run rate, quarterly actuals, and the $200K progress bar.</div>
+    </section>
+  </div>
+</main>
+
+<footer><div class="foot"><b>ENDURING</b><span>The Gateway · v1</span><span id="footRole"></span></div></footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script>
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBtZiXmmL_rA51xFvS50xWM-W1jbygpkn4",
+  authDomain: "enduring-daily.firebaseapp.com",
+  databaseURL: "https://enduring-daily-default-rtdb.firebaseio.com",
+  projectId: "enduring-daily",
+  storageBucket: "enduring-daily.firebasestorage.app",
+  messagingSenderId: "1050464636884",
+  appId: "1:1050464636884:web:5e975f663e53847fd51041"
+};
+const OWNER_UID = "pvnOeV3RdLOIcdTAZEwCR0cEke72";
+const ENDURING_DOMAIN = "enduring.co";
+const LOTS = { allrec: "AllRec", school: "School Apparel", kinetico: "Kinetico SA", ebs: "Enduring HoldCo" };
+const LOT_ORDER = ["allrec", "school", "kinetico", "ebs"];
+const STATUS_LABEL = { idea: "Idea", forged: "Forge submitted", screened: "Cleared Stage 1", scored: "Stage 2 scored", queued: "Queued", build: "In build", live: "Live", measuring: "Live, measuring", hold: "On hold", parked: "Parked", declined: "Declined" };
+const OWNER_STATUSES = ["screened", "scored", "queued", "build", "live", "measuring", "hold", "parked", "declined"];
+const DECISIONS = { pass2: "Pass to Stage 2", pilot: "Pass, pilot without Stage 2", hold: "Hold, resolve red-line first", decline: "Decline" };
+const DECISION_STATUS = { pass2: "screened", pilot: "queued", hold: "hold", decline: "declined" };
+const BASIS = { cost: "Cost savings, ~100% to profit", revenue: "Revenue at contribution margin", risk: "Risk / loss avoided, at expected value", moat: "Moat only, no dollars" };
+const RED_LINES = [
+  ["q1", "Is there a real, named business problem, not just an interesting capability?"],
+  ["q2", "Can we estimate a run-rate profit impact, even a rough one?"],
+  ["q3", "Is there a named owner who will actually use or run the result?"],
+  ["q4", "Can it plausibly ride existing infrastructure (Workspace, Claude Team, local LLM)?"],
+  ["q5", "If it touches sensitive data, can that data stay on the local LLM and off unvetted cloud tools?"]
+];
+const TRIGGERS = [
+  ["effort", "Estimated build effort over two weeks of internal time"],
+  ["recurring", "Any new recurring cost"],
+  ["sensitive", "Any tool that touches sensitive data"],
+  ["multi", "Intended to run across more than one portfolio company"]
+];
+const MOAT_CHECKS = { data: "Data we keep", leave: "Harder to leave", routine: "Inside their routine", reach: "We reach first", metric: "A number that moves", copy: "Hard to copy" };
+
+let db = null, ME = null, isOwner = false, isEditor = false, canEdit = false;
+let lots = {};        // lot -> items
+let gateway = {};     // ideaId -> { draft, final }
+let coFilter = "", view = "inbox", q = "";
+let sel = null;       // { id, lot }
+let saveTimer = null, pendingPatch = {};
+
+const $ = id => document.getElementById(id);
+const esc = s => (s == null ? "" : String(s)).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const emailKey = e => (e || "").toLowerCase().replace(/\./g, ",");
+const money = n => (n == null || isNaN(n)) ? "" : "$" + Math.round(n).toLocaleString("en-US");
+const fmtDate = s => { if (!s) return ""; const d = new Date(s + "T00:00:00"); return isNaN(d) ? s : d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); };
+const fmtTs = ts => ts ? new Date(ts).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "";
+const today = () => new Date().toISOString().slice(0, 10);
+
+/* ---------------- AUTH ---------------- */
+function gateMsg(m) { $("gateMsg").textContent = m || ""; }
+$("googleBtn").addEventListener("click", () => {
+  gateMsg("");
+  const p = new firebase.auth.GoogleAuthProvider();
+  p.setCustomParameters({ hd: ENDURING_DOMAIN, prompt: "select_account" });
+  firebase.auth().signInWithPopup(p).catch(err => { if (err.code !== "auth/popup-closed-by-user") gateMsg(err.message); });
+});
+$("signOut").addEventListener("click", () => firebase.auth().signOut());
+
+function startAuth() {
+  firebase.auth().onAuthStateChanged(user => {
+    if (!user) { ME = null; $("gate").hidden = false; $("app").hidden = true; return; }
+    const email = (user.email || "").toLowerCase();
+    if (!email.endsWith("@" + ENDURING_DOMAIN) || !user.emailVerified) { gateMsg("The Gateway is for @enduring.co accounts."); firebase.auth().signOut(); return; }
+    ME = { uid: user.uid, email, name: user.displayName || email.split("@")[0] };
+    isOwner = user.uid === OWNER_UID;
+    db.ref("roles/" + emailKey(email)).once("value").then(s => {
+      isEditor = s.val() === "editor";
+      canEdit = isOwner || isEditor;
+      $("gate").hidden = true; $("app").hidden = false;
+      $("whoBox").innerHTML = `<b>${esc(ME.name)}</b>`;
+      const r = isOwner ? "Owner" : isEditor ? "Editor" : "Viewer";
+      $("roleTag").textContent = r; $("footRole").textContent = r;
+      LOT_ORDER.forEach(k => db.ref("lots/" + k).on("value", s => { lots[k] = s.val() || {}; render(); }));
+      db.ref("gateway").on("value", s => { gateway = s.val() || {}; render(); });
+      if (location.hash.length > 1) selectById(location.hash.slice(1));
+    });
+  });
+}
+window.addEventListener("hashchange", () => { if (location.hash.length > 1) selectById(location.hash.slice(1)); });
+
+/* ---------------- DATA HELPERS ---------------- */
+function allIdeas() {
+  const out = [];
+  LOT_ORDER.forEach(lot => Object.entries(lots[lot] || {}).forEach(([id, it]) => { if (!it.deleted) out.push({ id, lot, it, g: gateway[id] || {} }); }));
+  return out;
+}
+function s1State(g) { return g.final && g.final.s1 ? "done" : (g.draft && g.draft.s1 ? "draft" : "todo"); }
+function s2State(row) { const g = row.g; if (g.final && g.final.s2) return "done"; if (g.final && g.final.s1 && g.final.s1.decision === "pilot") return "na"; return (g.draft && g.draft.s2) ? "draft" : "todo"; }
+function inView(row) {
+  const st = row.it.status || "idea";
+  if (view === "inbox") return st === "forged" || (st === "idea" && row.it.tech && !!row.it.forge);
+  if (view === "screened") return st === "screened" || st === "scored";
+  if (view === "queue") return st === "queued" || st === "build" || st === "live" || st === "measuring";
+  if (view === "held") return st === "hold" || st === "parked" || st === "declined";
+  return true;
+}
+function selectById(id) {
+  const row = allIdeas().find(r => r.id === id);
+  if (!row) { sel = { id, lot: null }; return; }
+  sel = { id: row.id, lot: row.lot };
+  render();
+  setTimeout(() => { const d = $("detail"); if (d && !d.hidden) d.scrollIntoView({ behavior: "smooth", block: "start" }); }, 30);
+}
+
+/* ---------------- RENDER ---------------- */
+function render() {
+  const rows = allIdeas();
+  const counts = { inbox: 0, screened: 0, queue: 0, held: 0 };
+  rows.forEach(r => { const v = view; ["inbox","screened","queue","held"].forEach(k => { view = k; if (inView(r)) counts[k]++; }); view = v; });
+  $("sum").innerHTML = [["inbox","Forge inbox","awaiting Stage 1"],["screened","Cleared Stage 1","in or awaiting Stage 2"],["queue","Queued or building","approved projects"],["held","Held, parked, declined","need a decision or a date"]]
+    .map(([k, l, s]) => `<div class="sumc ${view === k ? "on" : ""}" data-view="${k}"><div class="n">${counts[k]}</div><div class="l">${l}<br><span style="color:var(--gray)">${s}</span></div></div>`).join("");
+  $("listTitle").textContent = { inbox: "Forge inbox", screened: "Cleared Stage 1", queue: "Queued or building", held: "Held, parked, declined", all: "Every idea" }[view];
+
+  let shown = rows.filter(r => inView(r) && (!coFilter || r.lot === coFilter) && (!q || (r.it.text || "").toLowerCase().includes(q)));
+  shown.sort((a, b) => (b.it.forge ? b.it.forge.submittedAt : b.it.ts || 0) - (a.it.forge ? a.it.forge.submittedAt : a.it.ts || 0));
+  $("listCount").textContent = shown.length;
+  const head = `<div class="row rhead"><span>Company</span><span>Idea</span><span class="hide-m">Status</span><span class="hide-m">Stages</span><span class="hide-m">Forge $</span><span>Submitted</span><span></span></div>`;
+  $("list").innerHTML = shown.length ? head + shown.map(r => {
+    const st = r.it.status || "idea";
+    const hot = st === "forged";
+    const s1 = s1State(r.g), s2 = s2State(r);
+    return `<div class="row ${sel && sel.id === r.id ? "on" : ""}" data-sel="${r.id}">
+      <span><span class="co ${r.lot}">${esc(LOTS[r.lot])}</span></span>
+      <div class="rtext">${esc(r.it.text)}<div class="sub">${r.it.forge ? "Forge by " + esc(r.it.forge.by) : (r.it.tech ? "Tech, no Forge yet" : "Not a build")}${r.it.multi ? " · Multiple" : ""}</div></div>
+      <span class="st hide-m ${hot ? "hot" : st}">${STATUS_LABEL[st]}</span>
+      <span class="hide-m"><span class="sb ${s1}">S1</span> <span class="sb ${s2}">S2</span></span>
+      <span class="money hide-m">${r.it.forge && r.it.forge.dollars ? money(r.it.forge.dollars) : (r.it.forge && r.it.forge.hours ? r.it.forge.hours + " h/wk" : "")}</span>
+      <span style="font-size:12px;color:var(--gray-dk)">${fmtTs(r.it.forge ? r.it.forge.submittedAt : r.it.ts)}</span>
+      <span style="color:var(--brass);font-weight:900">&rsaquo;</span>
+    </div>`; }).join("")
+    : `<div class="empty">${view === "inbox" ? "Nothing waiting. When a leader submits a Forge form it lands here." : "Nothing here."}</div>`;
+
+  // revisit list
+  const parked = rows.filter(r => r.it.status === "parked").sort((a, b) => (a.it.revisit || "9999").localeCompare(b.it.revisit || "9999"));
+  $("revCard").hidden = !parked.length; $("revCount").textContent = parked.length;
+  $("revList").innerHTML = parked.map(r => `<div class="rev-row" data-sel="${r.id}"><span class="d ${r.it.revisit && r.it.revisit <= today() ? "" : "ok"}">${r.it.revisit ? fmtDate(r.it.revisit) : "No date"}</span><span class="co ${r.lot}">${esc(LOTS[r.lot])}</span><span>${esc(r.it.text)}</span></div>`).join("");
+
+  renderDetail();
+}
+
+function renderDetail() {
+  const d = $("detail");
+  if (!sel) { d.hidden = true; return; }
+  const row = allIdeas().find(r => r.id === sel.id);
+  if (!row) { d.hidden = true; return; }
+  d.hidden = false;
+  const it = row.it, f = it.forge || {}, g = row.g, draft = (g.draft && g.draft.s1) || {}, fin = g.final && g.final.s1;
+  const st = it.status || "idea";
+  $("dTitle").textContent = it.text;
+  $("dMeta").innerHTML = `<span class="co ${row.lot}">${esc(LOTS[row.lot])}</span><span>${esc(it.author || "")}, ${fmtTs(it.ts)}</span><span>${STATUS_LABEL[st]}</span>${it.projectId ? `<a href="index.html" style="color:var(--brass)">On the tracker</a>` : ""}`;
+
+  const tags = `<div class="opts" style="margin-bottom:10px">
+    <span class="tag rev ${it.revenue ? "on" : ""}">Increase revenue</span><span class="tag risk ${it.risk ? "on" : ""}">Reduce risk</span><span class="tag cost ${it.cost ? "on" : ""}">Cut costs</span><span class="tag moat ${it.moat ? "on" : ""}">Protect moat</span></div>`;
+  const moatTrue = Object.entries(f.checks || {}).filter(([k, v]) => v).map(([k]) => MOAT_CHECKS[k]);
+  const forgeHtml = it.forge ? `
+    <div class="sect first">Forge submission</div>
+    <div class="moatline">By <b>${esc(f.by)}</b> on ${fmtTs(f.submittedAt)}${f.layer ? `. Layer: <b>${{ outward: "Outward-facing", productivity: "Productivity", internal: "Internal" }[f.layer]}</b>` : ""}</div>
+    <dl class="kv" style="margin-top:10px">
+      <dt>Business problem</dt><dd>${esc(f.problem)}</dd>
+      <dt>Who does it today</dt><dd>${esc(f.who)}</dd>
+      <dt>How often</dt><dd>${esc(f.freq)}</dd>
+      <dt>Cost today</dt><dd>${esc(f.effort)}</dd>
+      <dt>Systems and information</dt><dd>${esc(f.systems)}</dd>
+      <dt>Success looks like</dt><dd>${esc(f.success)}</dd>
+      <dt>Rough number</dt><dd>${f.dollars ? money(f.dollars) + " per year" : ""}${f.dollars && f.hours ? ", " : ""}${f.hours ? f.hours + " hours per week" : ""}${!f.dollars && !f.hours ? "None given" : ""}</dd>
+      <dt>Durability</dt><dd>${{ recurring: "Recurring", multi: "Multi-year" + (f.years ? ", " + f.years + " yrs" : ""), onetime: "One-time" }[f.durability] || ""}</dd>
+      <dt>Moat checks</dt><dd>${moatTrue.length ? moatTrue.join(", ") : "None ticked"}</dd>
+      <dt>Customer feels</dt><dd>${esc(f.feel)}</dd>
+      ${f.link ? `<dt>Example</dt><dd><a href="${esc(f.link)}" target="_blank" rel="noopener">${esc(f.link)}</a></dd>` : ""}
+    </dl>` : `<div class="sect first">Forge submission</div><div class="moatline">No Forge form yet. ${it.tech ? "The leader can add one from The Refinery, or you can screen it from the idea alone." : "This idea is not flagged as a build."}</div>`;
+
+  const comments = Object.values(it.comments || {}).sort((a, b) => (a.ts || 0) - (b.ts || 0));
+  const commentsHtml = `<div class="sect">Comments (${comments.length})</div>${comments.length ? comments.map(c => `<div style="font-size:13px;padding:3px 0"><b style="font-weight:500;color:var(--blue)">${esc(c.author)}</b> <span style="color:var(--gray);font-size:11px">${fmtTs(c.ts)}</span><div>${esc(c.text)}</div></div>`).join("") : `<div class="moatline">None. Leaders see comments on their card in The Refinery.</div>`}`;
+
+  const statusHtml = isOwner ? `
+    <div class="sect">Status and note to the leader</div>
+    <div class="q"><div class="row2">
+      <div><label class="ql" for="stSel">Status <small>what the leader's strip shows</small></label><select id="stSel">${["idea","forged"].concat(OWNER_STATUSES).map(s => `<option value="${s}" ${st === s ? "selected" : ""}>${STATUS_LABEL[s]}</option>`).join("")}</select></div>
+      <div id="revWrap" ${st === "parked" ? "" : "hidden"}><label class="ql" for="revIn">Revisit on</label><input type="date" id="revIn" value="${esc(it.revisit || "")}" /></div>
+    </div></div>
+    <div class="q"><label class="ql" for="noteIn">Note <small>one line, visible on the leader's card</small></label><input type="text" id="noteIn" maxlength="300" value="${esc(it.note || "")}" /><div style="margin-top:6px"><button class="btn ghost small" id="noteSave">Save note</button></div></div>` : (it.note ? `<div class="sect">Note to the leader</div><div class="moatline">${esc(it.note)}</div>` : "");
+
+  $("dBody").innerHTML = tags + forgeHtml + commentsHtml + statusHtml;
+
+  // ---------- Stage 1 ----------
+  const locked = !!fin;
+  const v = draft;
+  const dis = (!canEdit || locked) ? "disabled" : "";
+  const noCount = RED_LINES.filter(([k]) => (v.rl || {})[k] === "no").length;
+  const unanswered = RED_LINES.filter(([k]) => !(v.rl || {})[k]).length;
+  const trig = TRIGGERS.filter(([k]) => (v.triggers || {})[k]);
+  const verdictRl = unanswered ? `<div class="verdict">${unanswered} red-line question${unanswered === 1 ? "" : "s"} still unanswered.</div>`
+    : noCount >= 2 ? `<div class="verdict stop">Two or more unresolved: the idea stops here. Decline, or Hold if the answers can change.</div>`
+    : noCount === 1 ? `<div class="verdict warn">One "no". It must be resolved before Stage 2. Hold is the usual answer.</div>`
+    : `<div class="verdict go">All five clear.</div>`;
+  const verdictTrig = trig.length ? `<div class="verdict warn">Stage 2 is mandatory: ${trig.map(t => t[1].toLowerCase()).join("; ")}.</div>` : `<div class="verdict">Under the threshold. A passed Screener plus operator judgment is enough to pilot.</div>`;
+  const cos = v.cos || {};
+  const cosDefault = !Object.keys(cos).length;
+  const coMap = { allrec: "allrec", school: "school", kinetico: "kosa", ebs: "holdco" };
+  const coOn = k => cosDefault ? (coMap[row.lot] === k || (k === "multi" && !!it.multi)) : !!cos[k];
+  const opt = (grp, key, label, on, cls) => `<span class="opt ${cls || ""} ${on ? "on" : ""}" data-grp="${grp}" data-key="${key}" ${dis ? 'data-dis="1"' : ""}>${label}</span>`;
+
+  $("s1Body").innerHTML = `
+    ${!canEdit ? `<div class="verdict" style="margin-bottom:10px">Read only. Editors and the owner fill this in.</div>` : ""}
+    <div class="q"><div class="row2">
+      <div><label class="ql" for="s1name">Project name</label><input type="text" id="s1name" data-f="name" maxlength="200" value="${esc(v.name != null ? v.name : it.text)}" ${dis} /></div>
+      <div><label class="ql" for="s1date">Date / author</label><input type="text" id="s1date" value="${esc((v.date || today()) + ", " + (v.author || ME.name))}" disabled /></div>
+    </div></div>
+    <div class="q"><label class="ql">Companies affected</label><div class="opts">
+      ${opt("cos","holdco","HoldCo",coOn("holdco"))}${opt("cos","kosa","KoSA",coOn("kosa"))}${opt("cos","allrec","AllRec Awards",coOn("allrec"))}${opt("cos","school","School Apparel",coOn("school"))}${opt("cos","multi","Multiple",coOn("multi"))}
+    </div></div>
+    <div class="q"><label class="ql" for="s1sum">The idea in two sentences</label><textarea id="s1sum" data-f="summary" maxlength="1500" ${dis}>${esc(v.summary != null ? v.summary : (f.problem || ""))}</textarea></div>
+
+    <div class="sect">The five red-line questions <small style="font-weight:400;letter-spacing:0;text-transform:none;color:var(--gray-dk)">One "no" must be resolved before Stage 2. Two or more stop the idea here.</small></div>
+    ${RED_LINES.map(([k, qtext], i) => `<div class="rl"><span>${i + 1}. ${qtext}</span><span class="opts">${opt("rl:" + k, "yes", "Yes", (v.rl || {})[k] === "yes", "yes")}${opt("rl:" + k, "no", "No", (v.rl || {})[k] === "no", "no")}</span></div>`).join("")}
+    ${verdictRl}
+
+    <div class="sect">Declare the profit impact <small style="font-weight:400;letter-spacing:0;text-transform:none;color:var(--gray-dk)">A number you will defend later. Run-rate only.</small></div>
+    <div class="q"><div class="row2">
+      <div><label class="ql" for="s1dollars">Annualized run-rate profit impact <small>$ per year</small></label><input type="number" id="s1dollars" data-f="dollars" min="0" step="1000" value="${v.dollars != null ? v.dollars : (f.dollars != null ? f.dollars : "")}" ${dis} /></div>
+      <div><label class="ql">Confidence</label><div class="opts">${["high","moderate","low"].map(c => opt("confidence", c, c[0].toUpperCase() + c.slice(1), v.confidence === c)).join("")}</div></div>
+    </div></div>
+    <div class="q"><label class="ql">Basis</label><div class="opts">${Object.entries(BASIS).map(([k, l]) => opt("basis", k, l, v.basis === k)).join("")}</div></div>
+    <div class="q"><div class="row2">
+      <div><label class="ql">Durability</label><div class="opts">${opt("durability","recurring","Recurring",(v.durability || f.durability) === "recurring")}${opt("durability","multi","Multi-year",(v.durability || f.durability) === "multi")}${opt("durability","onetime","One-time",(v.durability || f.durability) === "onetime")}<input type="number" id="s1years" data-f="years" min="1" max="20" placeholder="yrs" value="${v.years || f.years || ""}" ${dis} style="width:70px;${(v.durability || f.durability) === "multi" ? "" : "display:none"}" /></div></div>
+      <div><label class="ql">Which Year-1 requisite it feeds</label><div class="opts">${opt("requisite","topline","Top-line / margin",v.requisite === "topline")}${opt("requisite","infra","AI infrastructure",v.requisite === "infra")}${opt("requisite","workflow","Workflow mapping",v.requisite === "workflow")}</div></div>
+    </div></div>
+    <div class="q"><label class="ql">Customer moat claimed? <small>carried from the Forge; scored in full at Stage 2</small></label><div class="opts">${opt("moatClaimed","yes","Yes",(v.moatClaimed != null ? v.moatClaimed : moatTrue.length > 0) === true)}${opt("moatClaimed","no","No",(v.moatClaimed != null ? v.moatClaimed : moatTrue.length > 0) === false)}</div></div>
+
+    <div class="sect">Does it need a Stage 2 Pressure Test?</div>
+    <div class="checks">${TRIGGERS.map(([k, l]) => `<label><input type="checkbox" data-trig="${k}" ${(v.triggers || {})[k] ? "checked" : ""} ${dis} /><span>${l}</span></label>`).join("")}</div>
+    ${verdictTrig}
+
+    <div class="sect">Screener decision</div>
+    <div class="q"><div class="opts">${Object.entries(DECISIONS).map(([k, l]) => opt("decision", k, l, v.decision === k)).join("")}</div></div>
+    <div class="q"><label class="ql" for="s1reason">Reason or condition <small>required on Hold and Decline; sent to the leader as the note on their card</small></label><textarea id="s1reason" data-f="reason" maxlength="600" ${dis}>${esc(v.reason || "")}</textarea></div>
+
+    <div class="final ${locked ? "locked" : ""}">
+      ${locked ? `<h4>Finalized ${fmtTs(fin.at)}: ${DECISIONS[fin.decision]}</h4><div style="font-size:13px">${esc(fin.reason || "")}</div>${isOwner ? `<div style="margin-top:8px"><button class="btn ghost small" id="unlockBtn">Reopen</button> <span style="font-size:11.5px;color:var(--gray-dk)">Reopening does not email the leader. Finalizing again does.</span></div>` : ""}`
+      : isOwner ? `<h4>Finalize</h4><div style="font-size:12.5px;color:var(--gray-dk);margin-bottom:8px">Locks Stage 1, sets the leader's status to <b id="finPreview">${v.decision ? STATUS_LABEL[DECISION_STATUS[v.decision]] : "the decision"}</b>, copies the reason to their card, and sends the decision email.</div><button class="btn brass" id="finBtn" ${v.decision ? "" : "disabled"}>Finalize Stage 1</button>`
+      : `<h4>Draft</h4><div style="font-size:12.5px;color:var(--gray-dk)">Saved as you type. Coop finalizes.</div>`}
+    </div>`;
+}
+
+/* ---------------- EVENTS ---------------- */
+document.addEventListener("click", e => {
+  const sv = e.target.closest("[data-view]"); if (sv) { view = sv.dataset.view; render(); return; }
+  const co = e.target.closest("[data-co]"); if (co) { coFilter = co.dataset.co; document.querySelectorAll("[data-co]").forEach(x => x.classList.toggle("on", x.dataset.co === coFilter)); render(); return; }
+  const s = e.target.closest("[data-sel]"); if (s) { location.hash = s.dataset.sel; selectById(s.dataset.sel); return; }
+  const o = e.target.closest(".opt[data-grp]");
+  if (o && !o.dataset.dis && sel) { optClick(o); return; }
+  if (e.target.id === "finBtn") { finalizeS1(); return; }
+  if (e.target.id === "unlockBtn") { reopenS1(); return; }
+  if (e.target.id === "noteSave") { saveNote(); return; }
+  if (e.target.id === "csvBtn") { exportCsv(); return; }
+});
+document.addEventListener("input", e => {
+  if (!sel) return;
+  const f = e.target.closest("[data-f]");
+  if (f) { const k = f.dataset.f; let val = f.value; if (f.type === "number") { val = val === "" ? null : parseFloat(val); if (val !== null && isNaN(val)) val = null; } queue({ [k]: val }); }
+});
+document.addEventListener("change", e => {
+  if (!sel) return;
+  const t = e.target.closest("[data-trig]"); if (t) { queue({ ["triggers/" + t.dataset.trig]: t.checked }, true); return; }
+  if (e.target.id === "stSel") { setStatus(e.target.value); return; }
+  if (e.target.id === "revIn") { db.ref(ideaPath() + "/revisit").set(e.target.value || null); return; }
+});
+$("search").addEventListener("input", e => { q = e.target.value.trim().toLowerCase(); render(); });
+
+function ideaPath() { return "lots/" + sel.lot + "/" + sel.id; }
+function draftPath() { return "gateway/" + sel.id + "/draft/s1"; }
+
+function optClick(o) {
+  const grp = o.dataset.grp, key = o.dataset.key;
+  if (grp === "cos") { queue({ ["cos/" + key]: !o.classList.contains("on") }, true); return; }
+  if (grp.startsWith("rl:")) { queue({ ["rl/" + grp.slice(3)]: o.classList.contains("on") ? null : key }, true); return; }
+  if (grp === "moatClaimed") { queue({ moatClaimed: key === "yes" }, true); return; }
+  // single-select groups: basis, confidence, durability, requisite, decision
+  queue({ [grp]: o.classList.contains("on") ? null : key }, true);
+}
+function queue(patch, now) {
+  Object.assign(pendingPatch, patch);
+  $("saveState").textContent = "Saving";
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(flush, now ? 0 : 600);
+}
+function flush() {
+  if (!sel || !Object.keys(pendingPatch).length) return;
+  const patch = Object.assign({}, pendingPatch, { updatedAt: Date.now(), updatedBy: ME.name });
+  const cur = (gateway[sel.id] && gateway[sel.id].draft && gateway[sel.id].draft.s1) || {};
+  if (!cur.date) { patch.date = today(); patch.author = ME.name; }
+  if (!cur.cos && !Object.keys(patch).some(k => k.startsWith("cos/"))) {
+    const it = (lots[sel.lot] || {})[sel.id] || {};
+    const coMap = { allrec: "allrec", school: "school", kinetico: "kosa", ebs: "holdco" };
+    patch["cos/" + coMap[sel.lot]] = true; if (it.multi) patch["cos/multi"] = true;
+  }
+  pendingPatch = {};
+  db.ref(draftPath()).update(patch)
+    .then(() => { $("saveState").textContent = "Saved"; })
+    .catch(err => { $("saveState").textContent = "Not saved: " + err.message; });
+}
+
+function finalizeS1() {
+  if (!isOwner || !sel) return;
+  flush();
+  const g = gateway[sel.id] || {}, v = (g.draft && g.draft.s1) || {};
+  if (!v.decision) return;
+  const reason = (v.reason || "").trim();
+  if ((v.decision === "hold" || v.decision === "decline") && !reason) { alert("Hold and Decline need a reason. It goes to the leader."); $("s1reason").focus(); return; }
+  const noCount = RED_LINES.filter(([k]) => (v.rl || {})[k] === "no").length;
+  const trig = TRIGGERS.some(([k]) => (v.triggers || {})[k]);
+  if ((v.decision === "pass2" || v.decision === "pilot") && noCount) { if (!confirm("There is an unresolved red-line answer. Pass anyway?")) return; }
+  if (v.decision === "pilot" && trig) { if (!confirm("A Stage 2 trigger is ticked. Pilot without Stage 2 anyway?")) return; }
+  if (!confirm("Finalize Stage 1 as \"" + DECISIONS[v.decision] + "\"? This emails the leader.")) return;
+  const final = { decision: v.decision, reason: reason || null, at: Date.now(), dollars: v.dollars != null ? v.dollars : null, basis: v.basis || null, snapshot: v };
+  const ideaPatch = { status: DECISION_STATUS[v.decision], note: reason || null, noS2: v.decision === "pilot" };
+  db.ref("gateway/" + sel.id + "/final/s1").set(final)
+    .then(() => db.ref(ideaPath()).update(ideaPatch))
+    .catch(err => alert("Could not finalize: " + err.message));
+}
+function reopenS1() {
+  if (!isOwner || !sel) return;
+  if (!confirm("Reopen Stage 1? The leader keeps their current status until you finalize again.")) return;
+  db.ref("gateway/" + sel.id + "/final/s1").remove().catch(err => alert(err.message));
+}
+function setStatus(val) {
+  if (!isOwner || !sel) return;
+  const patch = { status: val };
+  if (val !== "parked") patch.revisit = null;
+  db.ref(ideaPath()).update(patch).then(() => { $("revWrap").hidden = val !== "parked"; if (val === "parked") { const r = $("revIn"); if (r && !r.value) { r.focus(); } } })
+    .catch(err => alert(err.message));
+}
+function saveNote() {
+  if (!isOwner || !sel) return;
+  const t = ($("noteIn").value || "").trim();
+  db.ref(ideaPath() + "/note").set(t || null).catch(err => alert(err.message));
+}
+
+function exportCsv() {
+  const rows = allIdeas();
+  const cols = ["Company","Idea","Status","Submitted by","Submitted","Revenue","Risk","Cost","Moat","Tech","Multiple","Forge $/yr","Forge hrs/wk","Layer","Durability","S1","S1 decision","S1 $/yr","S1 basis","S1 finalized","S2","Note","Revisit","On tracker"];
+  const cell = x => { const s = x == null ? "" : String(x); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  const lines = [cols.join(",")].concat(rows.map(r => {
+    const it = r.it, f = it.forge || {}, fin = r.g.final && r.g.final.s1;
+    return [LOTS[r.lot], it.text, STATUS_LABEL[it.status || "idea"], f.by || it.author, fmtTs(f.submittedAt || it.ts), it.revenue ? "Y" : "", it.risk ? "Y" : "", it.cost ? "Y" : "", it.moat ? "Y" : "", it.tech ? "Y" : "", it.multi ? "Y" : "",
+      f.dollars, f.hours, f.layer, f.durability, s1State(r.g), fin ? DECISIONS[fin.decision] : "", fin ? fin.dollars : "", fin ? fin.basis : "", fin ? fmtTs(fin.at) : "", s2State(r), it.note, it.revisit, it.projectId ? "Y" : ""].map(cell).join(",");
+  }));
+  const blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = today() + "_Enduring_Gateway_Export.csv"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+/* ---------------- BOOT ---------------- */
+try {
+  firebase.initializeApp(FIREBASE_CONFIG);
+  db = firebase.database();
+  startAuth();
+} catch (e) {
+  gateMsg("Could not reach the sign-in service. Check your connection and reload.");
+}
+</script>
+</body>
+</html>
