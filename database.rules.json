@@ -1,0 +1,492 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "board": {
+      "bk": {
+        ".read": "auth != null && auth.token.email_verified === true && auth.token.email.endsWith('@enduring.co')",
+        "$itemId": {
+          ".write": "auth != null && auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72'",
+          ".validate": "newData.hasChildren(['text','ts'])",
+          "text": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 300"
+          },
+          "ts": {
+            ".validate": "newData.isNumber()"
+          },
+          "order": {
+            ".validate": "newData.isNumber()"
+          },
+          "done": {
+            ".write": "auth != null && auth.token.email_verified === true && auth.token.email.endsWith('@enduring.co')",
+            ".validate": "newData.isBoolean()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      },
+      "$list": {
+        ".read": "auth != null && auth.token.email_verified === true && auth.token.email.endsWith('@enduring.co')",
+        "$itemId": {
+          ".write": "auth != null && auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72'",
+          ".validate": "newData.hasChildren(['text','ts'])",
+          "text": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000"
+          },
+          "ts": {
+            ".validate": "newData.isNumber()"
+          },
+          "order": {
+            ".validate": "newData.isNumber()"
+          },
+          "name": {
+            ".validate": "newData.isString() && newData.val().length <= 120"
+          },
+          "author": {
+            ".validate": "newData.isString() && newData.val().length <= 120"
+          },
+          "uid": {
+            ".validate": "newData.isString() && newData.val().length <= 64"
+          },
+          "email": {
+            ".validate": "newData.isString() && newData.val().length <= 160 && newData.val().matches(/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/)"
+          },
+          "done": {
+            ".validate": "newData.isBoolean()"
+          },
+          "reviewed": {
+            ".validate": "newData.isBoolean()"
+          },
+          "deleted": {
+            ".validate": "newData.isBoolean()"
+          },
+          "deletedAt": {
+            ".validate": "newData.isNumber() || newData.val() === null"
+          },
+          "source": {
+            ".validate": "newData.isString() && (newData.val() === 'public' || newData.val() === 'owner')"
+          },
+          "s1": {
+            ".validate": "newData.isString() && (newData.val() === 'done' || newData.val() === 'na')"
+          },
+          "s2": {
+            ".validate": "newData.isString() && (newData.val() === 'done' || newData.val() === 'na')"
+          },
+          "s1url": {
+            ".validate": "newData.isString() && newData.val().length <= 600 && newData.val().matches(/^https?:\\/\\//)"
+          },
+          "s2url": {
+            ".validate": "newData.isString() && newData.val().length <= 600 && newData.val().matches(/^https?:\\/\\//)"
+          },
+          "notes": {
+            "$noteId": {
+              ".write": "auth != null && auth.token.email_verified === true && auth.token.email.endsWith('@enduring.co') && (auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72' || (!data.exists() && newData.exists()))",
+              ".validate": "!newData.exists() || (newData.hasChildren(['text','ts','author','uid']) && (auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72' || newData.child('uid').val() === auth.uid))",
+              "text": {
+                ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000"
+              },
+              "ts": {
+                ".validate": "newData.isNumber()"
+              },
+              "author": {
+                ".validate": "newData.isString() && newData.val().length <= 120"
+              },
+              "uid": {
+                ".validate": "newData.isString() && newData.val().length <= 64"
+              },
+              "$other": {
+                ".validate": false
+              }
+            }
+          },
+          "complete": {
+            ".validate": "newData.isBoolean()"
+          },
+          "launch": {
+            ".validate": "newData.isString() && newData.val().length <= 40"
+          },
+          "start": {
+            ".validate": "newData.isString() && newData.val().length <= 20"
+          },
+          "co": {
+            ".validate": "newData.isString() && (newData.val() === 'school' || newData.val() === 'allrec' || newData.val() === 'kinetico' || newData.val() === 'ebs' || newData.val() === 'multi')"
+          },
+          "driveUrl": {
+            ".validate": "newData.isString() && newData.val().length <= 600 && newData.val().matches(/^https?:\\/\\//)"
+          },
+          "subs": {
+            "$subId": {
+              ".write": "auth != null && auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72'",
+              ".validate": "newData.hasChildren(['text','ts'])",
+              "text": {
+                ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 500"
+              },
+              "ts": {
+                ".validate": "newData.isNumber()"
+              },
+              "order": {
+                ".validate": "newData.isNumber()"
+              },
+              "status": {
+                ".write": "auth != null && auth.token.email_verified === true && auth.token.email.endsWith('@enduring.co')",
+                ".validate": "newData.isString() && (newData.val() === 'red' || newData.val() === 'yellow' || newData.val() === 'blue' || newData.val() === 'green')"
+              },
+              "driver": {
+                ".write": "auth != null && auth.token.email_verified === true && auth.token.email.endsWith('@enduring.co')",
+                ".validate": "newData.isString() && newData.val().length <= 3"
+              },
+              "approved": {
+                ".write": "auth != null && auth.token.email_verified === true && auth.token.email.endsWith('@enduring.co')",
+                ".validate": "newData.isString() && newData.val().length <= 3"
+              },
+              "$other": {
+                ".validate": false
+              }
+            }
+          },
+          "$other": {
+            ".validate": false
+          },
+          "ideaId": {
+            ".validate": "newData.val() === null || (newData.isString() && newData.val().length <= 64)"
+          },
+          "ideaLot": {
+            ".validate": "newData.val() === null || newData.val() === 'allrec' || newData.val() === 'school' || newData.val() === 'kinetico' || newData.val() === 'ebs'"
+          }
+        }
+      }
+    },
+    "lots": {
+      "$lot": {
+        ".validate": "$lot === 'allrec' || $lot === 'school' || $lot === 'kinetico' || $lot === 'ebs'",
+        ".read": "auth != null && (auth != null && auth.token.email_verified === true && auth.token.email.endsWith('@enduring.co') || root.child('access').child(auth.token.email.replace('.', ',')).val() === $lot)",
+        "$itemId": {
+          ".write": "auth != null && (auth != null && auth.token.email_verified === true && auth.token.email.endsWith('@enduring.co') || root.child('access').child(auth.token.email.replace('.', ',')).val() === $lot) && (newData.exists() || auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72')",
+          ".validate": "newData.hasChildren(['text','ts'])",
+          "text": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 500"
+          },
+          "ts": {
+            ".validate": "newData.isNumber()"
+          },
+          "order": {
+            ".validate": "newData.isNumber()"
+          },
+          "author": {
+            ".validate": "newData.isString() && newData.val().length <= 120"
+          },
+          "email": {
+            ".validate": "newData.isString() && newData.val().length <= 160"
+          },
+          "revenue": {
+            ".validate": "newData.isBoolean()"
+          },
+          "risk": {
+            ".validate": "newData.isBoolean()"
+          },
+          "cost": {
+            ".validate": "newData.isBoolean()"
+          },
+          "date": {
+            ".validate": "newData.val() === null || (newData.isString() && newData.val().matches(/^\\d{4}-\\d{2}-\\d{2}$/))"
+          },
+          "deleted": {
+            ".validate": "newData.isBoolean()"
+          },
+          "deletedAt": {
+            ".validate": "newData.isNumber() || newData.val() === null"
+          },
+          "promoted": {
+            ".validate": "newData.val() === null || (newData.isString() && newData.val().length <= 64)"
+          },
+          "$other": {
+            ".validate": false
+          },
+          "moat": {
+            ".validate": "newData.isBoolean()"
+          },
+          "tech": {
+            ".validate": "newData.isBoolean()"
+          },
+          "multi": {
+            ".validate": "newData.isBoolean()"
+          },
+          "status": {
+            ".validate": "newData.isString() && (newData.val() === 'idea' || newData.val() === 'forged' || newData.val() === 'screened' || newData.val() === 'scored' || newData.val() === 'queued' || newData.val() === 'build' || newData.val() === 'live' || newData.val() === 'measuring' || newData.val() === 'hold' || newData.val() === 'parked' || newData.val() === 'declined') && (newData.val() === 'idea' || newData.val() === 'forged' || auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72')"
+          },
+          "noS2": {
+            ".validate": "newData.isBoolean() && auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72'"
+          },
+          "note": {
+            ".validate": "newData.isString() && newData.val().length <= 300 && auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72'"
+          },
+          "revisit": {
+            ".validate": "(newData.val() === null || (newData.isString() && newData.val().matches(/^\\d{4}-\\d{2}-\\d{2}$/))) && auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72'"
+          },
+          "projectId": {
+            ".validate": "(newData.val() === null || (newData.isString() && newData.val().length <= 64)) && auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72'"
+          },
+          "forge": {
+            ".validate": "newData.hasChildren(['problem','submittedAt','by'])",
+            "problem": {
+              ".validate": "newData.isString() && newData.val().length <= 1500"
+            },
+            "who": {
+              ".validate": "newData.isString() && newData.val().length <= 500"
+            },
+            "freq": {
+              ".validate": "newData.isString() && newData.val().length <= 300"
+            },
+            "effort": {
+              ".validate": "newData.isString() && newData.val().length <= 500"
+            },
+            "systems": {
+              ".validate": "newData.isString() && newData.val().length <= 500"
+            },
+            "success": {
+              ".validate": "newData.isString() && newData.val().length <= 1000"
+            },
+            "layer": {
+              ".validate": "newData.val() === null || (newData.isString() && (newData.val() === 'outward' || newData.val() === 'productivity' || newData.val() === 'internal'))"
+            },
+            "dollars": {
+              ".validate": "newData.val() === null || newData.isNumber()"
+            },
+            "hours": {
+              ".validate": "newData.val() === null || newData.isNumber()"
+            },
+            "checks": {
+              "data": {
+                ".validate": "newData.isBoolean()"
+              },
+              "leave": {
+                ".validate": "newData.isBoolean()"
+              },
+              "routine": {
+                ".validate": "newData.isBoolean()"
+              },
+              "reach": {
+                ".validate": "newData.isBoolean()"
+              },
+              "metric": {
+                ".validate": "newData.isBoolean()"
+              },
+              "copy": {
+                ".validate": "newData.isBoolean()"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "feel": {
+              ".validate": "newData.isString() && newData.val().length <= 300"
+            },
+            "durability": {
+              ".validate": "newData.val() === null || (newData.isString() && (newData.val() === 'recurring' || newData.val() === 'multi' || newData.val() === 'onetime'))"
+            },
+            "years": {
+              ".validate": "newData.val() === null || newData.isNumber()"
+            },
+            "link": {
+              ".validate": "newData.val() === null || (newData.isString() && newData.val().length <= 600 && newData.val().matches(/^https?:\\/\\//))"
+            },
+            "submittedAt": {
+              ".validate": "newData.isNumber()"
+            },
+            "by": {
+              ".validate": "newData.isString() && newData.val().length <= 120"
+            },
+            "byEmail": {
+              ".validate": "newData.isString() && newData.val().length <= 160"
+            },
+            "$other": {
+              ".validate": false
+            }
+          },
+          "comments": {
+            "$cid": {
+              ".write": "auth != null && (auth != null && auth.token.email_verified === true && auth.token.email.endsWith('@enduring.co') || root.child('access').child(auth.token.email.replace('.', ',')).val() === $lot) && (auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72' || (!data.exists() && newData.exists()))",
+              ".validate": "!newData.exists() || (newData.hasChildren(['text','ts','author','uid']) && (auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72' || newData.child('uid').val() === auth.uid))",
+              "text": {
+                ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000"
+              },
+              "ts": {
+                ".validate": "newData.isNumber()"
+              },
+              "author": {
+                ".validate": "newData.isString() && newData.val().length <= 120"
+              },
+              "uid": {
+                ".validate": "newData.isString() && newData.val().length <= 64"
+              },
+              "$other": {
+                ".validate": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "access": {
+      ".read": "auth != null && auth.token.email_verified === true && auth.token.email.endsWith('@enduring.co')",
+      ".write": "auth != null && auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72'",
+      "$emailKey": {
+        ".read": "auth != null && $emailKey === auth.token.email.replace('.', ',')",
+        ".validate": "newData.isString() && (newData.val() === 'allrec' || newData.val() === 'school' || newData.val() === 'kinetico')"
+      }
+    },
+    "gateway": {
+      ".read": "auth != null && auth.token.email_verified === true && auth.token.email.endsWith('@enduring.co')",
+      "$ideaId": {
+        "draft": {
+          ".write": "auth != null && (auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72' || (auth != null && auth.token.email_verified === true && auth.token.email.endsWith('@enduring.co') && root.child('roles').child(auth.token.email.replace('.', ',')).val() === 'editor'))",
+          "s1": {
+            "name": {
+              ".validate": "newData.isString() && newData.val().length <= 200"
+            },
+            "author": {
+              ".validate": "newData.isString() && newData.val().length <= 120"
+            },
+            "date": {
+              ".validate": "newData.val() === null || (newData.isString() && newData.val().matches(/^\\d{4}-\\d{2}-\\d{2}$/))"
+            },
+            "summary": {
+              ".validate": "newData.isString() && newData.val().length <= 1500"
+            },
+            "cos": {
+              "holdco": {
+                ".validate": "newData.isBoolean()"
+              },
+              "kosa": {
+                ".validate": "newData.isBoolean()"
+              },
+              "allrec": {
+                ".validate": "newData.isBoolean()"
+              },
+              "school": {
+                ".validate": "newData.isBoolean()"
+              },
+              "multi": {
+                ".validate": "newData.isBoolean()"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "rl": {
+              "$q": {
+                ".validate": "($q === 'q1' || $q === 'q2' || $q === 'q3' || $q === 'q4' || $q === 'q5') && (newData.val() === null || newData.val() === 'yes' || newData.val() === 'no')"
+              }
+            },
+            "dollars": {
+              ".validate": "newData.val() === null || newData.isNumber()"
+            },
+            "basis": {
+              ".validate": "newData.val() === null || newData.val() === 'cost' || newData.val() === 'revenue' || newData.val() === 'risk' || newData.val() === 'moat'"
+            },
+            "durability": {
+              ".validate": "newData.val() === null || newData.val() === 'recurring' || newData.val() === 'multi' || newData.val() === 'onetime'"
+            },
+            "years": {
+              ".validate": "newData.val() === null || newData.isNumber()"
+            },
+            "requisite": {
+              ".validate": "newData.val() === null || newData.val() === 'topline' || newData.val() === 'infra' || newData.val() === 'workflow'"
+            },
+            "confidence": {
+              ".validate": "newData.val() === null || newData.val() === 'high' || newData.val() === 'moderate' || newData.val() === 'low'"
+            },
+            "moatClaimed": {
+              ".validate": "newData.isBoolean()"
+            },
+            "triggers": {
+              "effort": {
+                ".validate": "newData.isBoolean()"
+              },
+              "recurring": {
+                ".validate": "newData.isBoolean()"
+              },
+              "sensitive": {
+                ".validate": "newData.isBoolean()"
+              },
+              "multi": {
+                ".validate": "newData.isBoolean()"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "decision": {
+              ".validate": "newData.val() === null || newData.val() === 'pass2' || newData.val() === 'pilot' || newData.val() === 'hold' || newData.val() === 'decline'"
+            },
+            "reason": {
+              ".validate": "newData.isString() && newData.val().length <= 600"
+            },
+            "updatedAt": {
+              ".validate": "newData.isNumber()"
+            },
+            "updatedBy": {
+              ".validate": "newData.isString() && newData.val().length <= 120"
+            },
+            "$other": {
+              ".validate": false
+            }
+          },
+          "s2": {
+            ".validate": "newData.hasChildren()"
+          },
+          "value": {
+            ".validate": "newData.hasChildren()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        },
+        "final": {
+          ".write": "auth != null && auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72'",
+          "s1": {
+            ".validate": "newData.hasChildren(['decision','at'])",
+            "decision": {
+              ".validate": "newData.val() === 'pass2' || newData.val() === 'pilot' || newData.val() === 'hold' || newData.val() === 'decline'"
+            },
+            "reason": {
+              ".validate": "newData.isString() && newData.val().length <= 600"
+            },
+            "at": {
+              ".validate": "newData.isNumber()"
+            },
+            "dollars": {
+              ".validate": "newData.val() === null || newData.isNumber()"
+            },
+            "basis": {
+              ".validate": "newData.isString() && newData.val().length <= 20"
+            },
+            "snapshot": {
+              ".validate": "newData.hasChildren()"
+            },
+            "$other": {
+              ".validate": false
+            }
+          },
+          "s2": {
+            ".validate": "newData.hasChildren()"
+          },
+          "$other": {
+            ".validate": false
+          }
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "roles": {
+      ".read": "auth != null && auth.token.email_verified === true && auth.token.email.endsWith('@enduring.co')",
+      ".write": "auth != null && auth.uid === 'pvnOeV3RdLOIcdTAZEwCR0cEke72'",
+      "$emailKey": {
+        ".validate": "newData.isString() && newData.val() === 'editor'"
+      }
+    }
+  }
+}
