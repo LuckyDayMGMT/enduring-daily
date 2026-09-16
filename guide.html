@@ -101,7 +101,7 @@
   .box ul { margin: 4px 0 0; padding-left: 18px; }
   .rule { font-family: var(--serif); font-size: 22px; color: var(--blue); text-align: center; padding: 18px; border: 1px solid var(--line); border-left: 4px solid var(--gold); background: var(--white); border-radius: 6px; margin: 14px 0; }
 
-  .ex { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .ex { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
   .ex .box { border-top: 3px solid var(--gray-md); }
   .ex .box.school { border-top-color: #C9A227; } .ex .box.allrec { border-top-color: #993C1D; } .ex .box.kinetico { border-top-color: #7fb2d4; }
   .ex .co { font-size: 10px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase; color: var(--gray-dk); }
@@ -122,7 +122,7 @@
   .foot { max-width: 980px; margin: 0 auto; padding: 14px 20px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 11.5px; }
   .foot b { font-family: var(--serif); letter-spacing: 2.5px; color: var(--white); font-weight: 400; font-size: 13px; }
 
-  @media (max-width: 760px) { .cards, .moves, .two, .ex { grid-template-columns: 1fr; } .hero h2 { font-size: 30px; } }
+  @media (max-width: 760px) { .cards, .moves, .two { grid-template-columns: 1fr; } .hero h2 { font-size: 30px; } }
 
   @media print {
     header, footer, .cta, .pill, .noprint { display: none !important; }
@@ -245,11 +245,13 @@
   <section id="good">
     <div class="sh"><h3>What a good idea looks like</h3><span>Problems, in the words of the person who has them.</span></div>
     <div class="ex">
-      <div class="box school"><div class="co">School Apparel</div><div class="q">"Every tariff change, someone rebuilds the price list by hand across forty SKUs, and we have shipped wrong prices twice."</div><div class="why">Names the pain, the frequency, and what it costs when it goes wrong. Coop can work with this.</div></div>
-      <div class="box allrec"><div class="co">AllRec</div><div class="q">"Jacket measurements arrive as PDFs and we re-key every one. About six hours a week, and the typos come back as remakes."</div><div class="why">Hours per week plus a downstream cost. That is a number before anyone has done any math.</div></div>
-      <div class="box kinetico"><div class="co">Kinetico SA</div><div class="q">"Web leads sit for four hours before anyone calls. By then half of them have called somebody else."</div><div class="why">A gap, a delay, and a lost customer. Revenue idea, moat idea, and it did not mention a single technology.</div></div>
+      <div class="box school"><div class="co">Automate the repetitive · School Apparel</div><div class="q">"Every tariff change, someone rebuilds the price list by hand across forty SKUs, and we have shipped wrong prices twice."</div><div class="why">Names the pain, the frequency, and what it costs when it goes wrong. Coop can work with this.</div></div>
+      <div class="box allrec"><div class="co">Forecast from our own data · AllRec</div><div class="q">"We have twelve years of orders by school and season and we still guess the fall buy. Every year we run out of one thing and sit on another."</div><div class="why">The data already exists. The idea is to make it answer a question it has never been asked.</div></div>
+      <div class="box kinetico"><div class="co">Replace what does not fit · Kinetico SA</div><div class="q">"Our install scheduling runs on software built for a different kind of business. We pay for features we never touch and work around the ones we need."</div><div class="why">Sometimes the answer is our own build. Say where the current tool fights you; we decide whether to replace it.</div></div>
+      <div class="box school"><div class="co">Connect what we have · School Apparel</div><div class="q">"QuickBooks knows what we invoiced, the order sheet knows what we shipped, and nobody knows both without a Friday afternoon of copy and paste."</div><div class="why">Two systems that already work, not talking. Often the cheapest win in the building.</div></div>
+      <div class="box kinetico"><div class="co">Arm the reps · Kinetico SA</div><div class="q">"A rep walks into a kitchen against three competitors and answers 'why you?' from memory. The good answers exist. They live in five people's heads."</div><div class="why">Revenue idea, moat idea. Knowledge is the raw material; putting it in every rep's hands is the build.</div></div>
     </div>
-    <p style="margin-top:10px;font-size:14px;color:var(--gray-dk)">Notice what none of them say: "we should build an app." Say what hurts. We will figure out the rest.</p>
+    <p style="margin-top:10px;font-size:14px;color:var(--gray-dk)">Five kinds of idea, one thing in common: each says what hurts, not what to build. Say what hurts. We will figure out the rest.</p>
   </section>
 
   <section id="behind">
@@ -285,7 +287,7 @@
   </div>
 </main>
 
-<footer><div class="foot"><b>ENDURING</b><span>The Refinery · How it works · v1</span><span>enduring.co</span></div></footer>
+<footer><div class="foot"><b>ENDURING</b><span>The Refinery · How it works · v2</span><span>enduring.co</span></div></footer>
 
 <script>
   const stations = document.querySelectorAll(".st");
