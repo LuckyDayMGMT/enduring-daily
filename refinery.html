@@ -411,7 +411,7 @@
   </div>
 </div>
 
-<footer><div class="foot"><b>ENDURING</b><span>The Refinery · v2</span><span id="footRole"></span></div></footer>
+<footer><div class="foot"><b>ENDURING</b><span>The Refinery · v3</span><span id="footRole"></span></div></footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
@@ -462,6 +462,7 @@ let access = {};              // emailKey -> lot
 let filter = "", sort = "new";
 let lotRef = null;
 let roles = {};               // emailKey -> "editor"
+let gatewayData = {};         // owner only: gateway records, read at promote time for the companies affected
 let openComments = new Set(); // idea ids with the thread expanded
 let forgeFor = null;          // idea id currently in the Forge modal
 let pending = [];             // import preview rows
@@ -523,7 +524,7 @@ function startAuth() {
       $("backLink").hidden = role !== "enduring";
       $("gateLink").hidden = role !== "enduring";
       document.querySelectorAll(".owner-only").forEach(el => el.hidden = !isOwner);
-      if (role === "enduring") { renderTabs(); openLot(LOT_ORDER[0]); if (isOwner) { watchAccess(); watchRoles(); } }
+      if (role === "enduring") { renderTabs(); openLot(LOT_ORDER[0]); if (isOwner) { watchAccess(); watchRoles(); db.ref("gateway").on("value", s => { gatewayData = s.val() || {}; }); } }
       else openLot(role);
     }).catch(err => { gateMsg("Could not check access: " + err.message, "err"); firebase.auth().signOut(); });
   });
@@ -574,7 +575,6 @@ function render() {
           <span class="tag cost ${it.cost ? "on" : ""}" data-tog="cost" data-id="${id}">Cut costs</span>
           <span class="tag moat ${it.moat ? "on" : ""}" data-tog="moat" data-id="${id}">Protect moat</span>
           <span class="tag tech ${it.tech ? "on" : ""}" data-tog="tech" data-id="${id}" title="Involves AI, software, or tech">Tech</span>
-          ${role === "enduring" ? `<span class="tag multi ${it.multi ? "on" : ""}" data-tog="multi" data-id="${id}" title="Affects more than one company">Multiple</span>` : ""}
           <label class="date-wrap">Timeline <input type="date" value="${esc(it.date || "")}" data-date="${id}" /></label>
           <span class="by">${esc(it.author || "")} \u00b7 ${ago(it.ts)}</span>
           ${it.promoted && role === "enduring" ? `<span class="promoted-tag">\u2192 On the tracker</span>` : ""}
@@ -795,7 +795,12 @@ function promote(id) {
   const it = items[id]; if (!it) return;
   if (!confirm(`Send "${it.text}" to the project tracker as a new ${LOTS[lot].label} project?`)) return;
   const ref = db.ref("board/projects").push();
-  const proj = { text: it.text, ts: Date.now(), order: Date.now(), co: it.multi ? "multi" : lot, ideaId: id, ideaLot: lot };
+  // Companies affected come from Stage 1 (the Screener is the one place that decides it). More than one, or Multiple ticked, and the tracker chip reads Multiple.
+  const g = gatewayData[id] || {};
+  const cos = (g.final && g.final.s1 && g.final.s1.snapshot && g.final.s1.snapshot.cos) || (g.draft && g.draft.s1 && g.draft.s1.cos) || {};
+  const ticked = Object.entries(cos).filter(([k, on]) => on).map(([k]) => k);
+  const multi = ticked.includes("multi") || ticked.length > 1;
+  const proj = { text: it.text, ts: Date.now(), order: Date.now(), co: multi ? "multi" : lot, ideaId: id, ideaLot: lot };
   const st = it.status || "idea";
   const patch = { promoted: ref.key, projectId: ref.key };
   if (st === "idea" || st === "forged" || st === "screened" || st === "scored") patch.status = "queued";

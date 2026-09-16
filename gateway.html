@@ -106,6 +106,8 @@
   /* detail */
   .detail { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   @media (max-width: 900px) { .detail { grid-template-columns: 1fr; } .row { grid-template-columns: 80px 1fr 110px 40px; } .row .hide-m { display: none; } .sum { grid-template-columns: 1fr 1fr; } }
+  #s2Card, #valCard { grid-column: 1 / -1; }
+  #s2Card .dbody { max-width: 860px; }
   .dhead { padding: 14px 16px 12px; border-bottom: 3px solid var(--brass); }
   .dhead h2 { font-family: var(--serif); font-weight: 400; font-size: 22px; color: var(--blue); margin: 0 0 4px; }
   .dhead .meta { font-size: 12.5px; color: var(--gray-dk); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
@@ -153,6 +155,55 @@
   .rev-row .d { font-weight: 500; color: var(--red); min-width: 90px; }
   .rev-row .d.ok { color: var(--gray-dk); }
 
+  /* ---- Stage 2 ---- */
+  .scorebox { position: sticky; top: 0; z-index: 2; background: var(--white); border: 1px solid var(--line); border-top: 3px solid var(--gold); border-radius: 6px; padding: 10px 14px; display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px 18px; align-items: center; margin-bottom: 12px; box-shadow: 0 6px 18px -12px rgba(16,24,40,.35); }
+  .scorebox .big { font-family: var(--serif); font-size: 34px; color: var(--blue); line-height: 1; }
+  .scorebox .big small { font-size: 14px; color: var(--gray); }
+  .scorebox .tier { font-size: 12px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase; padding: 5px 10px; border-radius: 4px; color: var(--white); background: var(--gray); }
+  .scorebox .tier.t1 { background: var(--green); } .scorebox .tier.t2 { background: var(--blue); } .scorebox .tier.t3 { background: var(--brass); } .scorebox .tier.t4 { background: #b5651d; } .scorebox .tier.t5 { background: var(--red); }
+  .scorebox .sub { font-size: 11.5px; color: var(--gray-dk); }
+  .scorebox .sub b { font-weight: 500; color: var(--ink); }
+  .cat { display: grid; grid-template-columns: 1fr 56px auto 52px; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: 13px; }
+  .cat:last-child { border-bottom: none; }
+  .cat .w { color: var(--gray-dk); font-size: 12px; text-align: right; }
+  .cat .wt { text-align: right; font-weight: 500; }
+  .pips { display: flex; gap: 4px; }
+  .pip { width: 28px; height: 28px; border-radius: 5px; border: 1.5px solid var(--gray-md); background: var(--white); color: var(--gray-dk); font-size: 12.5px; font-weight: 500; display: grid; place-items: center; cursor: pointer; user-select: none; }
+  .pip.on { border-color: var(--blue); background: var(--blue); color: var(--white); }
+  .pip[data-dis] { cursor: default; opacity: .7; }
+  .moatrow { display: grid; grid-template-columns: 150px 1fr auto; gap: 8px 12px; align-items: start; padding: 8px 0; border-bottom: 1px dashed var(--line); font-size: 12.5px; }
+  .moatrow:last-child { border-bottom: none; }
+  .moatrow .mn { font-weight: 500; font-size: 13px; }
+  .moatrow .md { color: var(--gray-dk); font-size: 11.5px; line-height: 1.4; }
+  .moatrow .md b { font-weight: 500; color: var(--ink); }
+  .pip.m { width: 26px; height: 26px; }
+  .pip.m.on { background: var(--brass); border-color: var(--brass); }
+  .band { font-size: 11px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; padding: 4px 9px; border-radius: 4px; display: inline-block; }
+  .band.deep { background: var(--brass); color: var(--white); } .band.real { background: rgba(166,131,44,.18); color: #7d5f16; } .band.thin { background: var(--gray-lt); color: var(--gray-dk); } .band.none { background: var(--white); color: var(--gray); border: 1px dashed var(--gray-md); }
+  .ceil { font-size: 10.5px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; display: inline-block; }
+  .ceil.blocking { background: var(--red); color: var(--white); } .ceil.limiting { background: rgba(153,60,29,.12); color: var(--red); } .ceil.neutral { background: var(--gray-lt); color: var(--gray-dk); }
+  .tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .tbl th { text-align: left; font-size: 9.5px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; color: var(--gray-dk); padding: 4px 6px; }
+  .tbl td { padding: 3px 4px; }
+  .tbl input { width: 100%; border: 1px solid var(--gray-md); border-radius: 4px; padding: 6px 8px; font-size: 12.5px; }
+  .tbl input:focus { outline: none; border-color: var(--brass); }
+  .hintq { font-size: 11.5px; color: var(--gray-dk); margin: 0 0 6px; }
+
+  /* ---- ranked queue ---- */
+  .qrow { display: grid; grid-template-columns: 44px 92px 1fr 56px 90px 60px 86px 78px 72px 96px 56px; gap: 8px; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--line); cursor: pointer; }
+  .qrow:hover { background: rgba(166,131,44,.05); }
+  .qrow.on { background: rgba(201,162,39,.10); }
+  .qrow.qhead { font-size: 9.5px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-dk); cursor: default; background: var(--gray-lt); }
+  .qrow.qhead:hover { background: var(--gray-lt); }
+  .qrow .rank { font-family: var(--serif); font-size: 20px; color: var(--blue); }
+  .qrow .rk { display: flex; flex-direction: column; gap: 2px; }
+  .qrow .rk button { border: 1px solid var(--gray-md); background: var(--white); border-radius: 3px; font-size: 9px; line-height: 1; padding: 3px 5px; cursor: pointer; color: var(--gray-dk); }
+  .qrow .rk button:hover { border-color: var(--brass); color: var(--brass); }
+  .qrow .sc { font-weight: 500; font-size: 14px; }
+  .qrow .tier { font-size: 10px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; padding: 3px 7px; border-radius: 4px; color: var(--white); background: var(--gray); display: inline-block; }
+  .qrow .tier.t1 { background: var(--green); } .qrow .tier.t2 { background: var(--blue); } .qrow .tier.t3 { background: var(--brass); } .qrow .tier.t4 { background: #b5651d; } .qrow .tier.t5 { background: var(--red); }
+  @media (max-width: 1000px) { .qrow { grid-template-columns: 40px 80px 1fr 56px 60px; } .qrow .hide-q { display: none; } }
+
   footer { background: var(--blue); border-top: 3px solid var(--black); color: #cdd6e4; }
   .foot { max-width: 1180px; margin: 0 auto; padding: 14px 20px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 11.5px; }
   .foot b { font-family: var(--serif); letter-spacing: 2.5px; color: var(--white); font-weight: 400; font-size: 13px; }
@@ -197,6 +248,7 @@
     <div class="card-head">
       <div class="card-title" id="listTitle">Forge inbox</div>
       <span class="count" id="listCount">0</span>
+      <button class="btn ghost small" id="autoRankBtn" hidden title="Order the queue by the Standard's rules: blocking ceiling first, then cost before revenue before risk, then declared dollars, then moat">Auto-rank</button>
       <button class="btn ghost small" id="csvBtn" title="Export every idea with its Gateway state">Export CSV</button>
     </div>
     <div class="toolbar">
@@ -235,18 +287,21 @@
       </div>
       <div class="dbody" id="s1Body"></div>
     </section>
-    <section class="card">
-      <div class="dhead"><h2>Stage 2: The Pressure Test</h2></div>
-      <div class="phase" id="s2Body">Phase 2. Live scoring across the nine categories, the growth-ceiling flag, and the moat scoresheet land here.</div>
+    <section class="card" id="s2Card">
+      <div class="dhead">
+        <h2>Stage 2: The Pressure Test</h2>
+        <div class="meta"><span>Required over the Stage 1 threshold. Be direct: weak assumptions, overbuilding, adoption risk.</span><span class="savestate" id="saveState2"></span></div>
+      </div>
+      <div class="dbody" id="s2Body"></div>
     </section>
-    <section class="card">
+    <section class="card" id="valCard">
       <div class="dhead"><h2>Value</h2></div>
       <div class="phase" id="valBody">Phase 3. Declared run rate, quarterly actuals, and the $200K progress bar.</div>
     </section>
   </div>
 </main>
 
-<footer><div class="foot"><b>ENDURING</b><span>The Gateway · v1</span><span id="footRole"></span></div></footer>
+<footer><div class="foot"><b>ENDURING</b><span>The Gateway · v2</span><span id="footRole"></span></div></footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
@@ -285,12 +340,39 @@ const TRIGGERS = [
 ];
 const MOAT_CHECKS = { data: "Data we keep", leave: "Harder to leave", routine: "Inside their routine", reach: "We reach first", metric: "A number that moves", copy: "Hard to copy" };
 
+/* ---- Stage 2 ---- */
+const CATS = [
+  ["value", "Business and financial value", 20], ["strategic", "Strategic importance", 10], ["adoption", "User need and adoption potential", 15],
+  ["workflow", "Workflow improvement", 10], ["reuse", "Cross-company reusability", 10], ["tech", "Technical and data readiness", 10],
+  ["feas", "Implementation feasibility", 10], ["time", "Time to measurable value", 10], ["sponsor", "Executive sponsorship and ownership", 5]
+];
+const TIERS = [[85, 1, "Priority 1: Accelerate"], [70, 2, "Priority 2: Near-Term"], [55, 3, "Priority 3: Viable, Lower Priority"], [40, 4, "Priority 4: Validate / Redesign"], [0, 5, "Priority 5: Pause / Do Not Pursue"]];
+const MOAT_CRIT = [
+  ["data", "Proprietary data capture", "Captured but not kept or structured.", "Structured and kept; usable in one company.", "Structured, kept, compounding; the pattern travels to other portcos."],
+  ["switch", "Switching cost created", "Mild inconvenience to leave.", "Real re-setup cost: history, settings, or training lost.", "They would have to rebuild a process they run the business on."],
+  ["embed", "Workflow embedment", "Customer-visible but occasional.", "The customer uses it in their normal routine.", "System of record for something the customer does."],
+  ["touch", "Proactive touch enablement", "We answer faster once they contact us.", "Outreach fires automatically on a known event.", "We predict the need and reach them first."],
+  ["metric", "Retention metric moved", "A retention metric is named; no baseline.", "Named metric with a captured baseline and a target date.", "Same, and live on the EBS Tracker with a named owner."],
+  ["lag", "Replicability lag", "Weeks, with tools anyone can buy.", "Months; needs data or integrations we already hold.", "Years or never; rests on data or relationships that cannot be bought."]
+];
+const MOAT_BANDS = [[14, "deep", "Deep moat"], [9, "real", "Real moat"], [4, "thin", "Thin moat"], [0, "none", "No moat"]];
+const REC = { accelerate: "Accelerate", prioritize: "Prioritize", validate: "Validate", viable: "Viable / Lower Priority", pause: "Pause or Redesign", nopursue: "Do Not Pursue" };
+const S2_DECISIONS = { proceed: "Proceed", pilot: "Pilot", validate: "Validate Further", reduce: "Reduce Scope", pipeline: "Future Pipeline", pause: "Pause", reject: "Reject" };
+const S2_STATUS = { proceed: "queued", pilot: "queued", validate: "scored", reduce: "scored", pipeline: "scored", pause: "parked", reject: "declined" };
+const CEILING = { blocking: "Growth-blocking", limiting: "Growth-limiting", neutral: "Growth-neutral" };
+const BASIS_RANK = { cost: 0, revenue: 1, risk: 2, moat: 3 };
+function s2Score(sc) { let t = 0, n = 0; CATS.forEach(([k, , w]) => { if (sc && sc[k]) { t += sc[k] / 5 * w; n++; } }); return { score: Math.round(t), done: n, total: CATS.length }; }
+function tierOf(score) { return TIERS.find(t => score >= t[0]); }
+function moatTotal(m) { return MOAT_CRIT.reduce((a, [k]) => a + ((m && m[k]) || 0), 0); }
+function moatBand(total) { return MOAT_BANDS.find(b => total >= b[0]); }
+
 let db = null, ME = null, isOwner = false, isEditor = false, canEdit = false;
 let lots = {};        // lot -> items
 let gateway = {};     // ideaId -> { draft, final }
 let coFilter = "", view = "inbox", q = "";
 let sel = null;       // { id, lot }
 let saveTimer = null, pendingPatch = {};
+let saveTimer2 = null, pendingPatch2 = {};
 
 const $ = id => document.getElementById(id);
 const esc = s => (s == null ? "" : String(s)).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -343,8 +425,8 @@ function s2State(row) { const g = row.g; if (g.final && g.final.s2) return "done
 function inView(row) {
   const st = row.it.status || "idea";
   if (view === "inbox") return st === "forged" || (st === "idea" && row.it.tech && !!row.it.forge);
-  if (view === "screened") return st === "screened" || st === "scored";
-  if (view === "queue") return st === "queued" || st === "build" || st === "live" || st === "measuring";
+  if (view === "queue") return st === "scored" || st === "queued" || st === "build" || st === "live" || st === "measuring";
+  if (view === "screened") return st === "screened";
   if (view === "held") return st === "hold" || st === "parked" || st === "declined";
   return true;
 }
@@ -361,13 +443,15 @@ function render() {
   const rows = allIdeas();
   const counts = { inbox: 0, screened: 0, queue: 0, held: 0 };
   rows.forEach(r => { const v = view; ["inbox","screened","queue","held"].forEach(k => { view = k; if (inView(r)) counts[k]++; }); view = v; });
-  $("sum").innerHTML = [["inbox","Forge inbox","awaiting Stage 1"],["screened","Cleared Stage 1","in or awaiting Stage 2"],["queue","Queued or building","approved projects"],["held","Held, parked, declined","need a decision or a date"]]
+  $("sum").innerHTML = [["inbox","Forge inbox","awaiting Stage 1"],["screened","Cleared Stage 1","in or awaiting Stage 2"],["queue","The queue","scored, queued, building, live"],["held","Held, parked, declined","need a decision or a date"]]
     .map(([k, l, s]) => `<div class="sumc ${view === k ? "on" : ""}" data-view="${k}"><div class="n">${counts[k]}</div><div class="l">${l}<br><span style="color:var(--gray)">${s}</span></div></div>`).join("");
-  $("listTitle").textContent = { inbox: "Forge inbox", screened: "Cleared Stage 1", queue: "Queued or building", held: "Held, parked, declined", all: "Every idea" }[view];
+  $("listTitle").textContent = { inbox: "Forge inbox", screened: "Cleared Stage 1", queue: "Portfolio Prioritization Queue", held: "Held, parked, declined", all: "Every idea" }[view];
 
   let shown = rows.filter(r => inView(r) && (!coFilter || r.lot === coFilter) && (!q || (r.it.text || "").toLowerCase().includes(q)));
   shown.sort((a, b) => (b.it.forge ? b.it.forge.submittedAt : b.it.ts || 0) - (a.it.forge ? a.it.forge.submittedAt : a.it.ts || 0));
   $("listCount").textContent = shown.length;
+  $("autoRankBtn").hidden = !(view === "queue" && isOwner);
+  if (view === "queue") { renderQueue(shown); renderRevisit(rows); renderDetail(); return; }
   const head = `<div class="row rhead"><span>Company</span><span>Idea</span><span class="hide-m">Status</span><span class="hide-m">Stages</span><span class="hide-m">Forge $</span><span>Submitted</span><span></span></div>`;
   $("list").innerHTML = shown.length ? head + shown.map(r => {
     const st = r.it.status || "idea";
@@ -384,12 +468,72 @@ function render() {
     </div>`; }).join("")
     : `<div class="empty">${view === "inbox" ? "Nothing waiting. When a leader submits a Forge form it lands here." : "Nothing here."}</div>`;
 
-  // revisit list
+  renderRevisit(rows);
+  renderDetail();
+}
+function renderRevisit(rows) {
   const parked = rows.filter(r => r.it.status === "parked").sort((a, b) => (a.it.revisit || "9999").localeCompare(b.it.revisit || "9999"));
   $("revCard").hidden = !parked.length; $("revCount").textContent = parked.length;
   $("revList").innerHTML = parked.map(r => `<div class="rev-row" data-sel="${r.id}"><span class="d ${r.it.revisit && r.it.revisit <= today() ? "" : "ok"}">${r.it.revisit ? fmtDate(r.it.revisit) : "No date"}</span><span class="co ${r.lot}">${esc(LOTS[r.lot])}</span><span>${esc(r.it.text)}</span></div>`).join("");
+}
 
-  renderDetail();
+/* ---------------- RANKED QUEUE ---------------- */
+function queueKey(r) {
+  // The Standard's rules, as a sort key: blocking ceiling first; then cost > revenue > risk > moat basis; then declared dollars; then moat depth.
+  const f2 = r.g.final && r.g.final.s2, f1 = r.g.final && r.g.final.s1;
+  const ceil = f2 && f2.ceiling === "blocking" ? 0 : f2 && f2.ceiling === "limiting" ? 1 : 2;
+  const basis = f1 && f1.basis in BASIS_RANK ? BASIS_RANK[f1.basis] : 4;
+  const dollars = f1 && f1.dollars ? f1.dollars : 0;
+  const moat = f2 && f2.moat ? f2.moat : 0;
+  return [ceil, basis, -dollars, -moat, -(f2 ? f2.score : 0)];
+}
+function cmpKeys(a, b) { for (let i = 0; i < a.length; i++) { if (a[i] !== b[i]) return a[i] - b[i]; } return 0; }
+function sortedQueue(rows) {
+  return rows.slice().sort((a, b) => {
+    const ra = a.g.final && a.g.final.rank, rb = b.g.final && b.g.final.rank;
+    if (ra != null && rb != null) return ra - rb;
+    if (ra != null) return -1; if (rb != null) return 1;
+    return cmpKeys(queueKey(a), queueKey(b));
+  });
+}
+function renderQueue(rows) {
+  const q = sortedQueue(rows);
+  const head = `<div class="qrow qhead"><span>Rank</span><span>Company</span><span>Project</span><span>Score</span><span class="hide-q">Run-rate $</span><span class="hide-q">Tier</span><span class="hide-q">Ceiling</span><span class="hide-q">Moat</span><span class="hide-q">S1 / S2</span><span>Status</span><span></span></div>`;
+  $("list").innerHTML = q.length ? head + q.map((r, i) => {
+    const f1 = r.g.final && r.g.final.s1, f2 = r.g.final && r.g.final.s2, st = r.it.status || "idea";
+    const noS2 = f1 && f1.decision === "pilot";
+    const band = f2 ? moatBand(f2.moat || 0) : null;
+    return `<div class="qrow ${sel && sel.id === r.id ? "on" : ""}" data-sel="${r.id}">
+      <span style="display:flex;align-items:center;gap:6px"><span class="rank">${i + 1}</span>${isOwner ? `<span class="rk"><button data-rk="up" data-rid="${r.id}" title="Move up">&#9650;</button><button data-rk="down" data-rid="${r.id}" title="Move down">&#9660;</button></span>` : ""}</span>
+      <span><span class="co ${r.lot}">${esc(LOTS[r.lot])}</span></span>
+      <div class="rtext">${esc((f2 && f2.snapshot && f2.snapshot.name) || (f1 && f1.snapshot && f1.snapshot.name) || r.it.text)}<div class="sub">${r.g.final && r.g.final.rank != null ? "Ranked by Coop" : "Rule order"}</div></div>
+      <span class="sc">${f2 ? f2.score : (noS2 ? "—" : "")}</span>
+      <span class="money hide-q" style="text-align:left">${f1 && f1.dollars ? money(f1.dollars) : ""}</span>
+      <span class="hide-q">${f2 ? `<span class="tier t${f2.tier}">P${f2.tier}</span>` : ""}</span>
+      <span class="hide-q">${f2 && f2.ceiling ? `<span class="ceil ${f2.ceiling}">${f2.ceiling}</span>` : ""}</span>
+      <span class="hide-q">${f2 ? `<span class="band ${band[1]}" style="font-size:10px;padding:3px 7px">${band[1]}</span>` : (noS2 ? "—" : "")}</span>
+      <span class="hide-q"><span class="sb ${s1State(r.g)}">S1</span> <span class="sb ${s2State(r)}">S2</span></span>
+      <span class="st ${st}">${STATUS_LABEL[st]}</span>
+      <span style="color:var(--brass);font-weight:900">&rsaquo;</span>
+    </div>`; }).join("")
+    : `<div class="empty">Nothing in the queue yet. A project lands here when Stage 1 passes to pilot, or Stage 2 is finalized.</div>`;
+}
+function moveRank(id, dir) {
+  const rows = allIdeas().filter(r => { const v = view; view = "queue"; const ok = inView(r); view = v; return ok; });
+  const q = sortedQueue(rows);
+  const i = q.findIndex(r => r.id === id); if (i < 0) return;
+  const j = dir === "up" ? i - 1 : i + 1; if (j < 0 || j >= q.length) return;
+  [q[i], q[j]] = [q[j], q[i]];
+  const updates = {}; q.forEach((r, k) => { updates["gateway/" + r.id + "/final/rank"] = k + 1; });
+  db.ref().update(updates).catch(err => alert(err.message));
+}
+function autoRank() {
+  if (!isOwner) return;
+  if (!confirm("Re-order the queue by the Standard's rules? Your manual ranks are replaced.")) return;
+  const rows = allIdeas().filter(r => { const v = view; view = "queue"; const ok = inView(r); view = v; return ok; });
+  const q = rows.slice().sort((a, b) => cmpKeys(queueKey(a), queueKey(b)));
+  const updates = {}; q.forEach((r, k) => { updates["gateway/" + r.id + "/final/rank"] = k + 1; });
+  db.ref().update(updates).catch(err => alert(err.message));
 }
 
 function renderDetail() {
@@ -494,15 +638,162 @@ function renderDetail() {
       : isOwner ? `<h4>Finalize</h4><div style="font-size:12.5px;color:var(--gray-dk);margin-bottom:8px">Locks Stage 1, sets the leader's status to <b id="finPreview">${v.decision ? STATUS_LABEL[DECISION_STATUS[v.decision]] : "the decision"}</b>, copies the reason to their card, and sends the decision email.</div><button class="btn brass" id="finBtn" ${v.decision ? "" : "disabled"}>Finalize Stage 1</button>`
       : `<h4>Draft</h4><div style="font-size:12.5px;color:var(--gray-dk)">Saved as you type. Coop finalizes.</div>`}
     </div>`;
+  renderS2(row);
+}
+
+/* ---------------- STAGE 2 ---------------- */
+function renderS2(row) {
+  const it = row.it, f = it.forge || {}, g = row.g;
+  const s1 = (g.draft && g.draft.s1) || {}, fin1 = g.final && g.final.s1, fin2 = g.final && g.final.s2;
+  const v = (g.draft && g.draft.s2) || {};
+  const body = $("s2Body");
+  if (!fin1) { body.innerHTML = `<div class="verdict">Stage 1 must be finalized first. Nothing moves to Stage 2 without a Screener on file.</div>`; return; }
+  if (fin1.decision === "pilot" && !fin2 && !(g.draft && g.draft.s2)) { body.innerHTML = `<div class="verdict">Not required: Stage 1 passed this to pilot without a Pressure Test. ${canEdit ? `<button class="btn ghost small" id="s2Anyway" style="margin-left:8px">Run Stage 2 anyway</button>` : ""}</div>`; return; }
+  if (fin1.decision === "hold" || fin1.decision === "decline") { if (!fin2 && !(g.draft && g.draft.s2)) { body.innerHTML = `<div class="verdict">Stage 1 result was ${DECISIONS[fin1.decision]}. Reopen and pass Stage 1 before scoring.</div>`; return; } }
+  const locked = !!fin2;
+  const dis = (!canEdit || locked) ? "disabled" : "";
+  const disAttr = dis ? 'data-dis="1"' : "";
+  const sc = v.scores || {}, res = s2Score(sc), tier = tierOf(res.score);
+  const mt = moatTotal(v.moat), band = moatBand(mt);
+  const opt = (grp, key, label, on, cls) => `<span class="opt ${cls || ""} ${on ? "on" : ""}" data-grp2="${grp}" data-key="${key}" ${disAttr}>${label}</span>`;
+  const ta = (k, label, hint, val, rows) => `<div class="q"><label class="ql" for="s2-${k}">${label}${hint ? ` <small>${hint}</small>` : ""}</label><textarea id="s2-${k}" data-f2="${k}" maxlength="2000" ${dis} style="${rows ? "min-height:" + rows + "px" : ""}">${esc(val || "")}</textarea></div>`;
+  const inp = (k, label, hint, val, type) => `<div class="q"><label class="ql" for="s2-${k}">${label}${hint ? ` <small>${hint}</small>` : ""}</label><input type="${type || "text"}" id="s2-${k}" data-f2="${k}" maxlength="600" value="${esc(val || "")}" ${dis} /></div>`;
+  const pips = (k, val) => `<span class="pips">${[1,2,3,4,5].map(n => `<span class="pip ${val === n ? "on" : ""}" data-pip="${k}" data-n="${n}" ${disAttr}>${n}</span>`).join("")}</span>`;
+  const mpips = (k, val) => `<span class="pips">${[0,1,2,3].map(n => `<span class="pip m ${val === n ? "on" : ""}" data-mpip="${k}" data-n="${n}" ${disAttr}>${n}</span>`).join("")}</span>`;
+  const cos = v.cos || s1.cos || {};
+  const tbl = (key, prefix, n, cols, labels) => `<table class="tbl"><tr>${labels.map(l => `<th>${l}</th>`).join("")}</tr>${Array.from({ length: n }, (_, i) => { const rk = prefix + (i + 1), rv = (v[key] || {})[rk] || {}; return `<tr>${cols.map(c => `<td><input type="text" data-row2="${key}/${rk}/${c}" value="${esc(rv[c] || "")}" maxlength="400" ${dis} /></td>`).join("")}</tr>`; }).join("")}</table>`;
+
+  body.innerHTML = `
+    <div class="scorebox">
+      <div class="big">${res.done ? res.score : "—"}<small> / 100</small></div>
+      <div><span class="tier t${tier[1]}">${res.done === res.total ? tier[2] : (res.done ? tier[2] + " (" + res.done + " of 9 scored)" : "Score the nine categories below")}</span></div>
+      <div class="sub">Moat <b>${mt} / 18</b> <span class="band ${band[1]}" style="margin-left:6px">${band[2]}</span></div>
+      <div class="sub">Ceiling ${v.ceiling ? `<span class="ceil ${v.ceiling}">${v.ceiling}</span>` : "<b>not set</b>"}</div>
+    </div>
+    ${!canEdit ? `<div class="verdict" style="margin-bottom:10px">Read only. Editors and the owner fill this in.</div>` : ""}
+    <div class="sect first">Project information</div>
+    <div class="q"><div class="row2">
+      <div><label class="ql" for="s2-name">Project name</label><input type="text" id="s2-name" data-f2="name" maxlength="200" value="${esc(v.name != null ? v.name : (s1.name || it.text))}" ${dis} /></div>
+      <div><label class="ql">Date / author</label><input type="text" value="${esc((v.date || today()) + ", " + (v.author || ME.name))}" disabled /></div>
+    </div></div>
+    <div class="q"><label class="ql">Companies affected</label><div class="opts">${[["holdco","HoldCo"],["kosa","KoSA"],["allrec","AllRec Awards"],["school","School Apparel"],["multi","Multiple"]].map(([k, l]) => opt("cos", k, l, !!cos[k])).join("")}</div></div>
+    ${ta("solution", "Proposed solution", "the capability, automation, workflow, or build", v.solution)}
+    ${ta("problem", "Business problem or opportunity", "the cost, inefficiency, risk, or growth opening", v.problem != null ? v.problem : (s1.summary || f.problem))}
+    ${inp("users", "Primary users", "", v.users != null ? v.users : f.who)}
+    ${ta("current", "Current process or technology", "manual, outsourced, or existing system today", v.current != null ? v.current : f.systems)}
+    ${ta("constraints", "Known constraints", "budget, timing, staffing, data, security, vendor", v.constraints)}
+
+    <div class="sect">1. Executive recommendation</div>
+    <p class="hintq">Is the problem worth solving? Is this the right solution or is there a simpler one? Is the organization ready to adopt it? Move now, later, after validation, or not at all?</p>
+    ${ta("recSummary", "Assessment", "", v.recSummary, 80)}
+    <div class="q"><div class="opts">${Object.entries(REC).map(([k, l]) => opt("rec", k, l, v.rec === k)).join("")}</div></div>
+    ${inp("recReason", "Primary reason", "", v.recReason)}
+
+    <div class="sect">2. Business value</div>
+    <div class="q"><div class="row2">
+      <div><label class="ql" for="s2-valueDirect">Direct, measurable value</label><textarea id="s2-valueDirect" data-f2="valueDirect" maxlength="1500" ${dis}>${esc(v.valueDirect || "")}</textarea></div>
+      <div><label class="ql" for="s2-valueStrategic">Strategic or indirect value</label><textarea id="s2-valueStrategic" data-f2="valueStrategic" maxlength="1500" ${dis}>${esc(v.valueStrategic || "")}</textarea></div>
+    </div></div>
+    ${inp("valueDriver", "Primary value driver", "", v.valueDriver)}
+    ${inp("valueMeasure", "How success will be measured", "", v.valueMeasure)}
+
+    <div class="sect">3. User, workflow and adoption test</div>
+    <p class="hintq">What does this solve for each primary user? Help or extra work? What behavior must change, and what training, incentives, or leadership support does that take?</p>
+    ${ta("adoptionNotes", "Assessment", "", v.adoptionNotes, 70)}
+    <div class="q"><label class="ql">Anticipated adoption</label><div class="opts">${["high","moderate","low"].map(k => opt("adoption", k, k[0].toUpperCase() + k.slice(1), v.adoption === k)).join("")}</div></div>
+    ${inp("adoptionNote", "Explain", "", v.adoptionNote)}
+    ${inp("adoptionRisk", "Greatest adoption risk, and how usage will be measured after launch", "", v.adoptionRisk)}
+
+    <div class="sect">4. Solution and user experience review</div>
+    <p class="hintq">Can a typical user see the value within minutes? Steps required versus today. Are users re-entering data that already exists elsewhere? Could an existing system deliver this instead?</p>
+    ${ta("uxNotes", "Assessment", "", v.uxNotes, 70)}
+    ${inp("uxRisk", "Single largest UX or workflow risk", "", v.uxRisk)}
+
+    <div class="sect">5. Integration, data and technology readiness</div>
+    <p class="hintq">Systems, APIs, data sources and their owners. Data quality. Security, privacy, legal, compliance. Vendor dependencies. Infrastructure and ongoing maintenance.</p>
+    ${ta("techNotes", "Assessment", "", v.techNotes, 70)}
+    <div class="q"><label class="ql">Integration complexity</label><div class="opts">${[["low","Low"],["moderate","Moderate"],["high","High"],["veryhigh","Very High"]].map(([k, l]) => opt("integration", k, l, v.integration === k)).join("")}</div></div>
+    ${inp("techDependency", "Unresolved technical dependency that could prevent success", "", v.techDependency)}
+
+    <div class="sect">6. Minimum viable solution and overbuilding test</div>
+    <p class="hintq">Smallest version that validates the core value. Are we solving several problems at once or building ahead of proven demand? Could configuration, an existing platform, a lightweight automation, an off-the-shelf tool, or a manual pilot do it?</p>
+    ${ta("mvpNotes", "Assessment", "", v.mvpNotes, 70)}
+    ${ta("mvp", "Minimum Viable Pilot", "the smallest practical test that demonstrates value", v.mvp)}
+    ${ta("deferred", "Deferred features", "not built until adoption and value are proven", v.deferred)}
+    <div class="q"><label class="ql">Scope verdict</label><div class="opts">${[["under","Underbuilt"],["appropriate","Appropriately Scoped"],["modover","Moderately Overbuilt"],["sigover","Significantly Overbuilt"]].map(([k, l]) => opt("scope", k, l, v.scope === k)).join("")}</div></div>
+
+    <div class="sect">6b. Growth-ceiling test</div>
+    <p class="hintq">Not "will this project scale" but "can the company scale without it?" What growth does this unblock, and at what volume does its absence bite? If we never build it, what caps the company, when, and what does the workaround cost at scale? Which future projects or revenue depend on it?</p>
+    ${ta("ceilingNotes", "Assessment", "", v.ceilingNotes, 70)}
+    <div class="q"><div class="opts">
+      ${opt("ceiling", "blocking", "Growth-blocking: hard ceiling", v.ceiling === "blocking", "no")}
+      ${opt("ceiling", "limiting", "Growth-limiting: soft ceiling", v.ceiling === "limiting")}
+      ${opt("ceiling", "neutral", "Growth-neutral", v.ceiling === "neutral")}
+    </div></div>
+    ${v.ceiling === "blocking" ? ta("ceilingRationale", "Sequencing rationale (logged)", "why this jumps the queue despite its score", v.ceilingRationale) : ""}
+
+    <div class="sect">6c. Customer relationship moat test</div>
+    <p class="hintq">Not "does it save us money" but "does it make us harder to leave." Score each criterion 0 to 3. Zero is a finding, not a failure. The moat score sits beside the weighted score, never inside it.</p>
+    ${MOAT_CRIT.map(([k, name, d1, d2, d3]) => `<div class="moatrow"><div class="mn">${name}</div><div class="md"><b>1</b> ${d1} <b>2</b> ${d2} <b>3</b> ${d3}</div>${mpips(k, (v.moat || {})[k])}</div>`).join("")}
+    <div class="verdict" style="margin-top:8px">Moat score <b>${mt} / 18</b>: ${band[2]}. ${band[1] === "deep" ? "Strategic. Log the rationale; may outrank its score." : band[1] === "real" ? "A real relationship gain. Breaks ties in the queue." : band[1] === "thin" ? "Mostly efficiency. Do not claim moat value in reporting." : "Cost and revenue alone. Not a mark against the project."}</div>
+    ${ta("moatNotes", "Where does the customer touch this, what would they lose by leaving, what will we know in twelve months, and what slows a copycat?", "", v.moatNotes, 60)}
+
+    <div class="sect">7. Risks, blockers and critical assumptions</div>
+    ${tbl("risks", "r", 5, ["risk","impact","mit"], ["Risk or assumption","Potential impact","Mitigation / validation"])}
+    ${inp("topIssue", "Single issue most likely to prevent success", "", v.topIssue)}
+
+    <div class="sect">8. Validation exercises</div>
+    ${tbl("validations", "v", 3, ["exercise","question","evidence"], ["Exercise","Question it must answer","Evidence required to proceed"])}
+
+    <div class="sect">9. Success measures</div>
+    <p class="hintq">No vanity metrics. At least one measure must map to the declared run-rate profit impact${fin1.dollars ? " (" + money(fin1.dollars) + " per year, " + (BASIS[fin1.basis] || "") + ")" : ""}.</p>
+    ${tbl("measures", "m", 3, ["measure","target","method","timing"], ["Measure","Target","Method","Timing"])}
+
+    <div class="sect">10. Executive priority score</div>
+    <p class="hintq">Score each category 1 to 5. Weighted to 100. The Author owns the score; Coop finalizes.</p>
+    ${CATS.map(([k, name, w]) => `<div class="cat"><span>${name}</span><span class="w">${w}%</span>${pips(k, sc[k])}<span class="wt">${sc[k] ? Math.round(sc[k] / 5 * w) : ""}</span></div>`).join("")}
+    <div class="cat" style="border-top:2px solid var(--blue);font-weight:500"><span>Total</span><span class="w">100%</span><span></span><span class="wt">${res.done ? res.score : ""}</span></div>
+    <div class="verdict ${res.done === res.total ? (tier[1] <= 2 ? "go" : tier[1] === 3 ? "" : "warn") : ""}" style="margin-top:8px">${res.done === res.total ? tier[2] + ". " + ({1:"High value, feasible, well-supported, fast to measurable value.",2:"Strong, manageable risks. Proceed after defined validation.",3:"Real value, but others beat it now. Keep in the pipeline; revisit.",4:"Major assumptions or economics unresolved. Fix before proceeding.",5:"Insufficient value, readiness, or strategic fit."}[tier[1]]) : (9 - res.done) + " of 9 categories still unscored."}</div>
+    <div class="q" style="margin-top:10px"><label class="ql">Confidence level</label><div class="opts">${["high","moderate","low"].map(k => opt("confidence", k, k[0].toUpperCase() + k.slice(1), v.confidence === k)).join("")}</div></div>
+    ${inp("scoreReason", "Primary reason for the score", "", v.scoreReason)}
+    ${inp("scoreIncrease", "What would increase the score", "", v.scoreIncrease)}
+
+    <div class="sect">11. Final decision and next step</div>
+    <div class="q"><div class="opts">${Object.entries(S2_DECISIONS).map(([k, l]) => opt("decision", k, l, v.decision === k)).join("")}</div></div>
+    ${inp("nextStep", "Immediate next step", "the single most important action", v.nextStep)}
+    <div class="q"><div class="row3">
+      <div><label class="ql" for="s2-execOwner">Executive owner</label><input type="text" id="s2-execOwner" data-f2="execOwner" maxlength="120" value="${esc(v.execOwner || "")}" ${dis} /></div>
+      <div><label class="ql" for="s2-opOwner">Operational owner</label><input type="text" id="s2-opOwner" data-f2="opOwner" maxlength="120" value="${esc(v.opOwner || "")}" ${dis} /></div>
+      <div><label class="ql" for="s2-techOwner">Technology owner</label><input type="text" id="s2-techOwner" data-f2="techOwner" maxlength="120" value="${esc(v.techOwner || "Coop")}" ${dis} /></div>
+    </div></div>
+    <div class="q"><label class="ql" for="s2-reviewDate">Recommended review date</label><input type="date" id="s2-reviewDate" data-f2="reviewDate" value="${esc(v.reviewDate || "")}" ${dis} style="max-width:220px" /></div>
+
+    <div class="final ${locked ? "locked" : ""}">
+      ${locked ? `<h4>Finalized ${fmtTs(fin2.at)}: ${S2_DECISIONS[fin2.decision]}, score ${fin2.score}, ${tierOf(fin2.score)[2]}</h4><div style="font-size:13px">${esc(fin2.reason || "")}</div>${isOwner ? `<div style="margin-top:8px"><button class="btn ghost small" id="unlock2Btn">Reopen</button></div>` : ""}`
+      : isOwner ? `<h4>Finalize</h4><div style="font-size:12.5px;color:var(--gray-dk);margin-bottom:8px">Locks Stage 2, records the score, tier, ceiling, and moat on the queue, sets the leader's status to <b>${v.decision ? STATUS_LABEL[S2_STATUS[v.decision]] : "the decision"}</b>, and sends the decision email.</div><div class="q"><label class="ql" for="s2-finReason">Note to the leader <small>one line, visible on their card; required on Pause and Reject</small></label><input type="text" id="s2-finReason" maxlength="600" value="${esc(it.note || "")}" /></div><button class="btn brass" id="fin2Btn" ${v.decision && res.done === res.total ? "" : "disabled"}>Finalize Stage 2</button>${res.done < res.total ? `<span style="font-size:11.5px;color:var(--gray-dk);margin-left:8px">All nine categories must be scored.</span>` : ""}`
+      : `<h4>Draft</h4><div style="font-size:12.5px;color:var(--gray-dk)">Saved as you type. Coop finalizes.</div>`}
+    </div>`;
 }
 
 /* ---------------- EVENTS ---------------- */
 document.addEventListener("click", e => {
   const sv = e.target.closest("[data-view]"); if (sv) { view = sv.dataset.view; render(); return; }
   const co = e.target.closest("[data-co]"); if (co) { coFilter = co.dataset.co; document.querySelectorAll("[data-co]").forEach(x => x.classList.toggle("on", x.dataset.co === coFilter)); render(); return; }
+  const rk = e.target.closest("[data-rk]");
+  if (rk && isOwner) { moveRank(rk.dataset.rid, rk.dataset.rk); return; }
   const s = e.target.closest("[data-sel]"); if (s) { location.hash = s.dataset.sel; selectById(s.dataset.sel); return; }
   const o = e.target.closest(".opt[data-grp]");
   if (o && !o.dataset.dis && sel) { optClick(o); return; }
+  const o2 = e.target.closest(".opt[data-grp2]");
+  if (o2 && !o2.dataset.dis && sel) { const grp = o2.dataset.grp2, key = o2.dataset.key; if (grp === "cos") queue2({ ["cos/" + key]: !o2.classList.contains("on") }, true); else queue2({ [grp]: o2.classList.contains("on") ? null : key }, true); return; }
+  const pip = e.target.closest("[data-pip]");
+  if (pip && !pip.dataset.dis && sel) { queue2({ ["scores/" + pip.dataset.pip]: pip.classList.contains("on") ? null : parseInt(pip.dataset.n, 10) }, true); return; }
+  const mp = e.target.closest("[data-mpip]");
+  if (mp && !mp.dataset.dis && sel) { queue2({ ["moat/" + mp.dataset.mpip]: mp.classList.contains("on") ? null : parseInt(mp.dataset.n, 10) }, true); return; }
+  if (e.target.id === "autoRankBtn") { autoRank(); return; }
+  if (e.target.id === "fin2Btn") { finalizeS2(); return; }
+  if (e.target.id === "unlock2Btn") { reopenS2(); return; }
+  if (e.target.id === "s2Anyway") { queue2({ date: today(), author: ME.name }, true); return; }
   if (e.target.id === "finBtn") { finalizeS1(); return; }
   if (e.target.id === "unlockBtn") { reopenS1(); return; }
   if (e.target.id === "noteSave") { saveNote(); return; }
@@ -511,7 +802,11 @@ document.addEventListener("click", e => {
 document.addEventListener("input", e => {
   if (!sel) return;
   const f = e.target.closest("[data-f]");
-  if (f) { const k = f.dataset.f; let val = f.value; if (f.type === "number") { val = val === "" ? null : parseFloat(val); if (val !== null && isNaN(val)) val = null; } queue({ [k]: val }); }
+  if (f) { const k = f.dataset.f; let val = f.value; if (f.type === "number") { val = val === "" ? null : parseFloat(val); if (val !== null && isNaN(val)) val = null; } queue({ [k]: val }); return; }
+  const f2 = e.target.closest("[data-f2]");
+  if (f2) { queue2({ [f2.dataset.f2]: f2.value || null }); return; }
+  const r2 = e.target.closest("[data-row2]");
+  if (r2) { queue2({ [r2.dataset.row2]: r2.value || null }); return; }
 });
 document.addEventListener("change", e => {
   if (!sel) return;
@@ -523,6 +818,50 @@ $("search").addEventListener("input", e => { q = e.target.value.trim().toLowerCa
 
 function ideaPath() { return "lots/" + sel.lot + "/" + sel.id; }
 function draftPath() { return "gateway/" + sel.id + "/draft/s1"; }
+function draft2Path() { return "gateway/" + sel.id + "/draft/s2"; }
+function queue2(patch, now) {
+  Object.assign(pendingPatch2, patch);
+  $("saveState2").textContent = "Saving";
+  clearTimeout(saveTimer2);
+  saveTimer2 = setTimeout(flush2, now ? 0 : 600);
+}
+function flush2() {
+  if (!sel || !Object.keys(pendingPatch2).length) return;
+  const patch = Object.assign({}, pendingPatch2, { updatedAt: Date.now(), updatedBy: ME.name });
+  const cur = (gateway[sel.id] && gateway[sel.id].draft && gateway[sel.id].draft.s2) || {};
+  if (!cur.date) { patch.date = today(); patch.author = ME.name; }
+  if (!cur.cos && !Object.keys(patch).some(k => k.startsWith("cos/"))) {
+    const s1cos = (gateway[sel.id] && gateway[sel.id].draft && gateway[sel.id].draft.s1 && gateway[sel.id].draft.s1.cos) || {};
+    Object.entries(s1cos).forEach(([k, on]) => { if (on) patch["cos/" + k] = true; });
+  }
+  pendingPatch2 = {};
+  db.ref(draft2Path()).update(patch)
+    .then(() => { $("saveState2").textContent = "Saved"; })
+    .catch(err => { $("saveState2").textContent = "Not saved: " + err.message; });
+}
+function finalizeS2() {
+  if (!isOwner || !sel) return;
+  flush2();
+  const g = gateway[sel.id] || {}, v = (g.draft && g.draft.s2) || {};
+  const res = s2Score(v.scores);
+  if (!v.decision || res.done < res.total) return;
+  const reason = ($("s2-finReason").value || "").trim();
+  if ((v.decision === "pause" || v.decision === "reject") && !reason) { alert("Pause and Reject need a note. It goes to the leader."); $("s2-finReason").focus(); return; }
+  if (!v.ceiling) { if (!confirm("No growth-ceiling flag set. Finalize as growth-neutral?")) return; }
+  const tier = tierOf(res.score), mt = moatTotal(v.moat), band = moatBand(mt);
+  if (!confirm(`Finalize Stage 2: ${S2_DECISIONS[v.decision]}, score ${res.score} (${tier[2]}), moat ${mt}/18? This emails the leader.`)) return;
+  const final = { decision: v.decision, score: res.score, tier: tier[1], ceiling: v.ceiling || "neutral", moat: mt, moatBand: band[1], reason: reason || null, at: Date.now(), snapshot: v };
+  const ideaPatch = { status: S2_STATUS[v.decision], note: reason || null };
+  if (v.decision === "pause" && v.reviewDate) ideaPatch.revisit = v.reviewDate;
+  db.ref("gateway/" + sel.id + "/final/s2").set(final)
+    .then(() => db.ref(ideaPath()).update(ideaPatch))
+    .catch(err => alert("Could not finalize: " + err.message));
+}
+function reopenS2() {
+  if (!isOwner || !sel) return;
+  if (!confirm("Reopen Stage 2? The score leaves the queue until you finalize again; the leader keeps their current status.")) return;
+  db.ref("gateway/" + sel.id + "/final/s2").remove().catch(err => alert(err.message));
+}
 
 function optClick(o) {
   const grp = o.dataset.grp, key = o.dataset.key;
@@ -592,12 +931,14 @@ function saveNote() {
 
 function exportCsv() {
   const rows = allIdeas();
-  const cols = ["Company","Idea","Status","Submitted by","Submitted","Revenue","Risk","Cost","Moat","Tech","Multiple","Forge $/yr","Forge hrs/wk","Layer","Durability","S1","S1 decision","S1 $/yr","S1 basis","S1 finalized","S2","Note","Revisit","On tracker"];
+  const cols = ["Rank","Company","Idea","Status","Submitted by","Submitted","Revenue","Risk","Cost","Moat","Tech","Forge $/yr","Forge hrs/wk","Layer","Durability","S1","S1 decision","S1 $/yr","S1 basis","S1 finalized","S2","S2 decision","Score","Tier","Ceiling","Moat score","Moat band","S2 finalized","Note","Revisit","On tracker"];
   const cell = x => { const s = x == null ? "" : String(x); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
   const lines = [cols.join(",")].concat(rows.map(r => {
-    const it = r.it, f = it.forge || {}, fin = r.g.final && r.g.final.s1;
-    return [LOTS[r.lot], it.text, STATUS_LABEL[it.status || "idea"], f.by || it.author, fmtTs(f.submittedAt || it.ts), it.revenue ? "Y" : "", it.risk ? "Y" : "", it.cost ? "Y" : "", it.moat ? "Y" : "", it.tech ? "Y" : "", it.multi ? "Y" : "",
-      f.dollars, f.hours, f.layer, f.durability, s1State(r.g), fin ? DECISIONS[fin.decision] : "", fin ? fin.dollars : "", fin ? fin.basis : "", fin ? fmtTs(fin.at) : "", s2State(r), it.note, it.revisit, it.projectId ? "Y" : ""].map(cell).join(",");
+    const it = r.it, f = it.forge || {}, fin = r.g.final && r.g.final.s1, f2 = r.g.final && r.g.final.s2;
+    return [r.g.final && r.g.final.rank != null ? r.g.final.rank : "", LOTS[r.lot], it.text, STATUS_LABEL[it.status || "idea"], f.by || it.author, fmtTs(f.submittedAt || it.ts), it.revenue ? "Y" : "", it.risk ? "Y" : "", it.cost ? "Y" : "", it.moat ? "Y" : "", it.tech ? "Y" : "",
+      f.dollars, f.hours, f.layer, f.durability, s1State(r.g), fin ? DECISIONS[fin.decision] : "", fin ? fin.dollars : "", fin ? fin.basis : "", fin ? fmtTs(fin.at) : "", s2State(r),
+      f2 ? S2_DECISIONS[f2.decision] : "", f2 ? f2.score : "", f2 ? "P" + f2.tier : "", f2 ? f2.ceiling : "", f2 ? f2.moat : "", f2 ? f2.moatBand : "", f2 ? fmtTs(f2.at) : "",
+      it.note, it.revisit, it.projectId ? "Y" : ""].map(cell).join(",");
   }));
   const blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = today() + "_Enduring_Gateway_Export.csv"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
