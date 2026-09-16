@@ -446,6 +446,15 @@
     /* Recently-deleted + trash */
     .restore-btn { font-size: 12px; }
   }
+
+  /* ---- How it works: floating help ---- */
+  .helpfab { position: fixed; right: 18px; bottom: 18px; z-index: 400; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+    background: #C9A227; color: #122a4d; font-family: Roboto, Arial, sans-serif; font-weight: 900; font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+    padding: 10px 16px 10px 12px; border-radius: 999px; box-shadow: 0 10px 24px -10px rgba(0,0,0,.55), 0 0 0 3px rgba(201,162,39,.25); border: 1px solid #b08e20; }
+  .helpfab:hover { background: #fff; color: #193661; box-shadow: 0 10px 24px -10px rgba(0,0,0,.55), 0 0 0 3px rgba(25,54,97,.2); }
+  .helpfab .q { width: 20px; height: 20px; border-radius: 50%; background: #122a4d; color: #C9A227; display: grid; place-items: center; font-family: Georgia, serif; font-size: 13px; font-weight: 700; }
+  .helpfab:hover .q { background: #193661; color: #fff; }
+  @media print { .helpfab { display: none; } }
 </style>
 </head>
 <body>
@@ -542,7 +551,7 @@
 <footer>
   <div class="foot-inner">
     <span class="foot-logo">ENDURING</span>
-    <span>Enduring Daily · Operations Board · v22</span>
+    <span>Enduring Daily · Operations Board · v23</span>
     <span class="lock-hint" id="lockHint"></span>
   </div>
 </footer>
@@ -1318,5 +1327,6 @@ document.addEventListener("click", (e) => {
 document.getElementById("gateBtn").addEventListener("click", signIn);
 if (initBackend()) startAuth();
 </script>
+<a class="helpfab" href="guide.html" title="What The Refinery is, what it does, and how an idea moves"><span class="q">?</span>How it works</a>
 </body>
 </html>

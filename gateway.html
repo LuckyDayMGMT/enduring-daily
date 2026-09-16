@@ -245,6 +245,15 @@
   footer { background: var(--blue); border-top: 3px solid var(--black); color: #cdd6e4; }
   .foot { max-width: 1180px; margin: 0 auto; padding: 14px 20px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 11.5px; }
   .foot b { font-family: var(--serif); letter-spacing: 2.5px; color: var(--white); font-weight: 400; font-size: 13px; }
+
+  /* ---- How it works: floating help ---- */
+  .helpfab { position: fixed; right: 18px; bottom: 18px; z-index: 400; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+    background: #C9A227; color: #122a4d; font-family: Roboto, Arial, sans-serif; font-weight: 900; font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+    padding: 10px 16px 10px 12px; border-radius: 999px; box-shadow: 0 10px 24px -10px rgba(0,0,0,.55), 0 0 0 3px rgba(201,162,39,.25); border: 1px solid #b08e20; }
+  .helpfab:hover { background: #fff; color: #193661; box-shadow: 0 10px 24px -10px rgba(0,0,0,.55), 0 0 0 3px rgba(25,54,97,.2); }
+  .helpfab .q { width: 20px; height: 20px; border-radius: 50%; background: #122a4d; color: #C9A227; display: grid; place-items: center; font-family: Georgia, serif; font-size: 13px; font-weight: 700; }
+  .helpfab:hover .q { background: #193661; color: #fff; }
+  @media print { .helpfab { display: none; } }
 </style>
 </head>
 <body>
@@ -342,7 +351,7 @@
   </div>
 </main>
 
-<footer><div class="foot"><b>ENDURING</b><span>The Gateway · v3</span><span id="footRole"></span></div></footer>
+<footer><div class="foot"><b>ENDURING</b><span>The Gateway · v4</span><span id="footRole"></span></div></footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
@@ -1181,5 +1190,6 @@ try {
   gateMsg("Could not reach the sign-in service. Check your connection and reload.");
 }
 </script>
+<a class="helpfab" href="guide.html" title="What The Refinery is, what it does, and how an idea moves"><span class="q">?</span>How it works</a>
 </body>
 </html>

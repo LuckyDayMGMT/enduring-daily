@@ -6,12 +6,19 @@ Live at enduringdaily.co (GitHub Pages) on Firebase project enduring-daily. Ever
 
 | File | What it is | Version stamp in footer |
 |---|---|---|
-| index.html | Enduring Daily project tracker. @enduring.co only. | Operations Board · v22 |
-| refinery.html | The Refinery (was Parking Lot). Leaders see their company; @enduring.co sees all four lots. | The Refinery · v3 |
-| gateway.html | The Gateway. Stage 1 and Stage 2 in-app with live scoring, the ranked queue, and the value tracker. @enduring.co only. | The Gateway · v3 |
+| index.html | Enduring Daily project tracker. @enduring.co only. | Operations Board · v23 |
+| refinery.html | The Refinery (was Parking Lot). Leaders see their company; @enduring.co sees all four lots. | The Refinery · v4 |
+| gateway.html | The Gateway. Stage 1 and Stage 2 in-app with live scoring, the ranked queue, and the value tracker. @enduring.co only. | The Gateway · v4 |
+| guide.html | How it works. Public, no sign-in, nothing sensitive. Interactive pipeline map, leader instructions, behind-the-Gateway section, FAQ, print styles. | How it works · v1 |
 | lot.html | Redirect to refinery.html so old links and sign-in emails still work. | none |
 | bk.html | From the Desk of Steven Cooper. Unchanged. | none |
 | database.rules.json | Realtime Database rules. Publish by `firebase deploy --only database` or paste into the console. | n/a |
+
+## Guide (September 16, 2026)
+
+guide.html is the public explainer: hero, clickable SVG pipeline map (Idea, Refinery, Forge, Gateway, Queue, Live, Value, with the not-a-build bypass and the Hold, Parked, Declined sidings), the three moves, how to read the strip, the two emails, three example ideas, Behind the Gateway for Enduring Co, five FAQs, print stylesheet (four Letter pages). It loads no Firebase and states no scores, weights, dollar targets, or names beyond Coop, Brian, Jory. Every page (tracker v23, Refinery v4, Gateway v4) carries a fixed gold "How it works" button at bottom right linking to it; the Refinery sign-in card links to it as well.
+
+Deploy: upload guide.html, index.html, refinery.html, gateway.html through GitHub. No rules or function changes.
 
 ## Phase 3 changes (September 16, 2026)
 

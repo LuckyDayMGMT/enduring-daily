@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>How it works · The Refinery · Enduring</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --blue: #193661; --blue-deep: #122a4d; --brass: #A6832C; --gold: #C9A227; --black: #000; --white: #fff;
+    --gray: #A7A9AC; --gray-lt: #f3f4f6; --gray-md: #d8dade; --gray-dk: #6b6d72;
+    --paper: #f7f8fa; --ink: #14161a; --line: #e4e6ea; --green: #0F6E56; --red: #993C1D; --orange: #F26B1D;
+    --serif: "Tiempos Headline", Georgia, "Times New Roman", serif;
+    --sans: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  a { color: var(--blue); }
+  header { background: var(--blue); color: var(--white); border-bottom: 3px solid var(--brass); }
+  .mast { max-width: 980px; margin: 0 auto; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .logo-box { display: inline-block; border: 1px solid rgba(255,255,255,.28); padding: 7px 14px; font-family: var(--serif); font-size: 19px; letter-spacing: 3px; line-height: 1; }
+  .title { display: flex; align-items: center; gap: 12px; }
+  .title h1 { font-family: var(--serif); font-weight: 400; font-size: 24px; margin: 0; }
+  .title svg { width: 26px; height: 26px; }
+  .pill { font-weight: 900; text-transform: uppercase; letter-spacing: 1px; font-size: 10.5px; padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.3); color: #cdd6e4; text-decoration: none; }
+  .pill:hover { color: var(--brass); background: var(--white); border-color: var(--white); }
+  .pill.go { background: var(--gold); border-color: var(--gold); color: var(--blue-deep); }
+  .pill.go:hover { background: var(--white); }
+
+  main { max-width: 980px; margin: 0 auto; padding: 0 20px 80px; }
+  .hero { padding: 44px 0 22px; }
+  .hero h2 { font-family: var(--serif); font-weight: 400; font-size: 40px; line-height: 1.1; color: var(--blue); margin: 0 0 10px; }
+  .hero h2 em { font-style: normal; color: var(--brass); }
+  .hero p { font-size: 18px; color: var(--gray-dk); margin: 0; max-width: 620px; }
+  .hero .kicker { font-size: 11px; font-weight: 900; letter-spacing: 1.4px; text-transform: uppercase; color: var(--brass); margin-bottom: 10px; }
+
+  section { margin-top: 34px; }
+  .sh { display: flex; align-items: baseline; gap: 12px; border-bottom: 3px solid var(--blue); padding-bottom: 6px; margin-bottom: 14px; }
+  .sh h3 { font-family: var(--serif); font-weight: 400; font-size: 26px; color: var(--blue); margin: 0; }
+  .sh span { font-size: 12.5px; color: var(--gray-dk); }
+  p { margin: 0 0 10px; }
+  .lead { font-size: 16.5px; }
+
+  /* map */
+  .map { background: var(--white); border: 1px solid var(--line); border-radius: 6px; padding: 14px 10px 6px; overflow-x: auto; }
+  .map svg { width: 100%; min-width: 760px; height: auto; display: block; }
+  .st { cursor: pointer; }
+  .st circle.node { fill: var(--white); stroke: var(--blue); stroke-width: 2.5; transition: all .15s; }
+  .st:hover circle.node, .st.on circle.node { fill: var(--gold); stroke: var(--gold); }
+  .st text.lab { font-family: var(--sans); font-size: 12px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; fill: var(--blue); text-anchor: middle; }
+  .st text.sub { font-family: var(--sans); font-size: 10px; fill: var(--gray-dk); text-anchor: middle; }
+  .st.on text.lab { fill: var(--brass); }
+  .rail { stroke: var(--blue); stroke-width: 6; fill: none; stroke-linecap: round; }
+  .rail.thin { stroke-width: 2; stroke-dasharray: 6 5; stroke: var(--gray-dk); }
+  .spur { stroke: var(--gray-dk); stroke-width: 2; fill: none; }
+  .siding text { font-family: var(--sans); font-size: 10.5px; font-weight: 500; fill: var(--gray-dk); }
+  .siding rect { fill: var(--gray-lt); stroke: var(--gray-md); }
+  .siding.hold text { fill: #7d5f16; } .siding.hold rect { stroke: var(--brass); }
+  .siding.declined text { fill: var(--red); } .siding.declined rect { stroke: var(--red); }
+  .note-t { font-family: var(--sans); font-size: 10.5px; fill: var(--gray-dk); font-style: italic; }
+  .who { font-family: var(--sans); font-size: 9.5px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; fill: var(--white); }
+  .dial { fill: var(--white); stroke: var(--brass); stroke-width: 3; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+  .mc { background: var(--white); border: 1px solid var(--line); border-top: 3px solid var(--blue); border-radius: 6px; padding: 12px 14px; }
+  .mc.on { border-top-color: var(--gold); box-shadow: 0 8px 22px -14px rgba(16,24,40,.5); }
+  .mc h4 { font-family: var(--serif); font-weight: 400; font-size: 18px; color: var(--blue); margin: 0 0 4px; }
+  .mc .meta { font-size: 11px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; color: var(--brass); margin-bottom: 6px; }
+  .mc p { font-size: 13.5px; margin: 0; }
+  .mc.you { border-top-color: var(--orange); } .mc.you .meta { color: var(--orange); }
+
+  /* three moves */
+  .moves { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .mv { background: var(--white); border: 1px solid var(--line); border-radius: 6px; padding: 16px; position: relative; }
+  .mv .n { font-family: var(--serif); font-size: 44px; color: var(--gold); line-height: 1; position: absolute; right: 14px; top: 8px; opacity: .55; }
+  .mv h4 { font-family: var(--serif); font-weight: 400; font-size: 22px; color: var(--blue); margin: 0 0 6px; }
+  .mv p { font-size: 14px; margin: 0; }
+  .mv p b { font-weight: 500; }
+
+  /* strip */
+  .strip-demo { background: var(--white); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; }
+  .strip { display: flex; align-items: center; flex-wrap: wrap; margin: 6px 0 10px; }
+  .stop { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; letter-spacing: .3px; color: var(--gray); }
+  .stop::before { content: ""; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--gray-md); background: var(--white); }
+  .stop + .stop { margin-left: 8px; padding-left: 16px; position: relative; }
+  .stop + .stop::after { content: ""; position: absolute; left: 0; top: 50%; width: 12px; height: 1.5px; background: var(--gray-md); }
+  .stop.done { color: var(--gray-dk); } .stop.done::before { background: var(--gray-dk); border-color: var(--gray-dk); }
+  .stop.now { color: #7d5f16; font-weight: 900; } .stop.now::before { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,162,39,.25); }
+  .end { font-size: 10.5px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; background: var(--gray-lt); color: var(--gray-dk); border: 1px solid var(--gray-md); margin-right: 8px; }
+  .end.hold { color: #7d5f16; border-color: var(--brass); } .end.declined { color: var(--red); border-color: var(--red); }
+  .note { margin-top: 8px; font-size: 13px; background: rgba(201,162,39,.09); border-left: 3px solid var(--gold); padding: 6px 10px; border-radius: 0 4px 4px 0; }
+  .note b { font-weight: 500; color: #7d5f16; }
+  dl.legend { display: grid; grid-template-columns: 130px 1fr; gap: 4px 12px; font-size: 13.5px; margin: 10px 0 0; }
+  dl.legend dt { font-weight: 500; color: var(--blue); } dl.legend dd { margin: 0; }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .box { background: var(--white); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; }
+  .box h4 { font-family: var(--serif); font-weight: 400; font-size: 19px; color: var(--blue); margin: 0 0 6px; }
+  .box p, .box li { font-size: 14px; }
+  .box ul { margin: 4px 0 0; padding-left: 18px; }
+  .rule { font-family: var(--serif); font-size: 22px; color: var(--blue); text-align: center; padding: 18px; border: 1px solid var(--line); border-left: 4px solid var(--gold); background: var(--white); border-radius: 6px; margin: 14px 0; }
+
+  .ex { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .ex .box { border-top: 3px solid var(--gray-md); }
+  .ex .box.school { border-top-color: #C9A227; } .ex .box.allrec { border-top-color: #993C1D; } .ex .box.kinetico { border-top-color: #7fb2d4; }
+  .ex .co { font-size: 10px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase; color: var(--gray-dk); }
+  .ex .q { font-family: var(--serif); font-size: 16px; color: var(--blue); margin: 4px 0 6px; }
+  .ex .why { font-size: 12.5px; color: var(--gray-dk); }
+
+  .faq details { background: var(--white); border: 1px solid var(--line); border-radius: 6px; padding: 10px 14px; margin-bottom: 8px; }
+  .faq summary { cursor: pointer; font-weight: 500; color: var(--blue); font-size: 15px; }
+  .faq p { font-size: 14px; margin: 8px 0 0; }
+
+  .cta { margin-top: 30px; background: var(--blue); color: var(--white); border-radius: 6px; padding: 22px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; border-bottom: 3px solid var(--brass); }
+  .cta h3 { font-family: var(--serif); font-weight: 400; font-size: 24px; margin: 0; }
+  .cta p { margin: 4px 0 0; color: #cdd6e4; font-size: 14px; }
+  .btn { display: inline-block; background: var(--gold); color: var(--blue-deep); text-decoration: none; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; font-size: 12px; padding: 12px 20px; border-radius: 5px; }
+  .btn:hover { background: var(--white); }
+
+  footer { background: var(--blue); border-top: 3px solid var(--black); color: #cdd6e4; }
+  .foot { max-width: 980px; margin: 0 auto; padding: 14px 20px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 11.5px; }
+  .foot b { font-family: var(--serif); letter-spacing: 2.5px; color: var(--white); font-weight: 400; font-size: 13px; }
+
+  @media (max-width: 760px) { .cards, .moves, .two, .ex { grid-template-columns: 1fr; } .hero h2 { font-size: 30px; } }
+
+  @media print {
+    header, footer, .cta, .pill, .noprint { display: none !important; }
+    body { background: #fff; color: #000; }
+    main { max-width: none; padding: 0; }
+    .hero { padding: 0 0 12px; }
+    section { margin-top: 18px; break-inside: avoid; }
+    .map { border: none; padding: 0; overflow: visible; }
+    .map svg { min-width: 0; }
+    .cards { display: grid !important; }
+    .mc, .mv, .box, .strip-demo, .faq details { break-inside: avoid; box-shadow: none; }
+    .faq details { display: block; } .faq details > * { display: block; }
+    a { color: #000; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="mast">
+    <div class="title">
+      <span class="logo-box">ENDURING</span>
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 12h20l-3 14H9z" fill="#A6832C"/><path d="M9 12l3-4h8l3 4z" fill="#C9A227"/><path d="M16 4c1.8 2.2 3 3.6 3 5.2A3 3 0 0 1 13 9.2c0-1.6 1.2-3 3-5.2z" fill="#F26B1D"/></svg>
+      <h1>How it works</h1>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="pill noprint" href="#" onclick="window.print();return false;">Print</a>
+      <a class="pill go" href="refinery.html">Open The Refinery</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="kicker">The Refinery · enduringdaily.co</div>
+    <h2>Where ideas get <em>forged into reality.</em></h2>
+    <p>You bring the problem. We bring the build. One place to drop an idea so it never gets lost, and one line that shows you exactly where it is.</p>
+  </div>
+
+  <section id="map">
+    <div class="sh"><h3>The map</h3><span>Click a station. This is the same line you will see on every idea card.</span></div>
+    <div class="map">
+      <svg viewBox="0 0 980 275" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pipeline from idea to value">
+        <!-- who lanes -->
+        <rect x="0" y="8" width="335" height="20" rx="4" fill="#F26B1D"/><text class="who" x="12" y="22">Your part · about five minutes</text>
+        <rect x="345" y="8" width="635" height="20" rx="4" fill="#193661"/><text class="who" x="357" y="22">Enduring Co's part · Coop and Brian</text>
+        <!-- main rail -->
+        <path class="rail" d="M60 120 H900"/>
+        <!-- forge bypass, below the rail -->
+        <path class="rail thin" d="M180 120 C 220 178, 300 178, 340 120"/>
+        <text class="note-t" x="262" y="182" text-anchor="middle">not a build? it stays on the list as a plain idea</text>
+        <!-- sidings off the gateway -->
+        <path class="spur" d="M500 134 C 500 165, 470 180, 455 198"/>
+        <path class="spur" d="M500 134 C 500 175, 580 185, 605 208"/>
+        <path class="spur" d="M500 134 C 500 180, 690 190, 728 208"/>
+        <g class="siding hold"><rect x="388" y="198" width="134" height="24" rx="4"/><text x="455" y="214" text-anchor="middle">On hold · one question</text></g>
+        <g class="siding"><rect x="530" y="208" width="150" height="24" rx="4"/><text x="605" y="224" text-anchor="middle">Parked · with a revisit date</text></g>
+        <g class="siding declined"><rect x="690" y="208" width="76" height="24" rx="4"/><text x="728" y="224" text-anchor="middle">Declined</text></g>
+        <text class="note-t" x="580" y="256" text-anchor="middle">Sidings, not dead ends. Every one comes with a reason on your card.</text>
+        <!-- stations, labels above the rail -->
+        <g class="st" data-k="idea"><circle class="node" cx="60" cy="120" r="14"/><text class="lab" x="60" y="80">Idea</text><text class="sub" x="60" y="95">you type it</text></g>
+        <g class="st" data-k="refinery"><circle class="node" cx="180" cy="120" r="14"/><text class="lab" x="180" y="80">Refinery</text><text class="sub" x="180" y="95">your company's list</text></g>
+        <g class="st" data-k="forge"><circle class="node" cx="300" cy="120" r="14"/><text class="lab" x="300" y="80">Forge</text><text class="sub" x="300" y="95">six questions</text></g>
+        <g class="st" data-k="gateway"><circle class="node" cx="500" cy="120" r="14"/><text class="lab" x="500" y="80">Gateway</text><text class="sub" x="500" y="95">screened, then scored</text></g>
+        <g class="st" data-k="queue"><circle class="node" cx="660" cy="120" r="14"/><text class="lab" x="660" y="80">Queue</text><text class="sub" x="660" y="95">ranked, then built</text></g>
+        <g class="st" data-k="live"><circle class="node" cx="800" cy="120" r="14"/><text class="lab" x="800" y="80">Live</text><text class="sub" x="800" y="95">in your hands</text></g>
+        <g class="st" data-k="value"><circle class="dial" cx="910" cy="120" r="22"/><path d="M910 120 L921 108" stroke="#A6832C" stroke-width="3" stroke-linecap="round"/><circle cx="910" cy="120" r="3" fill="#A6832C"/><text class="lab" x="910" y="80">Value</text><text class="sub" x="910" y="95">counted every quarter</text></g>
+      </svg>
+    </div>
+    <div class="cards" id="mapCards">
+      <div class="mc you" data-k="idea"><div class="meta">You · 30 seconds</div><h4>Idea</h4><p>Type it into The Refinery. Tag it: more revenue, less risk, lower cost, or protect the moat. A sentence is enough. If it mentions software, AI, or tech, we ask one more thing.</p></div>
+      <div class="mc you" data-k="forge"><div class="meta">You · five minutes</div><h4>Forge</h4><p>Six plain questions about the problem: what goes wrong, who does the work, how often, what it costs, what it touches, what better looks like. Rough answers beat blank ones. Then you get a receipt.</p></div>
+      <div class="mc" data-k="gateway"><div class="meta">Enduring Co · days to weeks</div><h4>Gateway</h4><p>Coop screens it in ten minutes against five questions. Bigger builds get a pressure test: value, adoption, overbuilding, risk. You get one email with the decision and a reason.</p></div>
+      <div class="mc" data-k="queue"><div class="meta">Enduring Co</div><h4>Queue</h4><p>One ranked list across the whole portfolio. Growth-blocking work first, then the surest dollars. Your strip reads Queued, then Building.</p></div>
+      <div class="mc" data-k="live"><div class="meta">You and Enduring Co</div><h4>Live</h4><p>The build is in your hands. From here the question changes from "will it work" to "what did it move," and that is measured, not guessed.</p></div>
+      <div class="mc" data-k="value"><div class="meta">Every quarter</div><h4>Value</h4><p>Each finished project declares a number: dollars saved, earned, or protected. Actuals are logged quarterly against it. This is how the portfolio keeps score.</p></div>
+    </div>
+  </section>
+
+  <section id="moves">
+    <div class="sh"><h3>Your part, in three moves</h3></div>
+    <div class="moves">
+      <div class="mv"><div class="n">1</div><h4>Drop it.</h4><p>Open The Refinery, type the idea, pick a tag or two. That is the whole entry fee. <b>Nothing is too small</b> and nothing gets lost.</p></div>
+      <div class="mv"><div class="n">2</div><h4>Forge it.</h4><p>If it needs software or AI, the toggle lights up and the Forge opens. Answer what you can. <b>The first question is the only one that is required.</b></p></div>
+      <div class="mv"><div class="n">3</div><h4>Watch it move.</h4><p>Your card grows a strip of six stops and lights up as the idea travels. Coop's note sits under it. <b>Comment on the card any time</b> and we see it.</p></div>
+    </div>
+    <div class="rule">Bring us the problem, not the blueprint.</div>
+    <p>You do not need to know what to build or how. Naming what is slow, repetitive, or expensive is the hard part, and it is the part only you can do.</p>
+  </section>
+
+  <section id="strip">
+    <div class="sh"><h3>Reading the strip</h3><span>The gold dot is where your idea is right now.</span></div>
+    <div class="strip-demo">
+      <div class="strip"><span class="stop done">Forged</span><span class="stop now">Screened</span><span class="stop">Scored</span><span class="stop">Queued</span><span class="stop">Building</span><span class="stop">Live</span></div>
+      <div class="note"><b>Coop:</b> Cleared Stage 1. Moving to Pressure Test.</div>
+      <dl class="legend">
+        <dt>Forged</dt><dd>You sent the Forge form. Coop has it.</dd>
+        <dt>Screened</dt><dd>It cleared the ten-minute screener. Bigger builds go on to a pressure test.</dd>
+        <dt>Scored</dt><dd>The pressure test is done and the project has a score and a place in line.</dd>
+        <dt>Queued</dt><dd>Approved. Waiting its turn behind whatever is in build now.</dd>
+        <dt>Building</dt><dd>Coop and Brian are on it. Expect questions.</dd>
+        <dt>Live</dt><dd>Delivered. Now we count what it moved.</dd>
+      </dl>
+      <div style="margin-top:12px"><span class="end hold">On hold</span><span class="end">Parked</span><span class="end declined">Declined</span></div>
+      <dl class="legend">
+        <dt>On hold</dt><dd>One question has to be answered before it moves. The question is in the note.</dd>
+        <dt>Parked</dt><dd>Good idea, wrong moment. It carries a revisit date and comes back on its own.</dd>
+        <dt>Declined</dt><dd>Not this one, and the note says why. Declined ideas still teach us what to look for.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="hear">
+    <div class="sh"><h3>What you will hear from us</h3></div>
+    <div class="two">
+      <div class="box"><h4>Two emails, ever.</h4><p>A receipt the moment you forge an idea, and one decision email when Coop decides. That is the full list. Everything in between is on your card, not in your inbox.</p></div>
+      <div class="box"><h4>On silence.</h4><p>If the strip is not moving, Coop is working. If it has not moved in a week and you are wondering, leave a comment on the card. That is what the comments are for.</p></div>
+    </div>
+  </section>
+
+  <section id="good">
+    <div class="sh"><h3>What a good idea looks like</h3><span>Problems, in the words of the person who has them.</span></div>
+    <div class="ex">
+      <div class="box school"><div class="co">School Apparel</div><div class="q">"Every tariff change, someone rebuilds the price list by hand across forty SKUs, and we have shipped wrong prices twice."</div><div class="why">Names the pain, the frequency, and what it costs when it goes wrong. Coop can work with this.</div></div>
+      <div class="box allrec"><div class="co">AllRec</div><div class="q">"Jacket measurements arrive as PDFs and we re-key every one. About six hours a week, and the typos come back as remakes."</div><div class="why">Hours per week plus a downstream cost. That is a number before anyone has done any math.</div></div>
+      <div class="box kinetico"><div class="co">Kinetico SA</div><div class="q">"Web leads sit for four hours before anyone calls. By then half of them have called somebody else."</div><div class="why">A gap, a delay, and a lost customer. Revenue idea, moat idea, and it did not mention a single technology.</div></div>
+    </div>
+    <p style="margin-top:10px;font-size:14px;color:var(--gray-dk)">Notice what none of them say: "we should build an app." Say what hurts. We will figure out the rest.</p>
+  </section>
+
+  <section id="behind">
+    <div class="sh"><h3>Behind the Gateway</h3><span>For Enduring Co, and for anyone curious how the sausage gets made.</span></div>
+    <div class="two">
+      <div class="box"><h4>Stage 1: The Screener</h4><p>Every idea, without exception, ten minutes. Five red-line questions: is there a real business problem, can we estimate the profit impact, is there a named owner, can it run on what we already have, and can sensitive data stay where it belongs. One "no" must be resolved before anything moves. Two stop it. A declared run-rate number comes out of this stage, and it is a number Coop will later be held to.</p></div>
+      <div class="box"><h4>Stage 2: The Pressure Test</h4><p>For anything over the threshold: more than two weeks of build, any new recurring cost, sensitive data, or more than one company. Nine categories scored and weighted to 100. Plus two things kept beside the score, never inside it: does the company hit a growth ceiling without this, and does it make the customer harder to lose.</p></div>
+      <div class="box"><h4>The queue, in plain words</h4><p>One list for the whole portfolio. Growth-blocking work goes first regardless of score. Then savings beat revenue of the same size, because savings reach profit whole and revenue only at margin. Then declared dollars. Then the deeper customer moat. Coop can override the order, and when he does, the reason is logged.</p></div>
+      <div class="box"><h4>Value, counted</h4><p>Every project past the screener carries its declared number, a go-live date, and a ramp. That projects what it should contribute this fiscal year and the next two. Each quarter, actuals go in beside the projection. Variance is honest by design: only the quarters that have happened are compared.</p></div>
+    </div>
+    <div class="box" style="margin-top:12px"><h4>Who does what</h4>
+      <ul>
+        <li><b>Portfolio leaders</b> drop ideas, forge them, comment, and watch the strip. Each sees only their own company.</li>
+        <li><b>Coop</b> screens, scores, ranks, builds with Brian, and enters the quarterly actuals. Only Coop finalizes a stage.</li>
+        <li><b>Brian and Jory</b> can draft and edit screeners and pressure tests, so a decision is never waiting on one calendar.</li>
+        <li><b>Anyone at Enduring Co</b> can read the Gateway and see every company's list.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="faq" class="faq">
+    <div class="sh"><h3>Five questions people ask</h3></div>
+    <details><summary>Who can see my ideas?</summary><p>You and your company's leadership, plus Enduring Co. The other portfolio companies cannot see your list, and you cannot see theirs. That is enforced by the database, not by politeness.</p></details>
+    <details><summary>What if my idea is not about technology?</summary><p>Drop it anyway. It stays on your list as a plain idea with its tags, and Enduring Co can pick it up from there. The Forge and the Gateway are only for builds.</p></details>
+    <details><summary>How long does it take?</summary><p>The screener happens within five business days of your Forge. A pressure test, when one is needed, takes weeks because it involves people and numbers. Builds run thirty to sixty days once they start.</p></details>
+    <details><summary>I forged it, then thought of something. Can I add to it?</summary><p>Yes. Comment on the card. You can also open the Forge answers again with the gear button to reread what you sent.</p></details>
+    <details><summary>Why can't I see the score?</summary><p>Scores compare projects across companies, and that comparison is Enduring Co's job. What you see is the decision, the reason, and where it sits on the line. That is the part that affects you.</p></details>
+  </section>
+
+  <div class="cta noprint">
+    <div><h3>Got a problem worth solving?</h3><p>The Refinery is open. Questions go to Steven Cooper, scooper@enduring.co.</p></div>
+    <a class="btn" href="refinery.html">Drop an idea</a>
+  </div>
+</main>
+
+<footer><div class="foot"><b>ENDURING</b><span>The Refinery · How it works · v1</span><span>enduring.co</span></div></footer>
+
+<script>
+  const stations = document.querySelectorAll(".st");
+  const cards = document.querySelectorAll("#mapCards .mc");
+  function pick(k) {
+    stations.forEach(s => s.classList.toggle("on", s.dataset.k === k));
+    cards.forEach(c => c.classList.toggle("on", c.dataset.k === k));
+    const c = document.querySelector(`#mapCards .mc[data-k="${k}"]`);
+    if (c && window.innerWidth < 760) c.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+  // invisible hit area so the whole station (dot plus labels) is clickable
+  stations.forEach(s => { const b = s.getBBox(); const r = document.createElementNS("http://www.w3.org/2000/svg", "rect"); r.setAttribute("x", b.x - 8); r.setAttribute("y", b.y - 8); r.setAttribute("width", b.width + 16); r.setAttribute("height", b.height + 16); r.setAttribute("fill", "transparent"); s.insertBefore(r, s.firstChild); });
+  stations.forEach(s => s.addEventListener("click", () => pick(s.dataset.k === "refinery" ? "idea" : s.dataset.k)));
+  cards.forEach(c => c.addEventListener("click", () => pick(c.dataset.k)));
+  pick("forge");
+</script>
+</body>
+</html>
