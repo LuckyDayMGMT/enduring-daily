@@ -48,7 +48,9 @@
   .gate-msg { margin-top: 14px; font-size: 13px; color: var(--red); min-height: 18px; font-weight: 500; }
 
   /* summary */
-  .sum { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .sum { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px; }
+  .sumc.gold { border-top-color: var(--gold); }
+  .sumc .n small { font-size: 13px; color: var(--gray); font-family: var(--sans); }
   .sumc { background: var(--white); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; cursor: pointer; border-top: 3px solid var(--blue); }
   .sumc:hover { border-color: var(--brass); }
   .sumc.on { border-top-color: var(--gold); }
@@ -202,7 +204,43 @@
   .qrow .sc { font-weight: 500; font-size: 14px; }
   .qrow .tier { font-size: 10px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; padding: 3px 7px; border-radius: 4px; color: var(--white); background: var(--gray); display: inline-block; }
   .qrow .tier.t1 { background: var(--green); } .qrow .tier.t2 { background: var(--blue); } .qrow .tier.t3 { background: var(--brass); } .qrow .tier.t4 { background: #b5651d; } .qrow .tier.t5 { background: var(--red); }
-  @media (max-width: 1000px) { .qrow { grid-template-columns: 40px 80px 1fr 56px 60px; } .qrow .hide-q { display: none; } }
+  @media (max-width: 1000px) { .qrow { grid-template-columns: 40px 80px 1fr 56px 60px; } .qrow .hide-q { display: none; } .sum { grid-template-columns: 1fr 1fr; } }
+
+  /* ---- value tracker ---- */
+  .vbar-wrap { padding: 16px 16px 6px; }
+  .vbar-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+  .vbar-head .big { font-family: var(--serif); font-size: 30px; color: var(--blue); line-height: 1; }
+  .vbar-head .big small { font-size: 13px; color: var(--gray-dk); font-family: var(--sans); margin-left: 6px; }
+  .vbar-head .lg { font-size: 12px; color: var(--gray-dk); display: flex; gap: 14px; }
+  .vbar-head .lg i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  .vbar { position: relative; height: 22px; background: var(--gray-lt); border-radius: 4px; overflow: hidden; border: 1px solid var(--line); }
+  .vbar .proj { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(25,54,97,.22); }
+  .vbar .real { position: absolute; left: 0; top: 0; bottom: 0; background: var(--gold); }
+  .vbar .tgt { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--blue); }
+  .vsplit { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 12px 16px 16px; }
+  @media (max-width: 800px) { .vsplit { grid-template-columns: 1fr; } }
+  .vt { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .vt th { text-align: left; font-size: 9.5px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; color: var(--gray-dk); padding: 6px 8px; border-bottom: 2px solid var(--blue); }
+  .vt td { padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  .vt td.r, .vt th.r { text-align: right; }
+  .vt tr.tot td { font-weight: 500; border-top: 2px solid var(--blue); border-bottom: none; }
+  .vt tr.click { cursor: pointer; } .vt tr.click:hover { background: rgba(166,131,44,.05); }
+  .vt .mini { font-size: 11px; color: var(--gray-dk); }
+  .vt .pos { color: var(--green); } .vt .neg { color: var(--red); }
+  .vtitle { font-size: 10.5px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: var(--brass); margin: 0 0 6px; }
+  .agrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .agrid .aq { border: 1px solid var(--line); border-radius: 5px; padding: 8px 10px; background: var(--gray-lt); }
+  .agrid .aq.cur { border-color: var(--gold); background: rgba(201,162,39,.08); }
+  .agrid .aq .ql { font-size: 10.5px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase; color: var(--gray-dk); }
+  .agrid .aq .pj { font-size: 11px; color: var(--gray-dk); }
+  .agrid .aq input { width: 100%; border: 1px solid var(--gray-md); border-radius: 4px; padding: 6px 8px; font-size: 13px; margin-top: 4px; background: var(--white); }
+  .agrid .aq input:focus { outline: none; border-color: var(--brass); }
+  .agrid .aq input:disabled { background: var(--gray-lt); color: var(--gray-dk); }
+  .vsum { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; }
+  .vsum div { border: 1px solid var(--line); border-radius: 5px; padding: 8px 10px; }
+  .vsum .k { font-size: 10.5px; color: var(--gray-dk); text-transform: uppercase; letter-spacing: .6px; font-weight: 900; }
+  .vsum .v { font-family: var(--serif); font-size: 22px; color: var(--blue); }
+  @media (max-width: 640px) { .agrid { grid-template-columns: 1fr 1fr; } .vsum { grid-template-columns: 1fr; } }
 
   footer { background: var(--blue); border-top: 3px solid var(--black); color: #cdd6e4; }
   .foot { max-width: 1180px; margin: 0 auto; padding: 14px 20px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 11.5px; }
@@ -295,13 +333,16 @@
       <div class="dbody" id="s2Body"></div>
     </section>
     <section class="card" id="valCard">
-      <div class="dhead"><h2>Value</h2></div>
-      <div class="phase" id="valBody">Phase 3. Declared run rate, quarterly actuals, and the $200K progress bar.</div>
+      <div class="dhead">
+        <h2>Value</h2>
+        <div class="meta"><span>Declared run rate, projected by fiscal year (Jan to Dec), against quarterly actuals.</span><span class="savestate" id="saveState3"></span></div>
+      </div>
+      <div class="dbody" id="valBody"></div>
     </section>
   </div>
 </main>
 
-<footer><div class="foot"><b>ENDURING</b><span>The Gateway · v2</span><span id="footRole"></span></div></footer>
+<footer><div class="foot"><b>ENDURING</b><span>The Gateway · v3</span><span id="footRole"></span></div></footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
@@ -361,6 +402,61 @@ const S2_DECISIONS = { proceed: "Proceed", pilot: "Pilot", validate: "Validate F
 const S2_STATUS = { proceed: "queued", pilot: "queued", validate: "scored", reduce: "scored", pipeline: "scored", pause: "parked", reject: "declined" };
 const CEILING = { blocking: "Growth-blocking", limiting: "Growth-limiting", neutral: "Growth-neutral" };
 const BASIS_RANK = { cost: 0, revenue: 1, risk: 2, moat: 3 };
+
+/* ---- Value tracker ---- */
+const FY_TARGET = 200000;
+const FY_NOW = new Date().getFullYear();
+const FY_YEARS = [FY_NOW, FY_NOW + 1, FY_NOW + 2];
+const BASIS_SHORT = { cost: "Cost", revenue: "Revenue", risk: "Risk", moat: "Moat" };
+function qKey(d) { return d.getFullYear() + "Q" + (Math.floor(d.getMonth() / 3) + 1); }
+function qLabel(k) { return k.slice(4) + " " + k.slice(0, 4); }
+function qRange(fromKey, toKey) { const out = []; let y = +fromKey.slice(0, 4), q = +fromKey.slice(5); const ty = +toKey.slice(0, 4), tq = +toKey.slice(5); while (y < ty || (y === ty && q <= tq)) { out.push(y + "Q" + q); q++; if (q > 4) { q = 1; y++; } } return out; }
+/* Net annual value after basis and new recurring cost. Cost at 100%, revenue at contribution margin, risk at probability, moat not in dollars. */
+function netAnnual(v) {
+  const rr = v.runRate || 0;
+  let gross = 0;
+  if (v.basis === "cost") gross = rr;
+  else if (v.basis === "revenue") gross = rr * ((v.cmPct == null ? 100 : v.cmPct) / 100);
+  else if (v.basis === "risk") gross = rr * ((v.probability == null ? 100 : v.probability) / 100);
+  else gross = 0;
+  return gross - (v.recurringCost || 0);
+}
+/* Monthly projection from go-live: linear ramp over rampMonths, then full run rate for the durability window. One-time pays the whole amount in the go-live month. */
+function monthlySeries(v, horizonEnd) {
+  const out = {}; // "YYYY-MM" -> dollars
+  if (!v.goLive || !v.basis || v.basis === "moat") return out;
+  const start = new Date(v.goLive + "T00:00:00"); if (isNaN(start)) return out;
+  const net = netAnnual(v);
+  if (v.durability === "onetime") { out[start.getFullYear() + "-" + String(start.getMonth() + 1).padStart(2, "0")] = net; return out; }
+  const months = v.durability === "multi" ? Math.max(1, (v.years || 1)) * 12 : 10 * 12;
+  const ramp = v.rampMonths || 0;
+  const daysIn = (y, m) => new Date(y, m + 1, 0).getDate();
+  for (let i = 0; i < months; i++) {
+    const d = new Date(start.getFullYear(), start.getMonth() + i, 1);
+    if (d > horizonEnd) break;
+    let factor = ramp ? Math.min(1, (i + 1) / ramp) : 1;
+    let share = 1;
+    if (i === 0) share = (daysIn(d.getFullYear(), d.getMonth()) - start.getDate() + 1) / daysIn(d.getFullYear(), d.getMonth());
+    out[d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0")] = net / 12 * factor * share;
+  }
+  return out;
+}
+function byYear(series) { const o = {}; Object.entries(series).forEach(([k, val]) => { const y = +k.slice(0, 4); o[y] = (o[y] || 0) + val; }); return o; }
+function byQuarter(series) { const o = {}; Object.entries(series).forEach(([k, val]) => { const q = k.slice(0, 4) + "Q" + (Math.floor((+k.slice(5) - 1) / 3) + 1); o[q] = (o[q] || 0) + val; }); return o; }
+function projectValue(row) {
+  const g = row.g, v = g.value || {}, fin1 = g.final && g.final.s1;
+  const eff = Object.assign({}, v);
+  if (eff.runRate == null && fin1 && fin1.dollars != null) eff.runRate = fin1.dollars;
+  if (!eff.basis && fin1 && fin1.basis) eff.basis = fin1.basis;
+  if (!eff.durability && fin1 && fin1.snapshot && fin1.snapshot.durability) { eff.durability = fin1.snapshot.durability; eff.years = fin1.snapshot.years; }
+  const series = monthlySeries(eff, new Date(FY_NOW + 3, 0, 1));
+  const years = byYear(series), quarters = byQuarter(series);
+  const actuals = g.actuals || {};
+  const realizedFY = Object.entries(actuals).filter(([q]) => q.startsWith(String(FY_NOW))).reduce((a, [, n]) => a + (n || 0), 0);
+  const hasActuals = Object.values(actuals).some(n => n != null);
+  return { eff, net: netAnnual(eff), series, years, quarters, actuals, realizedFY, hasActuals, tracked: !!(eff.goLive && eff.basis && eff.basis !== "moat" && eff.runRate) };
+}
+function valueRows() { return allIdeas().filter(r => r.g.final && r.g.final.s1 && r.g.final.s1.decision !== "decline" && !["declined","hold"].includes(r.it.status)); }
 function s2Score(sc) { let t = 0, n = 0; CATS.forEach(([k, , w]) => { if (sc && sc[k]) { t += sc[k] / 5 * w; n++; } }); return { score: Math.round(t), done: n, total: CATS.length }; }
 function tierOf(score) { return TIERS.find(t => score >= t[0]); }
 function moatTotal(m) { return MOAT_CRIT.reduce((a, [k]) => a + ((m && m[k]) || 0), 0); }
@@ -373,11 +469,12 @@ let coFilter = "", view = "inbox", q = "";
 let sel = null;       // { id, lot }
 let saveTimer = null, pendingPatch = {};
 let saveTimer2 = null, pendingPatch2 = {};
+let saveTimer3 = null, pendingPatch3 = {};
 
 const $ = id => document.getElementById(id);
 const esc = s => (s == null ? "" : String(s)).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const emailKey = e => (e || "").toLowerCase().replace(/\./g, ",");
-const money = n => (n == null || isNaN(n)) ? "" : "$" + Math.round(n).toLocaleString("en-US");
+const money = n => (n == null || isNaN(n)) ? "" : (n < 0 ? "-$" : "$") + Math.abs(Math.round(n)).toLocaleString("en-US");
 const fmtDate = s => { if (!s) return ""; const d = new Date(s + "T00:00:00"); return isNaN(d) ? s : d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); };
 const fmtTs = ts => ts ? new Date(ts).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "";
 const today = () => new Date().toISOString().slice(0, 10);
@@ -428,6 +525,7 @@ function inView(row) {
   if (view === "queue") return st === "scored" || st === "queued" || st === "build" || st === "live" || st === "measuring";
   if (view === "screened") return st === "screened";
   if (view === "held") return st === "hold" || st === "parked" || st === "declined";
+  if (view === "value") return !!(row.g.final && row.g.final.s1);
   return true;
 }
 function selectById(id) {
@@ -443,15 +541,19 @@ function render() {
   const rows = allIdeas();
   const counts = { inbox: 0, screened: 0, queue: 0, held: 0 };
   rows.forEach(r => { const v = view; ["inbox","screened","queue","held"].forEach(k => { view = k; if (inView(r)) counts[k]++; }); view = v; });
+  const vrows = valueRows().map(projectValue);
+  const realized = vrows.reduce((a, p) => a + p.realizedFY, 0);
   $("sum").innerHTML = [["inbox","Forge inbox","awaiting Stage 1"],["screened","Cleared Stage 1","in or awaiting Stage 2"],["queue","The queue","scored, queued, building, live"],["held","Held, parked, declined","need a decision or a date"]]
-    .map(([k, l, s]) => `<div class="sumc ${view === k ? "on" : ""}" data-view="${k}"><div class="n">${counts[k]}</div><div class="l">${l}<br><span style="color:var(--gray)">${s}</span></div></div>`).join("");
-  $("listTitle").textContent = { inbox: "Forge inbox", screened: "Cleared Stage 1", queue: "Portfolio Prioritization Queue", held: "Held, parked, declined", all: "Every idea" }[view];
+    .map(([k, l, s]) => `<div class="sumc ${view === k ? "on" : ""}" data-view="${k}"><div class="n">${counts[k]}</div><div class="l">${l}<br><span style="color:var(--gray)">${s}</span></div></div>`).join("")
+    + `<div class="sumc gold ${view === "value" ? "on" : ""}" data-view="value"><div class="n">${money(realized)}<small> / ${money(FY_TARGET)}</small></div><div class="l">Value tracker<br><span style="color:var(--gray)">realized in FY${FY_NOW}</span></div></div>`;
+  $("listTitle").textContent = { inbox: "Forge inbox", screened: "Cleared Stage 1", queue: "Portfolio Prioritization Queue", held: "Held, parked, declined", value: "Value tracker, FY" + FY_NOW, all: "Every idea" }[view];
 
   let shown = rows.filter(r => inView(r) && (!coFilter || r.lot === coFilter) && (!q || (r.it.text || "").toLowerCase().includes(q)));
   shown.sort((a, b) => (b.it.forge ? b.it.forge.submittedAt : b.it.ts || 0) - (a.it.forge ? a.it.forge.submittedAt : a.it.ts || 0));
   $("listCount").textContent = shown.length;
   $("autoRankBtn").hidden = !(view === "queue" && isOwner);
   if (view === "queue") { renderQueue(shown); renderRevisit(rows); renderDetail(); return; }
+  if (view === "value") { renderValueView(); renderRevisit(rows); renderDetail(); return; }
   const head = `<div class="row rhead"><span>Company</span><span>Idea</span><span class="hide-m">Status</span><span class="hide-m">Stages</span><span class="hide-m">Forge $</span><span>Submitted</span><span></span></div>`;
   $("list").innerHTML = shown.length ? head + shown.map(r => {
     const st = r.it.status || "idea";
@@ -639,6 +741,112 @@ function renderDetail() {
       : `<h4>Draft</h4><div style="font-size:12.5px;color:var(--gray-dk)">Saved as you type. Coop finalizes.</div>`}
     </div>`;
   renderS2(row);
+  renderValue(row);
+}
+
+/* ---------------- VALUE TRACKER ---------------- */
+function renderValueView() {
+  const rows = valueRows().map(r => Object.assign({ row: r }, projectValue(r))).filter(p => !coFilter || p.row.lot === coFilter);
+  const realized = rows.reduce((a, p) => a + p.realizedFY, 0);
+  const projFY = rows.reduce((a, p) => a + (p.years[FY_NOW] || 0), 0);
+  const runRate = rows.filter(p => ["live","measuring"].includes(p.row.it.status)).reduce((a, p) => a + p.net, 0);
+  const pct = x => Math.min(100, x / FY_TARGET * 100);
+  const pillar = {}; const company = {};
+  rows.forEach(p => {
+    const b = p.eff.basis || "none"; pillar[b] = pillar[b] || { n: 0, proj: 0, real: 0 }; pillar[b].n++; pillar[b].proj += p.years[FY_NOW] || 0; pillar[b].real += p.realizedFY;
+    const c = p.row.lot; company[c] = company[c] || { n: 0, proj: 0, real: 0 }; company[c].n++; company[c].proj += p.years[FY_NOW] || 0; company[c].real += p.realizedFY;
+  });
+  const bd = (obj, keys, labeler) => `<table class="vt"><tr><th></th><th class="r">Projects</th><th class="r">FY${FY_NOW} projected</th><th class="r">FY${FY_NOW} realized</th></tr>${keys.filter(k => obj[k]).map(k => `<tr><td>${labeler(k)}</td><td class="r">${obj[k].n}</td><td class="r">${money(obj[k].proj)}</td><td class="r">${money(obj[k].real)}</td></tr>`).join("")}</table>`;
+  $("listCount").textContent = rows.length;
+  $("list").innerHTML = `
+    <div class="vbar-wrap">
+      <div class="vbar-head">
+        <div class="big">${money(realized)}<small>realized of ${money(FY_TARGET)} in FY${FY_NOW}</small></div>
+        <div class="lg"><span><i style="background:var(--gold)"></i>Realized (actuals)</span><span><i style="background:rgba(25,54,97,.22)"></i>Projected FY${FY_NOW}: ${money(projFY)}</span><span><i style="background:var(--blue)"></i>Target</span></div>
+      </div>
+      <div class="vbar"><div class="proj" style="width:${pct(projFY)}%"></div><div class="real" style="width:${pct(realized)}%"></div><div class="tgt" style="left:calc(100% - 2px)"></div></div>
+      <div class="vsum">
+        <div><div class="k">Net run rate, live projects</div><div class="v">${money(runRate)}</div></div>
+        <div><div class="k">Projected FY${FY_NOW + 1}</div><div class="v">${money(rows.reduce((a, p) => a + (p.years[FY_NOW + 1] || 0), 0))}</div></div>
+        <div><div class="k">Projected FY${FY_NOW + 2}</div><div class="v">${money(rows.reduce((a, p) => a + (p.years[FY_NOW + 2] || 0), 0))}</div></div>
+      </div>
+    </div>
+    <div class="vsplit">
+      <div><p class="vtitle">By pillar</p>${bd(pillar, ["cost","revenue","risk","moat","none"], k => ({ cost: "Cut costs", revenue: "Increase revenue", risk: "Reduce risk", moat: "Protect moat (not in dollars)", none: "Basis not set" })[k])}</div>
+      <div><p class="vtitle">By company</p>${bd(company, LOT_ORDER, k => LOTS[k])}</div>
+    </div>
+    <div style="padding:0 16px 16px;overflow-x:auto">
+      <p class="vtitle">By project</p>
+      <table class="vt">
+        <tr><th>Project</th><th>Company</th><th>Status</th><th>Basis</th><th class="r">Net run rate</th><th>Go-live</th><th class="r">FY${FY_NOW} proj.</th><th class="r">FY${FY_NOW} actual</th><th class="r">Variance</th><th class="r">FY${FY_NOW + 1}</th><th class="r">FY${FY_NOW + 2}</th></tr>
+        ${rows.length ? rows.map(p => { const pr = p.years[FY_NOW] || 0, vr = p.hasActuals ? p.realizedFY - projQuartersToDate(p) : null; return `<tr class="click" data-sel="${p.row.id}">
+          <td>${esc((p.row.g.final.s1.snapshot && p.row.g.final.s1.snapshot.name) || p.row.it.text)}${p.tracked ? "" : `<div class="mini">Needs go-live and basis</div>`}</td>
+          <td><span class="co ${p.row.lot}">${esc(LOTS[p.row.lot])}</span></td><td class="mini">${STATUS_LABEL[p.row.it.status || "idea"]}</td>
+          <td>${BASIS_SHORT[p.eff.basis] || ""}</td><td class="r">${money(p.net)}</td><td>${p.eff.goLive ? fmtDate(p.eff.goLive) : ""}</td>
+          <td class="r">${money(pr)}</td><td class="r">${p.hasActuals ? money(p.realizedFY) : ""}</td><td class="r ${vr == null ? "" : vr >= 0 ? "pos" : "neg"}">${vr == null ? "" : (vr >= 0 ? "+" : "") + money(vr)}</td>
+          <td class="r">${money(p.years[FY_NOW + 1] || 0)}</td><td class="r">${money(p.years[FY_NOW + 2] || 0)}</td></tr>`; }).join("") : `<tr><td colspan="11" class="empty">No project has passed Stage 1 yet.</td></tr>`}
+        ${rows.length ? `<tr class="tot"><td colspan="4">Total</td><td class="r">${money(rows.reduce((a, p) => a + p.net, 0))}</td><td></td><td class="r">${money(projFY)}</td><td class="r">${money(realized)}</td><td></td><td class="r">${money(rows.reduce((a, p) => a + (p.years[FY_NOW + 1] || 0), 0))}</td><td class="r">${money(rows.reduce((a, p) => a + (p.years[FY_NOW + 2] || 0), 0))}</td></tr>` : ""}
+      </table>
+      <p class="mini" style="margin:8px 0 0;color:var(--gray-dk)">Variance compares actuals entered against the projection for the same quarters only. Moat-only projects carry no dollars. Held and declined ideas are excluded.</p>
+    </div>`;
+}
+function projQuartersToDate(p) { return Object.entries(p.actuals).filter(([q, n]) => n != null).reduce((a, [q]) => a + (p.quarters[q] || 0), 0); }
+
+function renderValue(row) {
+  const it = row.it, g = row.g, fin1 = g.final && g.final.s1;
+  const body = $("valBody");
+  if (!fin1) { body.innerHTML = `<div class="verdict">Value tracking starts once Stage 1 is finalized; the Screener's declared run rate seeds it.</div>`; return; }
+  const v = g.value || {};
+  const p = projectValue(row);
+  const eff = p.eff;
+  const dis = !canEdit ? "disabled" : "";
+  const disAttr = dis ? 'data-dis="1"' : "";
+  const opt = (grp, key, label, on) => `<span class="opt ${on ? "on" : ""}" data-grp3="${grp}" data-key="${key}" ${disAttr}>${label}</span>`;
+  const numIn = (k, label, hint, val, extra) => `<div><label class="ql" for="v-${k}">${label}${hint ? ` <small>${hint}</small>` : ""}</label><input type="number" id="v-${k}" data-f3="${k}" value="${val != null ? val : ""}" ${dis} ${extra || ""} /></div>`;
+  const nowQ = qKey(new Date());
+  const startQ = eff.goLive ? qKey(new Date(eff.goLive + "T00:00:00")) : null;
+  const qs = startQ && startQ <= nowQ ? qRange(startQ, nowQ) : [];
+  const actuals = g.actuals || {};
+  body.innerHTML = `
+    <div class="sect first">Declared value <small style="font-weight:400;letter-spacing:0;text-transform:none;color:var(--gray-dk)">seeded from Stage 1; edit here as the build firms up</small></div>
+    <div class="q"><div class="row3">
+      ${numIn("runRate", "Annual run rate", "$ per year, gross", eff.runRate, 'min="0" step="1000"')}
+      <div><label class="ql">Basis</label><div class="opts">${["cost","revenue","risk","moat"].map(k => opt("basis", k, BASIS_SHORT[k], eff.basis === k)).join("")}</div></div>
+      ${eff.basis === "revenue" ? numIn("cmPct", "Contribution margin", "% of revenue that reaches profit", v.cmPct, 'min="0" max="100"') : eff.basis === "risk" ? numIn("probability", "Probability", "% chance the loss would occur", v.probability, 'min="0" max="100"') : "<div></div>"}
+    </div></div>
+    <div class="q"><div class="row3">
+      <div><label class="ql" for="v-goLive">Go-live date <small>value starts here</small></label><input type="date" id="v-goLive" data-f3="goLive" value="${esc(eff.goLive || "")}" ${dis} /></div>
+      ${numIn("rampMonths", "Ramp", "months to full run rate; blank = immediate", v.rampMonths, 'min="0" max="24"')}
+      ${numIn("recurringCost", "New recurring cost", "$ per year, subtracted", v.recurringCost, 'min="0" step="100"')}
+    </div></div>
+    <div class="q"><div class="row2">
+      <div><label class="ql">Durability</label><div class="opts">${opt("durability","recurring","Recurring",eff.durability === "recurring")}${opt("durability","multi","Multi-year",eff.durability === "multi")}${opt("durability","onetime","One-time",eff.durability === "onetime")}<input type="number" id="v-years" data-f3="years" min="1" max="20" placeholder="yrs" value="${eff.years || ""}" ${dis} style="width:70px;${eff.durability === "multi" ? "" : "display:none"}" /></div></div>
+      <div><label class="ql">Confidence</label><div class="opts">${["high","moderate","low"].map(c => opt("confidence", c, c[0].toUpperCase() + c.slice(1), v.confidence === c)).join("")}</div></div>
+    </div></div>
+    <div class="q"><label class="ql" for="v-notes">Sourcing and assumptions <small>where the number comes from</small></label><textarea id="v-notes" data-f3="notes" maxlength="1000" ${dis}>${esc(v.notes || "")}</textarea></div>
+
+    <div class="sect">Projection</div>
+    ${p.tracked ? `<div class="vsum">
+      <div><div class="k">Net annual run rate</div><div class="v">${money(p.net)}</div></div>
+      ${FY_YEARS.map(y => `<div><div class="k">FY${y}${y === FY_NOW ? " (this year)" : ""}</div><div class="v">${money(p.years[y] || 0)}</div></div>`).join("")}
+    </div><p class="mini" style="color:var(--gray-dk);margin:0">${eff.basis === "cost" ? "Cost savings count at 100%." : eff.basis === "revenue" ? "Revenue counted at " + (v.cmPct == null ? 100 : v.cmPct) + "% contribution margin." : "Risk counted at " + (v.probability == null ? 100 : v.probability) + "% probability."}${v.recurringCost ? " Less " + money(v.recurringCost) + " per year new cost." : ""}${v.rampMonths ? " Linear ramp over " + v.rampMonths + " months." : ""}${eff.durability === "onetime" ? " One-time: whole amount in the go-live month." : eff.durability === "multi" ? " Runs " + (eff.years || 1) + " years." : " Recurring."}</p>`
+    : `<div class="verdict warn">Set a go-live date, a basis other than moat, and a run rate to project.</div>`}
+
+    <div class="sect">Actuals by quarter <small style="font-weight:400;letter-spacing:0;text-transform:none;color:var(--gray-dk)">${isOwner ? "entered by Coop each quarter; a quarter with a number counts toward the $200K" : "entered by Coop"}</small></div>
+    ${qs.length ? `<div class="agrid">${qs.map(q => `<div class="aq ${q === nowQ ? "cur" : ""}"><div class="ql">${qLabel(q)}</div><div class="pj">Projected ${money(p.quarters[q] || 0)}</div><input type="number" data-actual="${q}" value="${actuals[q] != null ? actuals[q] : ""}" placeholder="$ actual" ${isOwner ? "" : "disabled"} /></div>`).join("")}</div>
+      <div class="vsum" style="margin-top:10px"><div><div class="k">FY${FY_NOW} realized</div><div class="v">${money(p.realizedFY)}</div></div><div><div class="k">Projected, same quarters</div><div class="v">${money(projQuartersToDate(p))}</div></div><div><div class="k">Variance</div><div class="v ${p.realizedFY - projQuartersToDate(p) >= 0 ? "" : ""}" style="color:${p.hasActuals ? (p.realizedFY - projQuartersToDate(p) >= 0 ? "var(--green)" : "var(--red)") : "var(--gray)"}">${p.hasActuals ? ((p.realizedFY - projQuartersToDate(p) >= 0 ? "+" : "") + money(p.realizedFY - projQuartersToDate(p))) : "—"}</div></div></div>`
+    : `<div class="verdict">${eff.goLive ? "Quarters appear here once the go-live date has passed." : "Set the go-live date first."}</div>`}`;
+}
+function valuePath() { return "gateway/" + sel.id + "/value"; }
+function queue3(patch, now) { Object.assign(pendingPatch3, patch); $("saveState3").textContent = "Saving"; clearTimeout(saveTimer3); saveTimer3 = setTimeout(flush3, now ? 0 : 600); }
+function flush3() {
+  if (!sel || !Object.keys(pendingPatch3).length) return;
+  const patch = Object.assign({}, pendingPatch3, { updatedAt: Date.now(), updatedBy: ME.name });
+  // First write carries the Stage 1 seed so the record stands on its own.
+  const g = gateway[sel.id] || {}, cur = g.value || {}, fin1 = g.final && g.final.s1;
+  if (!cur.updatedAt && fin1) { if (patch.runRate === undefined && fin1.dollars != null) patch.runRate = fin1.dollars; if (patch.basis === undefined && fin1.basis) patch.basis = fin1.basis; if (patch.durability === undefined && fin1.snapshot && fin1.snapshot.durability) { patch.durability = fin1.snapshot.durability; if (fin1.snapshot.years) patch.years = fin1.snapshot.years; } }
+  pendingPatch3 = {};
+  db.ref(valuePath()).update(patch).then(() => { $("saveState3").textContent = "Saved"; }).catch(err => { $("saveState3").textContent = "Not saved: " + err.message; });
 }
 
 /* ---------------- STAGE 2 ---------------- */
@@ -786,6 +994,8 @@ document.addEventListener("click", e => {
   if (o && !o.dataset.dis && sel) { optClick(o); return; }
   const o2 = e.target.closest(".opt[data-grp2]");
   if (o2 && !o2.dataset.dis && sel) { const grp = o2.dataset.grp2, key = o2.dataset.key; if (grp === "cos") queue2({ ["cos/" + key]: !o2.classList.contains("on") }, true); else queue2({ [grp]: o2.classList.contains("on") ? null : key }, true); return; }
+  const o3 = e.target.closest(".opt[data-grp3]");
+  if (o3 && !o3.dataset.dis && sel) { queue3({ [o3.dataset.grp3]: o3.classList.contains("on") ? null : o3.dataset.key }, true); return; }
   const pip = e.target.closest("[data-pip]");
   if (pip && !pip.dataset.dis && sel) { queue2({ ["scores/" + pip.dataset.pip]: pip.classList.contains("on") ? null : parseInt(pip.dataset.n, 10) }, true); return; }
   const mp = e.target.closest("[data-mpip]");
@@ -807,6 +1017,13 @@ document.addEventListener("input", e => {
   if (f2) { queue2({ [f2.dataset.f2]: f2.value || null }); return; }
   const r2 = e.target.closest("[data-row2]");
   if (r2) { queue2({ [r2.dataset.row2]: r2.value || null }); return; }
+  const f3 = e.target.closest("[data-f3]");
+  if (f3) { let val = f3.value; if (f3.type === "number") { val = val === "" ? null : parseFloat(val); if (val !== null && isNaN(val)) val = null; } else val = val || null; queue3({ [f3.dataset.f3]: val }, f3.type === "date"); return; }
+});
+document.addEventListener("change", e => {
+  if (!sel || !isOwner) return;
+  const a = e.target.closest("[data-actual]");
+  if (a) { const n = a.value === "" ? null : parseFloat(a.value); db.ref("gateway/" + sel.id + "/actuals/" + a.dataset.actual).set(isNaN(n) ? null : n).catch(err => alert(err.message)); }
 });
 document.addEventListener("change", e => {
   if (!sel) return;
@@ -930,6 +1147,7 @@ function saveNote() {
 }
 
 function exportCsv() {
+  if (view === "value") return exportValueCsv();
   const rows = allIdeas();
   const cols = ["Rank","Company","Idea","Status","Submitted by","Submitted","Revenue","Risk","Cost","Moat","Tech","Forge $/yr","Forge hrs/wk","Layer","Durability","S1","S1 decision","S1 $/yr","S1 basis","S1 finalized","S2","S2 decision","Score","Tier","Ceiling","Moat score","Moat band","S2 finalized","Note","Revisit","On tracker"];
   const cell = x => { const s = x == null ? "" : String(x); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
@@ -942,6 +1160,16 @@ function exportCsv() {
   }));
   const blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = today() + "_Enduring_Gateway_Export.csv"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+function exportValueCsv() {
+  const rows = valueRows().map(r => Object.assign({ row: r }, projectValue(r)));
+  const cell = x => { const s = x == null ? "" : String(x); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  const allQ = Array.from(new Set(rows.flatMap(p => Object.keys(p.actuals)))).sort();
+  const cols = ["Project","Company","Status","Basis","Gross run rate","CM % / Probability %","Recurring cost","Net run rate","Go-live","Ramp months","Durability","Years","Confidence"].concat(FY_YEARS.map(y => "FY" + y + " projected")).concat(allQ.map(q => qLabel(q) + " actual")).concat(["FY" + FY_NOW + " realized","Notes"]);
+  const lines = [cols.join(",")].concat(rows.map(p => [(p.row.g.final.s1.snapshot && p.row.g.final.s1.snapshot.name) || p.row.it.text, LOTS[p.row.lot], STATUS_LABEL[p.row.it.status || "idea"], p.eff.basis, p.eff.runRate, p.eff.basis === "revenue" ? p.eff.cmPct : p.eff.basis === "risk" ? p.eff.probability : "", p.eff.recurringCost, Math.round(p.net), p.eff.goLive, p.eff.rampMonths, p.eff.durability, p.eff.years, p.eff.confidence].concat(FY_YEARS.map(y => Math.round(p.years[y] || 0))).concat(allQ.map(q => p.actuals[q] != null ? p.actuals[q] : "")).concat([Math.round(p.realizedFY), p.eff.notes]).map(cell).join(",")));
+  const blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = today() + "_Enduring_Value_Tracker_Export.csv"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 
 /* ---------------- BOOT ---------------- */
