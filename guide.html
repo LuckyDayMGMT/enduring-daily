@@ -62,7 +62,17 @@
   .note-t { font-family: var(--sans); font-size: 10.5px; fill: var(--gray-dk); font-style: italic; }
   .who { font-family: var(--sans); font-size: 9.5px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; fill: var(--white); }
   .dial { fill: var(--white); stroke: var(--brass); stroke-width: 3; }
-  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+  .cards { display: none; }
+  #map { position: relative; }
+  .pop { position: absolute; z-index: 5; width: 300px; background: var(--white); border: 1px solid var(--line); border-top: 3px solid var(--gold); border-radius: 6px; padding: 10px 14px 12px; box-shadow: 0 14px 32px -14px rgba(16,24,40,.45); pointer-events: none; opacity: 0; transform: translateY(-4px); transition: opacity .12s, transform .12s; }
+  .pop.show { opacity: 1; transform: none; pointer-events: auto; }
+  .pop .meta { font-size: 10.5px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; color: var(--brass); margin-bottom: 3px; }
+  .pop.you .meta { color: var(--orange); }
+  .pop h4 { font-family: var(--serif); font-weight: 400; font-size: 18px; color: var(--blue); margin: 0 0 4px; }
+  .pop p { font-size: 13px; margin: 0; line-height: 1.45; }
+  .pop::before { content: ""; position: absolute; top: -9px; left: var(--ax, 24px); width: 12px; height: 12px; background: var(--white); border-left: 1px solid var(--line); border-top: 3px solid var(--gold); transform: rotate(45deg); }
+  .maphint { font-size: 12px; color: var(--gray-dk); margin: 6px 4px 0; }
+  dl.legend.legend-print { display: none; }
   .mc { background: var(--white); border: 1px solid var(--line); border-top: 3px solid var(--blue); border-radius: 6px; padding: 12px 14px; }
   .mc.on { border-top-color: var(--gold); box-shadow: 0 8px 22px -14px rgba(16,24,40,.5); }
   .mc h4 { font-family: var(--serif); font-weight: 400; font-size: 18px; color: var(--blue); margin: 0 0 4px; }
@@ -125,16 +135,25 @@
   @media (max-width: 760px) { .cards, .moves, .two { grid-template-columns: 1fr; } .hero h2 { font-size: 30px; } }
 
   @media print {
-    header, footer, .cta, .pill, .noprint { display: none !important; }
-    body { background: #fff; color: #000; }
+    @page { size: letter; margin: 0.45in 0.5in; }
+    header, footer, .cta, .pill, .noprint, .pop, #faq, #hear, .maphint { display: none !important; }
+    body { background: #fff; color: #000; font-size: 10px; line-height: 1.35; }
     main { max-width: none; padding: 0; }
-    .hero { padding: 0 0 12px; }
-    section { margin-top: 18px; break-inside: avoid; }
-    .map { border: none; padding: 0; overflow: visible; }
-    .map svg { min-width: 0; }
-    .cards { display: grid !important; }
-    .mc, .mv, .box, .strip-demo, .faq details { break-inside: avoid; box-shadow: none; }
-    .faq details { display: block; } .faq details > * { display: block; }
+    .hero { padding: 0 0 6px; } .hero h2 { font-size: 22px; margin-bottom: 4px; } .hero p { font-size: 11px; } .hero .kicker { margin-bottom: 4px; }
+    section { margin-top: 10px; break-inside: avoid; }
+    .sh { padding-bottom: 2px; margin-bottom: 6px; border-bottom-width: 2px; } .sh h3 { font-size: 15px; } .sh span { font-size: 9.5px; }
+    .map { border: none; padding: 0; overflow: visible; } .map svg { min-width: 0; max-height: 150px; }
+    dl.legend.legend-print { display: grid; grid-template-columns: 60px 1fr 60px 1fr; gap: 2px 8px; font-size: 9.5px; margin: 4px 0 0; }
+    .legend-print dt { font-weight: 700; color: #000; }
+    .moves { gap: 6px; } .mv { padding: 8px 10px; } .mv h4 { font-size: 13px; margin-bottom: 2px; } .mv p { font-size: 10px; } .mv .n { font-size: 24px; top: 4px; right: 8px; }
+    .rule { font-size: 13px; padding: 7px; margin: 6px 0; } #moves > p { font-size: 10px; }
+    .strip-demo { padding: 8px 10px; } .strip-demo > p { font-size: 10px !important; margin-bottom: 4px !important; }
+    dl.legend { grid-template-columns: 60px 1fr; gap: 1px 8px; font-size: 9.5px; margin-top: 4px; }
+    .stop { font-size: 9px; } .note { font-size: 10px; padding: 3px 8px; margin-top: 4px; }
+    .ex { grid-template-columns: repeat(3, 1fr); gap: 6px; } .ex .box { padding: 6px 8px; } .ex .q { font-size: 10.5px; margin: 2px 0 3px; } .ex .why { font-size: 9px; } .ex .co { font-size: 8px; }
+    #good > p { font-size: 10px !important; margin-top: 4px !important; }
+    .two { gap: 6px; } .box { padding: 8px 10px; } .box h4 { font-size: 12.5px; margin-bottom: 2px; } .box p, .box li { font-size: 9.8px; margin: 0; } .box ul { margin: 2px 0 0; padding-left: 14px; }
+    #behind > .box { margin-top: 6px !important; }
     a { color: #000; text-decoration: none; }
   }
 </style>
@@ -173,7 +192,7 @@
         <!-- forge bypass, below the rail -->
         <path class="rail thin" d="M180 120 C 220 178, 300 178, 340 120"/>
         <text class="note-t" x="262" y="182" text-anchor="middle">not a build? it stays on the list as a plain idea</text>
-        <!-- sidings off the gateway -->
+        <!-- sidings off the furnace -->
         <path class="spur" d="M500 134 C 500 165, 470 180, 455 198"/>
         <path class="spur" d="M500 134 C 500 175, 580 185, 605 208"/>
         <path class="spur" d="M500 134 C 500 180, 690 190, 728 208"/>
@@ -185,20 +204,30 @@
         <g class="st" data-k="idea"><circle class="node" cx="60" cy="120" r="14"/><text class="lab" x="60" y="80">Idea</text><text class="sub" x="60" y="95">you type it</text></g>
         <g class="st" data-k="refinery"><circle class="node" cx="180" cy="120" r="14"/><text class="lab" x="180" y="80">Refinery</text><text class="sub" x="180" y="95">your company's list</text></g>
         <g class="st" data-k="forge"><circle class="node" cx="300" cy="120" r="14"/><text class="lab" x="300" y="80">Forge</text><text class="sub" x="300" y="95">six questions</text></g>
-        <g class="st" data-k="gateway"><circle class="node" cx="500" cy="120" r="14"/><text class="lab" x="500" y="80">Gateway</text><text class="sub" x="500" y="95">screened, then scored</text></g>
+        <g class="st" data-k="furnace"><circle class="node" cx="500" cy="120" r="14"/><text class="lab" x="500" y="80">Furnace</text><text class="sub" x="500" y="95">screened, then scored</text></g>
         <g class="st" data-k="queue"><circle class="node" cx="660" cy="120" r="14"/><text class="lab" x="660" y="80">Queue</text><text class="sub" x="660" y="95">ranked, then built</text></g>
         <g class="st" data-k="live"><circle class="node" cx="800" cy="120" r="14"/><text class="lab" x="800" y="80">Live</text><text class="sub" x="800" y="95">in your hands</text></g>
         <g class="st" data-k="value"><circle class="dial" cx="910" cy="120" r="22"/><path d="M910 120 L921 108" stroke="#A6832C" stroke-width="3" stroke-linecap="round"/><circle cx="910" cy="120" r="3" fill="#A6832C"/><text class="lab" x="910" y="80">Value</text><text class="sub" x="910" y="95">counted every quarter</text></g>
       </svg>
     </div>
+    <div class="pop" id="pop" role="tooltip"></div>
+    <p class="maphint noprint">Hover a station, or tap it on a phone.</p>
     <div class="cards" id="mapCards">
       <div class="mc you" data-k="idea"><div class="meta">You · 30 seconds</div><h4>Idea</h4><p>Type it into The Refinery. Tag it: more revenue, less risk, lower cost, or protect the moat. A sentence is enough. If it mentions software, AI, or tech, we ask one more thing.</p></div>
       <div class="mc you" data-k="forge"><div class="meta">You · five minutes</div><h4>Forge</h4><p>Six plain questions about the problem: what goes wrong, who does the work, how often, what it costs, what it touches, what better looks like. Rough answers beat blank ones. Then you get a receipt.</p></div>
-      <div class="mc" data-k="gateway"><div class="meta">Enduring Co · days to weeks</div><h4>Gateway</h4><p>Coop screens it in ten minutes against five questions. Bigger builds get a pressure test: value, adoption, overbuilding, risk. You get one email with the decision and a reason.</p></div>
+      <div class="mc" data-k="furnace"><div class="meta">Enduring Co · days to weeks</div><h4>Furnace</h4><p>This is where we forge. Coop screens it in ten minutes against five questions. Bigger builds get a pressure test: value, adoption, overbuilding, risk. You get one email with the decision and a reason.</p></div>
       <div class="mc" data-k="queue"><div class="meta">Enduring Co</div><h4>Queue</h4><p>One ranked list across the whole portfolio. Growth-blocking work first, then the surest dollars. Your strip reads Queued, then Building.</p></div>
       <div class="mc" data-k="live"><div class="meta">You and Enduring Co</div><h4>Live</h4><p>The build is in your hands. From here the question changes from "will it work" to "what did it move," and that is measured, not guessed.</p></div>
       <div class="mc" data-k="value"><div class="meta">Every quarter</div><h4>Value</h4><p>Each finished project declares a number: dollars saved, earned, or protected. Actuals are logged quarterly against it. This is how the portfolio keeps score.</p></div>
     </div>
+    <dl class="legend legend-print">
+      <dt>Idea</dt><dd>You type it into The Refinery and tag it. A sentence is enough.</dd>
+      <dt>Forge</dt><dd>Six questions about the problem, five minutes. Then a receipt.</dd>
+      <dt>Furnace</dt><dd>Coop screens in ten minutes; bigger builds get a pressure test. One decision email.</dd>
+      <dt>Queue</dt><dd>One ranked list across the portfolio. Growth-blocking first, then the surest dollars.</dd>
+      <dt>Live</dt><dd>In your hands. Now we count what it moved.</dd>
+      <dt>Value</dt><dd>Declared number, quarterly actuals. How the portfolio keeps score.</dd>
+    </dl>
   </section>
 
   <section id="moves">
@@ -213,8 +242,9 @@
   </section>
 
   <section id="strip">
-    <div class="sh"><h3>Reading the strip</h3><span>The gold dot is where your idea is right now.</span></div>
+    <div class="sh"><h3>Behind the curtain</h3><span>What you will see on your card, and what each part means.</span></div>
     <div class="strip-demo">
+      <p style="font-size:13.5px;margin:0 0 8px;color:var(--gray-dk)">Every idea card carries a line of six stops. The gold dot is where your idea is right now. Coop's note sits under it.</p>
       <div class="strip"><span class="stop done">Forged</span><span class="stop now">Screened</span><span class="stop">Scored</span><span class="stop">Queued</span><span class="stop">Building</span><span class="stop">Live</span></div>
       <div class="note"><b>Coop:</b> Cleared Stage 1. Moving to Pressure Test.</div>
       <dl class="legend">
@@ -246,7 +276,7 @@
     <div class="sh"><h3>What a good idea looks like</h3><span>Problems, in the words of the person who has them.</span></div>
     <div class="ex">
       <div class="box school"><div class="co">Automate the repetitive · School Apparel</div><div class="q">"In season, orders arrive by email, phone, and the web store, and every one gets re-keyed into the order system by hand. Two people, most of the day, and the typos come back as returns."</div><div class="why">Names the pain, the season, the headcount, and what a mistake costs. Coop can work with this.</div></div>
-      <div class="box school"><div class="co">Replace what does not fit · School Apparel</div><div class="q">"The system that runs our core order process fails at basic things and does not talk properly to our web store. We work around it every day and the workarounds are the process now."</div><div class="why">Sometimes the answer is our own build, or a different tool. Say where the current one fights you; the Gateway decides which.</div></div>
+      <div class="box school"><div class="co">Replace what does not fit · School Apparel</div><div class="q">"The system that runs our core order process fails at basic things and does not talk properly to our web store. We work around it every day and the workarounds are the process now."</div><div class="why">Sometimes the answer is our own build, or a different tool. Say where the current one fights you; the Furnace decides which.</div></div>
       <div class="box allrec"><div class="co">Arm the reps · AllRec</div><div class="q">"A rep gets asked 'why you, and when can I have it?' and answers from memory. Who we are up against, what we do better, and this week's real delivery time all exist. They live in five people's heads and a whiteboard."</div><div class="why">Revenue idea, moat idea. The knowledge is the raw material; putting the competitor landscape, our advantages, and live lead times in every rep's hands is the build.</div></div>
       <div class="box kinetico"><div class="co">Forecast from our own data · Kinetico SA</div><div class="q">"Ask two people what a new customer costs us and you get two answers, far apart. We spend real money on advertising every month and set next month's budget on a number nobody trusts."</div><div class="why">Measure cost per customer one way, by channel, forecast it forward, and let the next dollar of ad spend go where it works. The data is already in our systems.</div></div>
       <div class="box kinetico"><div class="co">Connect what we have · Kinetico SA</div><div class="q">"A web lead comes in and nothing tells us how long before a human answers it. Our lead system and our dispatch system both know part of the story. Neither knows the whole thing."</div><div class="why">Two systems that already work, not talking. A text within a minute and a timestamp on every handoff is a small build with a big number behind it.</div></div>
@@ -256,7 +286,7 @@
   </section>
 
   <section id="behind">
-    <div class="sh"><h3>Behind the Gateway</h3><span>For Enduring Co, and for anyone curious how the sausage gets made.</span></div>
+    <div class="sh"><h3>Inside the Furnace</h3><span>For Enduring Co, and for anyone curious what happens to an idea once it goes in.</span></div>
     <div class="two">
       <div class="box"><h4>Stage 1: The Screener</h4><p>Every idea, without exception, ten minutes. Five red-line questions: is there a real business problem, can we estimate the profit impact, is there a named owner, can it run on what we already have, and can sensitive data stay where it belongs. One "no" must be resolved before anything moves. Two stop it. A declared run-rate number comes out of this stage, and it is a number Coop will later be held to.</p></div>
       <div class="box"><h4>Stage 2: The Pressure Test</h4><p>For anything over the threshold: more than two weeks of build, any new recurring cost, sensitive data, or more than one company. Nine categories scored and weighted to 100. Plus two things kept beside the score, never inside it: does the company hit a growth ceiling without this, and does it make the customer harder to lose.</p></div>
@@ -268,7 +298,7 @@
         <li><b>Portfolio leaders</b> drop ideas, forge them, comment, and watch the strip. Each sees only their own company.</li>
         <li><b>Coop</b> screens, scores, ranks, builds with Brian, and enters the quarterly actuals. Only Coop finalizes a stage.</li>
         <li><b>Brian and Jory</b> can draft and edit screeners and pressure tests, so a decision is never waiting on one calendar.</li>
-        <li><b>Anyone at Enduring Co</b> can read the Gateway and see every company's list.</li>
+        <li><b>Anyone at Enduring Co</b> can read the Furnace and see every company's list.</li>
       </ul>
     </div>
   </section>
@@ -276,7 +306,7 @@
   <section id="faq" class="faq">
     <div class="sh"><h3>Five questions people ask</h3></div>
     <details><summary>Who can see my ideas?</summary><p>You and your company's leadership, plus Enduring Co. The other portfolio companies cannot see your list, and you cannot see theirs. That is enforced by the database, not by politeness.</p></details>
-    <details><summary>What if my idea is not about technology?</summary><p>Drop it anyway. It stays on your list as a plain idea with its tags, and Enduring Co can pick it up from there. The Forge and the Gateway are only for builds.</p></details>
+    <details><summary>What if my idea is not about technology?</summary><p>Drop it anyway. It stays on your list as a plain idea with its tags, and Enduring Co can pick it up from there. The Forge and the Furnace are only for builds.</p></details>
     <details><summary>How long does it take?</summary><p>The screener happens within five business days of your Forge. A pressure test, when one is needed, takes weeks because it involves people and numbers. Builds run thirty to sixty days once they start.</p></details>
     <details><summary>I forged it, then thought of something. Can I add to it?</summary><p>Yes. Comment on the card. You can also open the Forge answers again with the gear button to reread what you sent.</p></details>
     <details><summary>Why can't I see the score?</summary><p>Scores compare projects across companies, and that comparison is Enduring Co's job. What you see is the decision, the reason, and where it sits on the line. That is the part that affects you.</p></details>
@@ -288,22 +318,36 @@
   </div>
 </main>
 
-<footer><div class="foot"><b>ENDURING</b><span>The Refinery · How it works · v6</span><span>enduring.co</span></div></footer>
+<footer><div class="foot"><b>ENDURING</b><span>The Refinery · How it works · v7</span><span>enduring.co</span></div></footer>
 
 <script>
   const stations = document.querySelectorAll(".st");
   const cards = document.querySelectorAll("#mapCards .mc");
-  function pick(k) {
-    stations.forEach(s => s.classList.toggle("on", s.dataset.k === k));
-    cards.forEach(c => c.classList.toggle("on", c.dataset.k === k));
-    const c = document.querySelector(`#mapCards .mc[data-k="${k}"]`);
-    if (c && window.innerWidth < 760) c.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }
-  // invisible hit area so the whole station (dot plus labels) is clickable
+  const pop = document.getElementById("pop");
+  const map = document.querySelector(".map");
+  let pinned = null;
   stations.forEach(s => { const b = s.getBBox(); const r = document.createElementNS("http://www.w3.org/2000/svg", "rect"); r.setAttribute("x", b.x - 8); r.setAttribute("y", b.y - 8); r.setAttribute("width", b.width + 16); r.setAttribute("height", b.height + 16); r.setAttribute("fill", "transparent"); s.insertBefore(r, s.firstChild); });
-  stations.forEach(s => s.addEventListener("click", () => pick(s.dataset.k === "refinery" ? "idea" : s.dataset.k)));
-  cards.forEach(c => c.addEventListener("click", () => pick(c.dataset.k)));
-  pick("forge");
+  function cardFor(k) { return document.querySelector(`#mapCards .mc[data-k="${k === "refinery" ? "idea" : k}"]`); }
+  function show(st) {
+    const k = st.dataset.k, c = cardFor(k); if (!c) return;
+    stations.forEach(x => x.classList.toggle("on", x === st));
+    pop.className = "pop show" + (c.classList.contains("you") ? " you" : "");
+    pop.innerHTML = `<div class="meta">${c.querySelector(".meta").textContent}</div><h4>${c.querySelector("h4").textContent}</h4><p>${c.querySelector("p").textContent}</p>`;
+    const sec = document.getElementById("map");
+    const mb = sec.getBoundingClientRect(), nb = st.querySelector("circle").getBoundingClientRect();
+    const cx = nb.left + nb.width / 2 - mb.left;
+    let left = cx - 150; const max = sec.clientWidth - 300 - 8; if (left > max) left = max; if (left < 8) left = 8;
+    pop.style.left = left + "px"; pop.style.top = (nb.bottom - mb.top + 40) + "px";
+    pop.style.setProperty("--ax", (cx - left - 6) + "px");
+  }
+  function hide() { if (pinned) return; pop.classList.remove("show"); stations.forEach(x => x.classList.remove("on")); }
+  stations.forEach(st => {
+    st.addEventListener("mouseenter", () => { if (!pinned) show(st); });
+    st.addEventListener("mouseleave", hide);
+    st.addEventListener("click", e => { e.stopPropagation(); if (pinned === st) { pinned = null; hide(); } else { pinned = st; show(st); } });
+  });
+  document.addEventListener("click", () => { pinned = null; hide(); });
+  window.addEventListener("resize", () => { if (pinned) show(pinned); });
 </script>
 </body>
 </html>

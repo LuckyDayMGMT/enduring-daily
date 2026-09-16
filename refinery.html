@@ -297,7 +297,7 @@
     <div class="mast-right">
       <span class="pill role" id="roleTag"></span>
       <span class="who" id="whoBox"></span>
-      <a class="pill" id="gateLink" href="gateway.html" hidden>The Gateway</a>
+      <a class="pill" id="gateLink" href="furnace.html" hidden>The Furnace</a>
       <a class="pill" id="backLink" href="index.html" hidden>&larr; Enduring Daily</a>
       <button class="pill" id="signOut">Sign out</button>
     </div>
@@ -392,10 +392,10 @@
 
   <section class="card owner-only" id="rolesCard" hidden>
     <div class="card-head">
-      <div class="card-title">Gateway Editors</div>
+      <div class="card-title">Furnace Editors</div>
     </div>
     <div class="access">
-      <p class="hint">Enduring Co people who can draft and edit Stage 1 and Stage 2 in The Gateway. Only the owner finalizes.</p>
+      <p class="hint">Enduring Co people who can draft and edit Stage 1 and Stage 2 in The Furnace. Only the owner finalizes.</p>
       <div class="row">
         <input type="email" id="roleEmail" placeholder="name@enduring.co" />
         <button class="btn primary" id="roleAdd">Add editor</button>
@@ -421,7 +421,7 @@
   </div>
 </div>
 
-<footer><div class="foot"><b>ENDURING</b><span>The Refinery · v6</span><span id="footRole"></span></div></footer>
+<footer><div class="foot"><b>ENDURING</b><span>The Refinery · v7</span><span id="footRole"></span></div></footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
@@ -448,7 +448,7 @@ const LOTS = {
 };
 const LOT_ORDER = ["allrec", "school", "kinetico", "ebs"];
 
-/* Status chain. Leaders can set forged; everything else is the owner's, set from The Gateway. */
+/* Status chain. Leaders can set forged; everything else is the owner's, set from The Furnace. */
 const STOPS = [
   { key: "forged",   label: "Forged" },
   { key: "screened", label: "Screened" },
@@ -596,7 +596,7 @@ function render() {
       </div>
       <div class="i-actions">
         ${it.tech && !it.forge ? `<button class="ib forge" title="Answer the Forge questions so Coop and Brian can build it" data-forge="${id}">Forge</button>` : ""}
-        ${it.tech && role === "enduring" ? `<a class="ib gate" title="Open in The Gateway" href="gateway.html#${id}">S1</a>` : ""}
+        ${it.tech && role === "enduring" ? `<a class="ib gate" title="Open in The Furnace" href="furnace.html#${id}">S1</a>` : ""}
         ${it.forge ? `<button class="ib" title="Review the Forge answers" data-forgeview="${id}">\u2699</button>` : ""}
         <button class="ib" title="Edit" data-edit="${id}">\u270e</button>
         ${isOwner && !it.promoted ? `<button class="ib promote" title="Promote to the project tracker" data-promote="${id}">\u2192</button>` : ""}

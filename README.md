@@ -6,13 +6,20 @@ Live at enduringdaily.co (GitHub Pages) on Firebase project enduring-daily. Ever
 
 | File | What it is | Version stamp in footer |
 |---|---|---|
-| index.html | Enduring Daily project tracker. @enduring.co only. | Operations Board · v23 |
-| refinery.html | The Refinery (was Parking Lot). Leaders see their company; @enduring.co sees all four lots. | The Refinery · v4 |
-| gateway.html | The Gateway. Stage 1 and Stage 2 in-app with live scoring, the ranked queue, and the value tracker. @enduring.co only. | The Gateway · v4 |
-| guide.html | How it works. Public, no sign-in, nothing sensitive. Interactive pipeline map, leader instructions, behind-the-Gateway section, FAQ, print styles. | How it works · v1 |
+| index.html | Enduring Daily project tracker. @enduring.co only. | Operations Board · v26 |
+| refinery.html | The Refinery (was Parking Lot). Leaders see their company; @enduring.co sees all four lots. | The Refinery · v7 |
+| furnace.html | The Furnace (was The Gateway). Stage 1 and Stage 2 in-app with live scoring, the ranked queue, and the value tracker. @enduring.co only. | The Furnace · v5 |
+| gateway.html | Redirect to furnace.html so old links and the tracker's earlier badges still resolve. | none |
+| guide.html | How it works. Public, no sign-in, nothing sensitive. Interactive pipeline map, leader instructions, behind-the-Gateway section, FAQ, print styles. | How it works · v7 |
 | lot.html | Redirect to refinery.html so old links and sign-in emails still work. | none |
 | bk.html | From the Desk of Steven Cooper. Unchanged. | none |
 | database.rules.json | Realtime Database rules. Publish by `firebase deploy --only database` or paste into the console. | n/a |
+
+## Furnace rename and guide v7 (September 16, 2026)
+
+The Gateway is now The Furnace everywhere a person sees it: page title, masthead and icon (a furnace with a flame), tracker chip, Refinery links and editor panel, status label "Cleared the Furnace", email copy, PDF headers and file names, CSV name. gateway.html redirects to furnace.html. The database path `gateway/`, the secret GATEWAY_FOLDER_ID, the function names, and the Drive folder are unchanged on purpose: renaming stored paths gains nothing and risks data. Redeploy functions for the email and PDF copy.
+
+Guide v7: map stations open a hover popover (tap on mobile, click to pin) instead of the six cards under the map; "Reading the strip" is "Behind the curtain" with a one-line explanation of what the strip is; "Behind the Gateway" is "Inside the Furnace"; "Two emails, ever" is "Two emails, that's it!"; print compressed to two Letter pages with a print-only legend for the map and the FAQ and email sections hidden.
 
 ## Guide (September 16, 2026)
 

@@ -487,7 +487,7 @@
       <div style="margin-top:9px; display:flex; gap:8px; align-items:center; justify-content:flex-end;">
         <a class="bkchip" href="bk.html" title="From the Desk of Steven Cooper">BK</a>
         <a class="lotchip" href="refinery.html" title="The Refinery: where ideas get forged into reality"><svg viewBox="0 0 32 20" aria-hidden="true"><path d="M1.8 4.8Q6 3.4 10 3.5V2.4H30.6V4.6C29.4 6.8 25.4 8.2 23.4 10.2V13.2L27 15.6V17.4H20.8Q16 15.4 11.2 17.4H5V15.6L8.6 13.2V10.2Q10.2 9 12.4 8.9Q6.2 9.6 1.8 4.8Z" fill="#000" stroke="#C9A227" stroke-width=".8" stroke-linejoin="round"/><path d="M7.4 20.2H26.6L29 25.6H5Z" fill="#000" stroke="#C9A227" stroke-width="1" stroke-linejoin="round"/><path d="M4 25.6H30V28.6H4Z" fill="#000" stroke="#C9A227" stroke-width="1"/><path d="M8.4 20.2H26L28.2 25.2H6.2Z" fill="#000" stroke="#C9A227" stroke-width=".9" stroke-linejoin="round"/><path d="M5 25.2H29.4V28H5Z" fill="#000" stroke="#C9A227" stroke-width=".9"/></svg>Refinery</a>
-        <a class="gatechip" href="gateway.html" title="The Gateway: screen, score, and prioritize"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 27V11l11-7 11 7v16h-6V17h-10v10z" fill="#A6832C"/><path d="M13 27v-7h6v7z" fill="#C9A227"/></svg>Gateway</a>
+        <a class="gatechip" href="furnace.html" title="The Furnace: where ideas are screened, scored, and ranked"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 28V12a11 11 0 0 1 22 0v16z" fill="#A6832C"/><path d="M9 28V15a7 7 0 0 1 14 0v13z" fill="#122a4d"/><path d="M16 12.5c2.6 3 4 5 4 7.2a4 4 0 0 1-8 0c0-1.4.5-2.6 1.6-4 .3 1.2.9 2 1.7 2.4-.2-2.2.2-4 .7-5.6z" fill="#F26B1D"/><path d="M16 18c1 1.3 1.6 2.2 1.6 3.1a1.6 1.6 0 0 1-3.2 0c0-.9.6-1.8 1.6-3.1z" fill="#C9A227"/><rect x="3" y="28" width="26" height="2.5" rx="1" fill="#000"/></svg>Furnace</a>
       </div>
     </div>
   </div>
@@ -551,7 +551,7 @@
 <footer>
   <div class="foot-inner">
     <span class="foot-logo">ENDURING</span>
-    <span>Enduring Daily · Operations Board · v25</span>
+    <span>Enduring Daily · Operations Board · v26</span>
     <span class="lock-hint" id="lockHint"></span>
   </div>
 </footer>
@@ -737,7 +737,7 @@ function notesHTML(list, id, it) {
     <button class="note-toggle" data-act="togglenotes" data-target="${list}:${id}">${notes.length?`${notes.length} note${notes.length>1?"s":""}`:"Add a note"} ▾</button>`;
 }
 
-/* Projects promoted from The Refinery carry ideaId; their S1/S2 come from the Gateway record, not the manual cycle. */
+/* Projects promoted from The Refinery carry ideaId; their S1/S2 come from the Furnace record, not the manual cycle. */
 function stageBadge(id, stage, state, url) {
   const p = (store.projects || {})[id];
   if (p && p.ideaId) {
@@ -747,8 +747,8 @@ function stageBadge(id, stage, state, url) {
     if (stage === "s1") st = fin.s1 ? "done" : (dr.s1 ? "draft" : "todo");
     else st = fin.s2 ? "done" : (fin.s1 && fin.s1.decision === "pilot") ? "na" : (dr.s2 ? "draft" : "todo");
     const label = stage.toUpperCase();
-    const title = st === "done" ? "Finalized in The Gateway" : st === "draft" ? "Draft in The Gateway" : st === "na" ? "Not required (pilot without Stage 2)" : "Not started";
-    return `<a class="sb linked${st === "done" ? " done" : st === "na" ? " na" : ""}" href="gateway.html#${esc(p.ideaId)}" title="${title}" ${st === "draft" ? 'style="border-color:var(--brass);color:var(--brass);border-style:dashed"' : ""}>${label}${st === "na" ? " —" : ""}</a>`;
+    const title = st === "done" ? "Finalized in The Furnace" : st === "draft" ? "Draft in The Furnace" : st === "na" ? "Not required (pilot without Stage 2)" : "Not started";
+    return `<a class="sb linked${st === "done" ? " done" : st === "na" ? " na" : ""}" href="furnace.html#${esc(p.ideaId)}" title="${title}" ${st === "draft" ? 'style="border-color:var(--brass);color:var(--brass);border-style:dashed"' : ""}>${label}${st === "na" ? " —" : ""}</a>`;
   }
   const s = state || "todo";
   const label = stage.toUpperCase();
