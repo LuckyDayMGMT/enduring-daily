@@ -4,7 +4,7 @@
  *
  * Secrets (firebase functions:secrets:set):
  *  DRIVE_SA_KEY        full JSON key of the gateway-backup service account (Drive + Gmail via domain-wide delegation)
- *  GATEWAY_FOLDER_ID   Drive folder ID of the Gateway folder in Shared Drives
+ *  GATEWAY_FOLDER_ID   Drive folder ID of the Furnace (formerly Gateway) folder in Shared Drives
  */
 const { onValueWritten } = require("firebase-functions/v2/database");
 const { onSchedule } = require("firebase-functions/v2/scheduler");
@@ -54,33 +54,36 @@ async function sendMail({ to, cc, subject, text }) {
 const DECISION_COPY = {
   screened: { subj: "Cleared Stage 1", line: "Your idea cleared the Stage 1 Screener and is moving to the Stage 2 Pressure Test. That step takes a few weeks; you will hear from me when it is scored." },
   scored:   { subj: "Stage 2 scored", line: "Your idea has been scored in Stage 2 and placed in the Enduring portfolio queue." },
-  queued:   { subj: "Cleared the Gateway", line: "Your idea cleared the Gateway and is queued for build." },
+  queued:   { subj: "Cleared the Furnace", line: "Your idea cleared the Gateway and is queued for build." },
   hold:     { subj: "On hold", line: "Your idea is on hold. One question has to be resolved before it can move." },
   declined: { subj: "Declined", line: "Your idea will not move forward at this time." }
 };
 
+/* Watches the whole card, not just the status leaf: the app writes the Forge answers and the
+ * status together in one update to the card, and a leaf-path trigger can miss a parent write. */
 exports.sendRefineryEmail = onValueWritten(
-  { ref: "/lots/{lot}/{id}/status", instance: "enduring-daily-default-rtdb", secrets: [DRIVE_SA_KEY] },
+  { ref: "/lots/{lot}/{id}", instance: "enduring-daily-default-rtdb", secrets: [DRIVE_SA_KEY] },
   async (event) => {
-    const before = event.data.before.val(), after = event.data.after.val();
+    const b = event.data.before.val() || {}, a = event.data.after.val() || {};
+    const before = b.status || null, after = a.status || null;
     if (!after || before === after) return;
     const { lot, id } = event.params;
-    const snap = await admin.database().ref(`lots/${lot}/${id}`).once("value");
-    const it = snap.val();
+    const it = a;
     if (!it || it.deleted) return;
+    logger.info("status change", { lot, id, before, after });
     const leader = (it.forge && it.forge.byEmail) || it.email || null;
     const co = LOTS[lot] || lot;
     const idea = it.text || "your idea";
 
     if (after === "forged") {
-      const link = `${SITE}/gateway.html#${id}`;
+      const link = `${SITE}/furnace.html#${id}`;
       const f = it.forge || {};
       const forgeText = [
         `Company: ${co}`, `Submitted by: ${f.by || it.author || ""} <${leader || ""}>`, "",
         `Problem: ${f.problem || ""}`, `Who does it today: ${f.who || ""}`, `How often: ${f.freq || ""}`, `Cost today: ${f.effort || ""}`,
         `Systems: ${f.systems || ""}`, `Success looks like: ${f.success || ""}`,
         `Rough number: ${f.dollars ? "$" + Math.round(f.dollars).toLocaleString("en-US") + "/yr" : ""}${f.hours ? " " + f.hours + " hrs/wk" : ""}`,
-        f.link ? `Example: ${f.link}` : null, "", `Open in The Gateway: ${link}`
+        f.link ? `Example: ${f.link}` : null, "", `Open in The Furnace: ${link}`
       ].filter(x => x !== null).join("\n");
       await sendMail({ to: SENDER, subject: `Forge: ${idea} (${co})`, text: forgeText });
       if (leader && leader.toLowerCase() !== SENDER) {
@@ -135,7 +138,7 @@ function s1Pdf(ideaText, lot, fin) {
   doc.on("data", c => chunks.push(c));
   const done = new Promise(res => doc.on("end", () => res(Buffer.concat(chunks))));
   const navy = "#193661", brass = "#A6832C", gray = "#595959";
-  doc.font("Times-Bold").fontSize(18).fillColor(navy).text("THE GATEWAY | Stage 1: The Screener");
+  doc.font("Times-Bold").fontSize(18).fillColor(navy).text("THE FURNACE | Stage 1: The Screener");
   doc.moveDown(0.3).moveTo(64, doc.y).lineTo(548, doc.y).lineWidth(1.5).strokeColor(brass).stroke().moveDown(0.6);
   doc.font("Helvetica").fontSize(11).fillColor("#000");
   const kv = (k, val) => { doc.font("Helvetica-Bold").text(k + ": ", { continued: true }).font("Helvetica").text(val || ""); };
@@ -160,7 +163,51 @@ function s1Pdf(ideaText, lot, fin) {
   kv("Decision", DEC[fin.decision] || fin.decision);
   kv("Reason / condition", fin.reason || "");
   kv("Finalized", new Date(fin.at).toLocaleString("en-US", { timeZone: "America/Chicago" }) + " by Steven Cooper");
-  doc.moveDown(1).fontSize(9).fillColor(gray).text("enduring.co  |  Generated from The Gateway on Enduring Daily");
+  doc.moveDown(1).fontSize(9).fillColor(gray).text("enduring.co  |  Generated from The Furnace on Enduring Daily");
+  doc.end();
+  return done;
+}
+
+function s2Pdf(ideaText, lot, fin) {
+  const v = fin.snapshot || {};
+  const CATS = [["value","Business & financial value",20],["strategic","Strategic importance",10],["adoption","User need & adoption potential",15],["workflow","Workflow improvement",10],["reuse","Cross-company reusability",10],["tech","Technical & data readiness",10],["feas","Implementation feasibility",10],["time","Time to measurable value",10],["sponsor","Executive sponsorship & ownership",5]];
+  const MOAT = [["data","Proprietary data capture"],["switch","Switching cost created"],["embed","Workflow embedment"],["touch","Proactive touch enablement"],["metric","Retention metric moved"],["lag","Replicability lag"]];
+  const TIER = { 1: "Priority 1: Accelerate", 2: "Priority 2: Near-Term", 3: "Priority 3: Viable, Lower Priority", 4: "Priority 4: Validate / Redesign", 5: "Priority 5: Pause / Do Not Pursue" };
+  const DEC = { proceed: "Proceed", pilot: "Pilot", validate: "Validate Further", reduce: "Reduce Scope", pipeline: "Future Pipeline", pause: "Pause", reject: "Reject" };
+  const REC = { accelerate: "Accelerate", prioritize: "Prioritize", validate: "Validate", viable: "Viable / Lower Priority", pause: "Pause or Redesign", nopursue: "Do Not Pursue" };
+  const cap = s => s ? s[0].toUpperCase() + s.slice(1) : "";
+  const doc = new PDFDocument({ size: "LETTER", margins: { top: 64, left: 64, right: 64, bottom: 64 } });
+  const chunks = []; doc.on("data", c => chunks.push(c));
+  const done = new Promise(res => doc.on("end", () => res(Buffer.concat(chunks))));
+  const navy = "#193661", brass = "#A6832C", gray = "#595959";
+  const H = t => doc.moveDown(0.6).font("Times-Bold").fontSize(13).fillColor(navy).text(t).fontSize(11).fillColor("#000").font("Helvetica");
+  const kv = (k, val) => { doc.font("Helvetica-Bold").text(k + ": ", { continued: true }).font("Helvetica").text(val || ""); };
+  const para = (k, val) => { if (!val) return; doc.font("Helvetica-Bold").text(k).font("Helvetica").text(val).moveDown(0.3); };
+  const rows = (obj, cols) => Object.keys(obj || {}).sort().forEach(k => { const r = obj[k]; if (cols.some(c => r[c])) doc.text(cols.map(c => r[c] || "").join("  |  ")); });
+  doc.font("Times-Bold").fontSize(18).fillColor(navy).text("THE FURNACE | Stage 2: The Pressure Test");
+  doc.moveDown(0.3).moveTo(64, doc.y).lineTo(548, doc.y).lineWidth(1.5).strokeColor(brass).stroke().moveDown(0.6);
+  doc.font("Helvetica").fontSize(11).fillColor("#000");
+  kv("Project name", v.name || ideaText);
+  kv("Date / Author", `${v.date || ymd(fin.at)} / ${v.author || ""}`);
+  const cos = Object.entries(v.cos || {}).filter(([, on]) => on).map(([k]) => ({ holdco: "HoldCo", kosa: "KoSA", allrec: "AllRec Awards", school: "School Apparel", multi: "Multiple" }[k])).join(", ");
+  kv("Company(ies) affected", cos || LOTS[lot]);
+  doc.moveDown(0.3); para("Proposed solution", v.solution); para("Business problem / opportunity", v.problem); kv("Primary users", v.users); para("Current process / technology", v.current); para("Known constraints", v.constraints);
+  H("1. Executive recommendation"); para("", v.recSummary); kv("Recommendation", REC[v.rec] || ""); kv("Primary reason", v.recReason);
+  H("2. Business value"); para("Direct, measurable value", v.valueDirect); para("Strategic / indirect value", v.valueStrategic); kv("Primary value driver", v.valueDriver); kv("How success will be measured", v.valueMeasure);
+  H("3. User, workflow & adoption test"); para("", v.adoptionNotes); kv("Anticipated adoption", cap(v.adoption) + (v.adoptionNote ? ": " + v.adoptionNote : "")); kv("Greatest adoption risk", v.adoptionRisk);
+  H("4. Solution & user experience review"); para("", v.uxNotes); kv("Single largest UX / workflow risk", v.uxRisk);
+  H("5. Integration, data & technology readiness"); para("", v.techNotes); kv("Integration complexity", ({ low: "Low", moderate: "Moderate", high: "High", veryhigh: "Very High" })[v.integration] || ""); kv("Unresolved technical dependency", v.techDependency);
+  H("6. Minimum viable solution & overbuilding test"); para("", v.mvpNotes); para("Minimum Viable Pilot", v.mvp); para("Deferred features", v.deferred); kv("Scope verdict", ({ under: "Underbuilt", appropriate: "Appropriately Scoped", modover: "Moderately Overbuilt", sigover: "Significantly Overbuilt" })[v.scope] || "");
+  H("6b. Growth-ceiling test"); para("", v.ceilingNotes); kv("Flag", ({ blocking: "Growth-blocking (hard ceiling)", limiting: "Growth-limiting (soft ceiling)", neutral: "Growth-neutral" })[fin.ceiling] || ""); if (v.ceilingRationale) para("Sequencing rationale (logged)", v.ceilingRationale);
+  H("6c. Customer relationship moat test"); MOAT.forEach(([k, n]) => doc.text(`${n}: ${(v.moat || {})[k] != null ? (v.moat || {})[k] : 0} / 3`)); kv("Moat score", `${fin.moat || 0} / 18, ${cap(fin.moatBand)} moat`); para("", v.moatNotes);
+  H("7. Risks, blockers & critical assumptions"); rows(v.risks, ["risk","impact","mit"]); kv("Single issue most likely to prevent success", v.topIssue);
+  H("8. Validation exercises"); rows(v.validations, ["exercise","question","evidence"]);
+  H("9. Success measures"); rows(v.measures, ["measure","target","method","timing"]);
+  H("10. Executive priority score"); CATS.forEach(([k, n, w]) => { const sc = (v.scores || {})[k] || 0; doc.text(`${n}  (${w}%)  score ${sc}  weighted ${Math.round(sc / 5 * w)}`); });
+  kv("Overall priority score", `${fin.score} / 100`); kv("Priority classification", TIER[fin.tier] || ""); kv("Confidence level", cap(v.confidence)); kv("Primary reason for the score", v.scoreReason); kv("What would increase the score", v.scoreIncrease);
+  H("11. Final decision & next step"); kv("Decision", DEC[fin.decision] || fin.decision); kv("Immediate next step", v.nextStep); kv("Executive owner", v.execOwner); kv("Operational owner", v.opOwner); kv("Technology owner", v.techOwner); kv("Recommended review date", v.reviewDate); kv("Note to the leader", fin.reason);
+  kv("Finalized", new Date(fin.at).toLocaleString("en-US", { timeZone: "America/Chicago" }) + " by Steven Cooper");
+  doc.moveDown(1).fontSize(9).fillColor(gray).text("enduring.co  |  Generated from The Furnace on Enduring Daily");
   doc.end();
   return done;
 }
@@ -173,6 +220,8 @@ exports.weeklyGatewayBackup = onSchedule(
     const root = GATEWAY_FOLDER_ID.value();
     const backups = await findOrCreateFolder(drive, root, "Backups");
     const stage1 = await findOrCreateFolder(drive, root, "Stage 1 Screeners");
+    const stage2 = await findOrCreateFolder(drive, root, "Stage 2 Pressure Tests");
+    const { Readable } = require("stream");
     const today = ymd(Date.now());
 
     const lots = {};
@@ -193,11 +242,19 @@ exports.weeklyGatewayBackup = onSchedule(
       for (const [id, it] of Object.entries(items)) {
         const fin = gateway[id] && gateway[id].final && gateway[id].final.s1;
         if (!fin || it.deleted) continue;
-        const name = `${ymd(fin.at)}_${CO_FILE[lot] || "Enduring"}_Gateway_S1_${safe((fin.snapshot && fin.snapshot.name) || it.text)}_v1.pdf`;
+        const name = `${ymd(fin.at)}_${CO_FILE[lot] || "Enduring"}_Furnace_S1_${safe((fin.snapshot && fin.snapshot.name) || it.text)}_v1.pdf`;
         if (await fileExists(drive, stage1, name)) continue;
         const buf = await s1Pdf(it.text, lot, fin);
-        const { Readable } = require("stream");
         await upload(drive, stage1, name, "application/pdf", Readable.from(buf));
+        pdfs++;
+      }
+      for (const [id, it] of Object.entries(items)) {
+        const fin = gateway[id] && gateway[id].final && gateway[id].final.s2;
+        if (!fin || it.deleted) continue;
+        const name = `${ymd(fin.at)}_${CO_FILE[lot] || "Enduring"}_Furnace_S2_${safe((fin.snapshot && fin.snapshot.name) || it.text)}_v1.pdf`;
+        if (await fileExists(drive, stage2, name)) continue;
+        const buf = await s2Pdf(it.text, lot, fin);
+        await upload(drive, stage2, name, "application/pdf", Readable.from(buf));
         pdfs++;
       }
     }
