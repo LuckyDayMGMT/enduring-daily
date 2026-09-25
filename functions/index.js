@@ -54,7 +54,7 @@ async function sendMail({ to, cc, subject, text }) {
 const DECISION_COPY = {
   screened: { subj: "Cleared Stage 1", line: "Your idea cleared the Stage 1 Screener and is moving to the Stage 2 Pressure Test. That step takes a few weeks; you will hear from me when it is scored." },
   scored:   { subj: "Stage 2 scored", line: "Your idea has been scored in Stage 2 and placed in the Enduring portfolio queue." },
-  queued:   { subj: "Cleared the Furnace", line: "Your idea cleared the Gateway and is queued for build." },
+  queued:   { subj: "Cleared the Furnace", line: "Your idea cleared the Furnace and is queued for build." },
   hold:     { subj: "On hold", line: "Your idea is on hold. One question has to be resolved before it can move." },
   declined: { subj: "Declined", line: "Your idea will not move forward at this time." }
 };
