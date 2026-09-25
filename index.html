@@ -208,14 +208,8 @@
   .lotchip { display: inline-flex; align-items: center; gap: 6px; font-weight: 900; letter-spacing: 1px; font-size: 11px;
     text-transform: uppercase; color: var(--white); text-decoration: none; background: rgba(242,107,29,0.16);
     border: 1px solid #F26B1D; border-radius: 999px; padding: 4px 12px 4px 8px; }
-  .lotchip svg { width: 24px; height: 15px; }
+  .lotchip svg { width: 16px; height: 16px; }
   .lotchip:hover { background: #F26B1D; color: var(--white); }
-  .gatechip { display: inline-flex; align-items: center; gap: 6px; font-weight: 900; letter-spacing: 1px; font-size: 11px;
-    text-transform: uppercase; color: var(--white); text-decoration: none; background: rgba(166,131,44,0.16);
-    border: 1px solid var(--brass); border-radius: 999px; padding: 4px 12px 4px 8px; }
-  .gatechip svg { width: 16px; height: 16px; }
-  .gatechip:hover { background: var(--brass); color: var(--white); }
-  .sb.linked { cursor: pointer; }
 
   /* ---- Notes ---- */
   .notes { margin-top: 8px; padding-left: 2px; display: flex; flex-direction: column; gap: 5px; }
@@ -351,7 +345,6 @@
   .chip.co-allrec   { border-color: #993C1D; color: #993C1D; background: rgba(153,60,29,0.08); }
   .chip.co-kinetico { border-color: #7fb2d4; color: #2f6d94; background: rgba(185,217,235,0.28); }
   .chip.co-ebs      { border-color: #000000; color: #000000; background: rgba(0,0,0,0.06); }
-  .chip.co-multi    { border-color: var(--brass); color: #7d5f16; background: rgba(166,131,44,0.10); }
   .chip.co-none     { border-style: dashed; color: var(--gray); }
   .g-filter { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; padding: 4px 4px 10px; }
   .g-filter .gf { font-size: 11px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase;
@@ -363,14 +356,12 @@
   .g-filter .gf.on.co-allrec   { background: #993C1D; border-color: #993C1D; }
   .g-filter .gf.on.co-kinetico { background: #7fb2d4; border-color: #7fb2d4; color: #10314a; }
   .g-filter .gf.on.co-ebs      { background: #000000; border-color: #000000; color: #ffffff; }
-  .g-filter .gf.on.co-multi    { background: var(--brass); border-color: var(--brass); color: #ffffff; }
   .g-label .co-tag { font-size: 8px; font-weight: 900; letter-spacing: .4px; padding: 1px 5px; border-radius: 3px;
     margin-right: 6px; text-transform: uppercase; vertical-align: middle; }
   .co-tag.co-school   { background: rgba(201,162,39,0.20); color: #8a6f16; }
   .co-tag.co-allrec   { background: rgba(153,60,29,0.16); color: #993C1D; }
   .co-tag.co-kinetico { background: rgba(185,217,235,0.45); color: #2f6d94; }
   .co-tag.co-ebs      { background: rgba(0,0,0,0.12); color: #000000; }
-  .co-tag.co-multi    { background: rgba(166,131,44,0.18); color: #7d5f16; }
 
   /* ---- Stage doc badges ---- */
   .stages { flex: 0 0 auto; display: flex; gap: 4px; align-items: center; }
@@ -446,15 +437,6 @@
     /* Recently-deleted + trash */
     .restore-btn { font-size: 12px; }
   }
-
-  /* ---- How it works: floating help ---- */
-  .helpfab { position: fixed; right: 18px; bottom: 18px; z-index: 400; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
-    background: #C9A227; color: #122a4d; font-family: Roboto, Arial, sans-serif; font-weight: 900; font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
-    padding: 10px 16px 10px 12px; border-radius: 999px; box-shadow: 0 10px 24px -10px rgba(0,0,0,.55), 0 0 0 3px rgba(201,162,39,.25); border: 1px solid #b08e20; }
-  .helpfab:hover { background: #fff; color: #193661; box-shadow: 0 10px 24px -10px rgba(0,0,0,.55), 0 0 0 3px rgba(25,54,97,.2); }
-  .helpfab .q { width: 20px; height: 20px; border-radius: 50%; background: #122a4d; color: #C9A227; display: grid; place-items: center; font-family: Georgia, serif; font-size: 13px; font-weight: 700; }
-  .helpfab:hover .q { background: #193661; color: #fff; }
-  @media print { .helpfab { display: none; } }
 </style>
 </head>
 <body>
@@ -486,8 +468,7 @@
       <div style="margin-top:10px"><span class="who" id="whoBox"></span></div>
       <div style="margin-top:9px; display:flex; gap:8px; align-items:center; justify-content:flex-end;">
         <a class="bkchip" href="bk.html" title="From the Desk of Steven Cooper">BK</a>
-        <a class="lotchip" href="refinery.html" title="The Refinery: where ideas get forged into reality"><svg viewBox="0 0 32 20" aria-hidden="true"><path d="M1.8 4.8Q6 3.4 10 3.5V2.4H30.6V4.6C29.4 6.8 25.4 8.2 23.4 10.2V13.2L27 15.6V17.4H20.8Q16 15.4 11.2 17.4H5V15.6L8.6 13.2V10.2Q10.2 9 12.4 8.9Q6.2 9.6 1.8 4.8Z" fill="#000" stroke="#C9A227" stroke-width=".8" stroke-linejoin="round"/><path d="M7.4 20.2H26.6L29 25.6H5Z" fill="#000" stroke="#C9A227" stroke-width="1" stroke-linejoin="round"/><path d="M4 25.6H30V28.6H4Z" fill="#000" stroke="#C9A227" stroke-width="1"/><path d="M8.4 20.2H26L28.2 25.2H6.2Z" fill="#000" stroke="#C9A227" stroke-width=".9" stroke-linejoin="round"/><path d="M5 25.2H29.4V28H5Z" fill="#000" stroke="#C9A227" stroke-width=".9"/></svg>Refinery</a>
-        <a class="gatechip" href="furnace.html" title="The Furnace: where ideas are screened, scored, and ranked"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 28V12a11 11 0 0 1 22 0v16z" fill="#A6832C"/><path d="M9 28V15a7 7 0 0 1 14 0v13z" fill="#122a4d"/><path d="M16 12.5c2.6 3 4 5 4 7.2a4 4 0 0 1-8 0c0-1.4.5-2.6 1.6-4 .3 1.2.9 2 1.7 2.4-.2-2.2.2-4 .7-5.6z" fill="#F26B1D"/><path d="M16 18c1 1.3 1.6 2.2 1.6 3.1a1.6 1.6 0 0 1-3.2 0c0-.9.6-1.8 1.6-3.1z" fill="#C9A227"/><rect x="3" y="28" width="26" height="2.5" rx="1" fill="#000"/></svg>Furnace</a>
+        <a class="lotchip" href="lot.html" title="Parking Lot"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M13 4h6l6 22H7z" fill="#F26B1D"/><path d="M11.4 12h9.2l1.2 4.5H10.2zM9 21.5h14l1 3.5H8z" fill="#fff" opacity=".9"/><rect x="3" y="26" width="26" height="3.5" rx="1.2" fill="#3a3a3a"/></svg>Parking Lot</a>
       </div>
     </div>
   </div>
@@ -496,7 +477,8 @@
 <main>
   <section class="card col-span" data-list="projects">
     <div class="card-head">
-      <div class="card-title" style="flex:1">Projects</div>
+      <div class="card-title">Projects</div>
+      <div class="card-sub" style="flex:1">Sorted by launch date, soonest first</div>
       <input type="search" id="projSearch" class="proj-search" placeholder="Search projects & sub-items…" autocomplete="off" />
       <div class="legend">
         <span class="lg"><i class="dot red"></i>Not started</span>
@@ -551,7 +533,7 @@
 <footer>
   <div class="foot-inner">
     <span class="foot-logo">ENDURING</span>
-    <span>Enduring Daily · Operations Board · v26</span>
+    <span>Enduring Daily · Operations Board · v22</span>
     <span class="lock-hint" id="lockHint"></span>
   </div>
 </footer>
@@ -610,7 +592,6 @@ function initBackend() {
 }
 
 function attachListeners() {
-  db.ref("gateway").on("value", snap => { store.gateway = snap.val() || {}; renderList("projects"); });
   LISTS.forEach(list => {
     db.ref("board/" + list).on("value", snap => {
       store[list] = snap.val() || {};
@@ -737,19 +718,7 @@ function notesHTML(list, id, it) {
     <button class="note-toggle" data-act="togglenotes" data-target="${list}:${id}">${notes.length?`${notes.length} note${notes.length>1?"s":""}`:"Add a note"} ▾</button>`;
 }
 
-/* Projects promoted from The Refinery carry ideaId; their S1/S2 come from the Furnace record, not the manual cycle. */
 function stageBadge(id, stage, state, url) {
-  const p = (store.projects || {})[id];
-  if (p && p.ideaId) {
-    const g = (store.gateway || {})[p.ideaId] || {};
-    const fin = g.final || {}, dr = g.draft || {};
-    let st = "todo";
-    if (stage === "s1") st = fin.s1 ? "done" : (dr.s1 ? "draft" : "todo");
-    else st = fin.s2 ? "done" : (fin.s1 && fin.s1.decision === "pilot") ? "na" : (dr.s2 ? "draft" : "todo");
-    const label = stage.toUpperCase();
-    const title = st === "done" ? "Finalized in The Furnace" : st === "draft" ? "Draft in The Furnace" : st === "na" ? "Not required (pilot without Stage 2)" : "Not started";
-    return `<a class="sb linked${st === "done" ? " done" : st === "na" ? " na" : ""}" href="furnace.html#${esc(p.ideaId)}" title="${title}" ${st === "draft" ? 'style="border-color:var(--brass);color:var(--brass);border-style:dashed"' : ""}>${label}${st === "na" ? " —" : ""}</a>`;
-  }
   const s = state || "todo";
   const label = stage.toUpperCase();
   const cls = "sb" + (s === "done" ? " done" : s === "na" ? " na" : "") + (isOwner ? " owner" : "");
@@ -766,15 +735,26 @@ function stageBadge(id, stage, state, url) {
 
 const STATUS_CYCLE = ["red", "yellow", "blue", "green"];
 
+// Project order: soonest launch first, ties alphabetical; undated after dated; completed last.
+function projectCompare(a, b) {
+  const pa = a[1], pb = b[1];
+  const ca = pa.complete ? 1 : 0, cb = pb.complete ? 1 : 0;
+  if (ca !== cb) return ca - cb;
+  const da = pa.launch || "", dbb = pb.launch || "";
+  if (da && !dbb) return -1;
+  if (!da && dbb) return 1;
+  if (da !== dbb) return da < dbb ? -1 : 1;
+  return (pa.text || "").localeCompare(pb.text || "", undefined, { sensitivity: "base" });
+}
+
 // PortCo tagging. Cycle: none -> school -> allrec -> kinetico -> ebs -> none
 const PORTCOS = {
   school:   { label: "School Apparel", short: "SCHOOL" },
   allrec:   { label: "AllRec",         short: "ALLREC" },
   kinetico: { label: "Kinetico SA",    short: "KINETICO" },
-  ebs:      { label: "EBS",            short: "EBS" },
-  multi:    { label: "Multiple",       short: "MULTI" }
+  ebs:      { label: "EBS",            short: "EBS" }
 };
-const CO_CYCLE = ["", "school", "allrec", "kinetico", "ebs", "multi"];
+const CO_CYCLE = ["", "school", "allrec", "kinetico", "ebs"];
 let ganttFilter = "";  // "" = all; else a portco key
 
 function subRow(pid, sid, s, canEdit, ownerCtl, q) {
@@ -806,11 +786,7 @@ function renderGantt() {
   if (!body) return;
   const projs = Object.entries(store.projects || {})
     .filter(([_, p]) => !p.deleted)
-    .sort((a, b) => {
-      const ca = a[1].complete ? 1 : 0, cb = b[1].complete ? 1 : 0;
-      if (ca !== cb) return ca - cb;
-      return (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0);
-    });
+    .sort(projectCompare);
   const filtered = ganttFilter ? projs.filter(([_, p]) => p.co === ganttFilter) : projs;
   const scheduled = [], unscheduled = [];
   filtered.forEach(([pid, p]) => {
@@ -867,11 +843,7 @@ function renderProjects() {
   if (drag && drag.list === "projects") return;
   const entries = Object.entries(store.projects || {})
     .filter(([_, p]) => !p.deleted)
-    .sort((a, b) => {
-      const ca = a[1].complete ? 1 : 0, cb = b[1].complete ? 1 : 0;
-      if (ca !== cb) return ca - cb;
-      return (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0);
-    });
+    .sort(projectCompare);
   if (countEl) countEl.textContent = entries.filter(([_, p]) => !p.complete).length;
   if (!entries.length) { body.innerHTML = `<div class="empty">No projects yet.</div>`; renderGantt(); return; }
 
@@ -906,7 +878,6 @@ function renderProjects() {
     return `<div class="proj ${isOpen ? "open" : "collapsed"} ${p.complete ? "complete" : ""} ${pNameHit ? "search-hit" : ""}" data-id="${pid}" data-list="projects">
       <div class="p-head">
         <button class="caret ${isOpen ? "open" : ""}" data-act="toggleproj" data-pid="${pid}" title="${isOpen ? "Collapse" : "Expand"}" aria-label="Toggle">▸</button>
-        ${isOwner ? `<div class="drag-handle" title="Drag to re-rank" data-drag="projects" data-id="${pid}">⠿</div>` : ""}
         <span class="p-check ${p.complete ? "on" : ""}${isOwner ? "" : " readonly"}" ${isOwner ? `data-act="pcomplete" data-pid="${pid}"` : ""} title="${p.complete ? "Complete" : "Mark complete"}">✓</span>
         <div class="p-name">${esc(p.text)}</div>
         ${isOwner ? `<button class="pencil" title="Rename project" data-act="rename" data-pid="${pid}">✎</button>` : ""}
@@ -929,11 +900,7 @@ function renderProjects() {
           ${startChip}
           ${launchChip}
           ${coChip}
-          ${isOwner ? `<span class="s-arrows p-arrows">
-            <button data-act="projup" data-pid="${pid}" title="Move up">▴</button>
-            <button data-act="projdown" data-pid="${pid}" title="Move down">▾</button>
-          </span>
-          <button class="iconbtn danger" title="Remove project" data-act="remove" data-list="projects" data-id="${pid}">✕</button>` : ""}
+          ${isOwner ? `<button class="iconbtn danger" title="Remove project" data-act="remove" data-list="projects" data-id="${pid}">✕</button>` : ""}
         </div>
       </div>
       <div class="p-body">
@@ -1327,6 +1294,5 @@ document.addEventListener("click", (e) => {
 document.getElementById("gateBtn").addEventListener("click", signIn);
 if (initBackend()) startAuth();
 </script>
-<a class="helpfab" href="guide.html" title="What The Refinery is, what it does, and how an idea moves"><span class="q">?</span>How it works</a>
 </body>
 </html>
