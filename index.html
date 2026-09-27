@@ -150,9 +150,8 @@
   .quick-add input:focus { outline: none; border-color: var(--brass); }
   .quick-add input::placeholder { color: var(--gray); }
   .btn { font-family: var(--sans); font-size: 13.5px; font-weight: 500; border-radius: var(--plate); padding: 9px 16px; cursor: pointer; border: 1px solid transparent; transition: background 0.15s ease, color 0.15s ease; white-space: nowrap; }
-  .btn.primary { background: var(--blue); color: var(--white); border-color: var(--blue); box-shadow: inset 0 -3px 0 var(--brass); }
+  .btn.primary { background: var(--blue); color: var(--white); border-color: var(--blue); }
   .btn.primary:hover { background: var(--blue-deep); }
-  .btn.primary:active { transform: translateY(1px); box-shadow: inset 0 -1px 0 var(--brass); }
   .btn.ghost { background: transparent; color: var(--gray-dk); border-color: var(--gray-md); font-size: 12px; padding: 6px 12px; }
   .btn.ghost:hover { color: var(--black); border-color: var(--gray-dk); }
   .restore-btn { font-size: 11px; padding: 4px 10px; }
@@ -338,7 +337,7 @@
   .g-row.complete .g-label { color: var(--gray); text-decoration: line-through; }
   .g-track { flex: 1; position: relative; height: 30px; background:
     repeating-linear-gradient(to right, transparent, transparent calc(100% / var(--gm) - 1px), var(--line) calc(100% / var(--gm) - 1px), var(--line) calc(100% / var(--gm))); }
-  .g-bar { position: absolute; top: 7px; height: 16px; border-radius: 2px; background: var(--blue); min-width: 8px; box-shadow: inset 0 -3px 0 var(--brass); }
+  .g-bar { position: absolute; top: 7px; height: 16px; border-radius: 2px; background: var(--blue); min-width: 8px; }
   .g-bar .g-cap { position: absolute; right: -4px; top: -14px; font-size: 8.5px; font-weight: 900;
     color: var(--gray-dk); letter-spacing: .4px; white-space: nowrap; }
   .g-row.complete .g-bar { background: var(--gray); box-shadow: none; }
@@ -460,7 +459,7 @@
   }
 
 </style>
-<link rel="stylesheet" href="assets/enduring.css?v=1" />
+<link rel="stylesheet" href="assets/enduring.css?v=2" />
 </head>
 <body>
 
@@ -556,7 +555,7 @@
 <footer>
   <div class="foot-inner">
     <span class="foot-logo">ENDURING</span>
-    <span>Enduring Daily · Operations Board · v27</span>
+    <span>Enduring Daily · Operations Board · v28</span>
     <span class="lock-hint" id="lockHint"></span>
   </div>
 </footer>

@@ -6,15 +6,19 @@ Live at enduringdaily.co (GitHub Pages) on Firebase project enduring-daily. Ever
 
 | File | What it is | Version stamp in footer |
 |---|---|---|
-| index.html | Enduring Daily project tracker. @enduring.co only. | Operations Board · v27 |
-| refinery.html | The Refinery (was Parking Lot). Leaders see their company; @enduring.co sees all four lots. | The Refinery · v8 |
-| assets/enduring.css, assets/icons.svg, assets/motion.js | Shared design layer: plate radius, icon sprite, How it works plate, motion. Loaded with ?v=1; bump it when they change. | n/a |
-| furnace.html | The Furnace (was The Gateway). Stage 1 and Stage 2 in-app with live scoring, the ranked queue, and the value tracker. @enduring.co only. | The Furnace · v6 |
+| index.html | Enduring Daily project tracker. @enduring.co only. | Operations Board · v28 |
+| refinery.html | The Refinery (was Parking Lot). Leaders see their company; @enduring.co sees all four lots. | The Refinery · v9 |
+| assets/enduring.css, assets/icons.svg, assets/motion.js | Shared design layer: plate radius, icon sprite, How it works plate, motion. Loaded with a ?v= key (enduring.css is v=2, motion.js v=1); bump it when they change. | n/a |
+| furnace.html | The Furnace (was The Gateway). Stage 1 and Stage 2 in-app with live scoring, the ranked queue, and the value tracker. @enduring.co only. | The Furnace · v7 |
 | gateway.html | Redirect to furnace.html so old links and the tracker's earlier badges still resolve. | none |
-| guide.html | How it works. Public, no sign-in, nothing sensitive. Interactive pipeline map, leader instructions, behind-the-Gateway section, FAQ, print styles. | How it works · v8 |
+| guide.html | How it works. Public, no sign-in, nothing sensitive. Interactive pipeline map, leader instructions, behind-the-Gateway section, FAQ, print styles. | How it works · v9 |
 | lot.html | Redirect to refinery.html so old links and sign-in emails still work. | none |
 | bk.html | From the Desk of Steven Cooper. Unchanged. | none |
 | database.rules.json | Realtime Database rules. Publish by `firebase deploy --only database` or paste into the console. | n/a |
+
+## Depth: tracker v28, Refinery v9, Furnace v7, guide v9 (September 27, 2026)
+
+Depth lives only in assets/enduring.css; pages own shape and color, the shared layer owns shadows, sheen, lift and glow. Plates are machined: light top edge, brass lip, hard contact line, tinted cast shadow, a slight sheen. Controls sit recessed (filter bars, inputs, checkboxes, progress tracks, the value bar) so the raised active option stands out. Glow means heat and is kept to hover, focus and hot states: buttons and masthead links lift and glow brass on hover, inputs get a brass focus ring, the active Furnace view card, the current status stop, a filled value bar, the today line on the Timeline and the How it works plate glow. The masthead brass rule casts a warm glow onto the page; the masthead marks carry a halo. Status dots are enamel. Print turns all shadows and glows off; the guide still prints on two pages. Page-level box-shadows that the shared layer now owns were removed so there is one source.
 
 ## Redesign: tracker v27, Refinery v8, Furnace v6, guide v8 (September 27, 2026)
 

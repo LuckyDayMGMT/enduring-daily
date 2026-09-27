@@ -12,15 +12,103 @@
 
 :focus-visible { outline: 2px solid var(--e-gold); outline-offset: 2px; }
 
+/* ---- depth: machined plates, recessed wells, heat glow on hover, focus and hot states ----
+   Pages own shape and color; this layer owns shadows, sheen and lift. */
+:root {
+  --lift-t: transform .16s var(--ease-out), box-shadow .22s ease, background-color .15s ease, color .15s ease, border-color .15s ease, filter .22s ease;
+  --edge-top: inset 0 1px 0 rgba(255,255,255,.18);
+  --contact: 0 1px 0 rgba(8,18,36,.55);
+  --cast: 0 7px 16px -7px rgba(18,42,77,.65);
+  --cast-lg: 0 14px 26px -10px rgba(18,42,77,.6);
+  --heat: 0 0 0 1px rgba(201,162,39,.55), 0 0 22px -3px rgba(201,162,39,.75);
+  --heat-ring: 0 0 0 3px rgba(201,162,39,.24);
+  --well: inset 0 1px 3px rgba(12,24,44,.16), inset 0 0 0 1px rgba(12,24,44,.03);
+  --sit: 0 1px 0 rgba(12,24,44,.07), 0 2px 0 rgba(12,24,44,.03), 0 20px 34px -30px rgba(12,24,44,.55);
+  --sheen: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0) 58%);
+}
+
+/* masthead: lit from above, brass rule casts a warm glow onto the page */
+header, header.masthead { position: relative; z-index: 3; background-image: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.14));
+  box-shadow: 0 7px 20px -9px rgba(201,162,39,.85), 0 2px 0 rgba(0,0,0,.08); }
+header .pill, header .lotchip, header .gatechip, header .bkchip, header .signout {
+  background-image: var(--sheen); box-shadow: var(--edge-top), 0 1px 0 rgba(0,0,0,.35), 0 5px 12px -6px rgba(0,0,0,.6); transition: var(--lift-t); }
+header .pill:hover, header .lotchip:hover, header .gatechip:hover, header .bkchip:hover, header .signout:hover {
+  transform: translateY(-1px); box-shadow: var(--edge-top), 0 1px 0 rgba(0,0,0,.35), var(--heat); }
+header .pill.role { box-shadow: 0 1px 0 rgba(0,0,0,.35), 0 4px 10px -5px rgba(0,0,0,.6); }
+header .pill.role:hover { transform: none; }
+header .ic { filter: drop-shadow(0 2px 2px rgba(0,0,0,.45)); }
+header .mark .ic, header .ic.mark { filter: drop-shadow(0 0 9px rgba(201,162,39,.45)) drop-shadow(0 3px 3px rgba(0,0,0,.5)); }
+header .product .ic { filter: drop-shadow(0 0 8px rgba(201,162,39,.4)) drop-shadow(0 2px 2px rgba(0,0,0,.45)); }
+
+/* navy plates */
+.btn.primary, .ib.forge, .sb.done, .pip.on, .fchip.on, .gf.on {
+  background-image: var(--sheen); box-shadow: var(--edge-top), inset 0 -3px 0 var(--e-brass), var(--contact), var(--cast); transition: var(--lift-t); }
+.sb.done, .pip.on, .fchip.on, .gf.on { box-shadow: var(--edge-top), inset 0 -2px 0 var(--e-brass), 0 2px 5px -2px rgba(12,24,44,.55); position: relative; z-index: 1; }
+.btn.primary:hover:not(:disabled), .ib.forge:hover { background-image: var(--sheen); transform: translateY(-1px); box-shadow: var(--edge-top), inset 0 -3px 0 var(--e-brass), var(--contact), var(--cast-lg), var(--heat); }
+.btn.primary:active:not(:disabled), .ib.forge:active { transform: translateY(1px); box-shadow: inset 0 2px 4px rgba(0,0,0,.35), inset 0 -1px 0 var(--e-brass); }
+
+/* brass and gold plates */
+.btn.brass { background-image: var(--sheen); box-shadow: inset 0 1px 0 rgba(255,255,255,.3), inset 0 -3px 0 #7a6020, 0 1px 0 #5e4a18, 0 7px 16px -7px rgba(122,96,32,.75); transition: var(--lift-t); }
+.btn.brass:hover:not(:disabled) { transform: translateY(-1px); box-shadow: inset 0 1px 0 rgba(255,255,255,.3), inset 0 -3px 0 #7a6020, 0 1px 0 #5e4a18, var(--heat); }
+.btn.brass:active:not(:disabled) { transform: translateY(1px); box-shadow: inset 0 2px 4px rgba(0,0,0,.3), inset 0 -1px 0 #7a6020; }
+header .pill.go, a.btn:not(.primary):not(.ghost), .helpfab {
+  background-image: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0) 60%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -3px 0 #9c7d18, 0 1px 0 #6f5810, 0 8px 18px -8px rgba(111,88,16,.85), 0 0 18px -6px rgba(201,162,39,.7); transition: var(--lift-t); }
+header .pill.go:hover, a.btn:not(.primary):not(.ghost):hover, .helpfab:hover {
+  transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -3px 0 #9c7d18, 0 1px 0 #6f5810, 0 12px 24px -10px rgba(111,88,16,.9), 0 0 0 3px rgba(201,162,39,.3), 0 0 30px -2px rgba(201,162,39,.85); }
+header .pill.go:active, a.btn:not(.primary):not(.ghost):active, .helpfab:active { transform: translateY(1px); box-shadow: inset 0 2px 4px rgba(0,0,0,.25), inset 0 -1px 0 #9c7d18; }
+
+/* white plates: ghost buttons, icon buttons, score pips, options */
+.btn.ghost, .ib:not(.forge), .iconbtn, .pip:not(.on), .opt, .gsi, .gbtn:not(.primary) {
+  box-shadow: inset 0 1px 0 #fff, 0 1px 0 rgba(12,24,44,.12), 0 3px 6px -4px rgba(12,24,44,.35); transition: var(--lift-t); }
+.btn.ghost:hover, .ib:not(.forge):hover, .iconbtn:hover, .pip:not(.on):not([data-dis]):hover, .opt:hover, .gsi:hover, .gbtn:not(.primary):hover {
+  transform: translateY(-1px); box-shadow: inset 0 1px 0 #fff, 0 1px 0 rgba(12,24,44,.12), 0 8px 14px -8px rgba(12,24,44,.45), 0 0 0 1px rgba(201,162,39,.45), 0 0 14px -4px rgba(201,162,39,.6); }
+.btn.ghost:active, .ib:not(.forge):active, .iconbtn:active, .pip:active, .opt:active { transform: translateY(1px); box-shadow: inset 0 1px 3px rgba(12,24,44,.25); }
+.opt.on { box-shadow: inset 0 1px 3px rgba(12,24,44,.18); }
+.btn.ghost:not(:hover), .ib:not(.forge):not(:hover), .iconbtn:not(:hover), .pip:not(.on), .opt:not(.on), .gsi:not(:hover), .gbtn:not(.primary):not(:hover) { background-image: linear-gradient(180deg, #fff, #f6f7f9); }
+
+/* surfaces */
+.card, .box, .mv, .strip-demo, .map, .faq details, .rule { box-shadow: var(--sit); }
+.sumc { box-shadow: var(--sit); transition: var(--lift-t); }
+.sumc:hover { transform: translateY(-2px); box-shadow: 0 1px 0 rgba(12,24,44,.07), 0 16px 26px -16px rgba(12,24,44,.55), 0 0 0 1px rgba(201,162,39,.4); }
+.sumc.on { box-shadow: 0 1px 0 rgba(12,24,44,.07), 0 16px 26px -16px rgba(12,24,44,.5), 0 0 0 1px rgba(201,162,39,.55), 0 0 26px -6px rgba(201,162,39,.7); }
+.scorebox { box-shadow: 0 1px 0 rgba(12,24,44,.07), 0 12px 24px -14px rgba(12,24,44,.55), 0 -8px 20px -14px rgba(201,162,39,.8); }
+.pop { box-shadow: 0 1px 0 rgba(12,24,44,.08), 0 22px 40px -18px rgba(12,24,44,.6), 0 -6px 18px -12px rgba(201,162,39,.8); }
+.cta { box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 18px 34px -20px rgba(12,24,44,.8), 0 8px 22px -12px rgba(201,162,39,.7); background-image: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.14)); }
+.tab { transition: var(--lift-t); box-shadow: inset 0 -4px 6px -4px rgba(12,24,44,.22); }
+.tab.on { box-shadow: 0 -4px 10px -6px rgba(12,24,44,.35); }
+.tag.on, .chip, span.co, .count, .tier, .band, .ceil, .promoted-tag { box-shadow: 0 1px 0 rgba(12,24,44,.10), inset 0 1px 0 rgba(255,255,255,.35); }
+
+/* recessed wells: fields, filter bars, tracks */
+.segs, .g-filter, .vbar, .bar-wrap, .drop, .techtog .sw, .check:not(.done), .p-check:not(.on), .pip[data-dis] { box-shadow: var(--well); }
+input[type=text], input[type=email], input[type=search], input[type=number], input[type=date], input[type=url], textarea, select {
+  box-shadow: inset 0 1px 2px rgba(12,24,44,.10); transition: box-shadow .2s ease, border-color .15s ease; }
+input:focus, textarea:focus, select:focus { box-shadow: inset 0 1px 2px rgba(12,24,44,.10), var(--heat-ring); }
+.check.done, .p-check.on { background-image: var(--sheen); box-shadow: var(--edge-top), 0 1px 3px rgba(12,24,44,.4); }
+
+/* enamel: status dots, rivets, bars */
+.s-dot, .dot { box-shadow: inset 0 -2px 0 rgba(0,0,0,.2), inset 0 2px 0 rgba(255,255,255,.3), 0 1px 2px rgba(12,24,44,.3); }
+.s-dot.click:hover { box-shadow: inset 0 -2px 0 rgba(0,0,0,.2), inset 0 2px 0 rgba(255,255,255,.3), var(--heat); }
+.bar-wrap .seg { background-image: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0) 60%); }
+.g-bar { background-image: var(--sheen); box-shadow: var(--edge-top), inset 0 -3px 0 var(--e-brass), 0 3px 7px -2px rgba(18,42,77,.5); }
+.g-today { box-shadow: 0 0 10px rgba(201,162,39,.9); }
+.vbar .real { background-image: linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0) 60%); box-shadow: inset 0 -3px 0 var(--e-brass), 0 0 16px rgba(201,162,39,.85); }
+.stop.now::before { box-shadow: 0 0 0 3px rgba(201,162,39,.25), 0 0 12px rgba(201,162,39,.95); }
+
+/* guide map: stations heat up */
+.st circle.node { transition: fill .15s, stroke .15s, filter .2s; }
+.st:hover circle.node, .st.on circle.node { filter: drop-shadow(0 0 7px rgba(201,162,39,.95)); }
+.rail:not(.thin) { filter: drop-shadow(0 2px 1px rgba(12,24,44,.22)); }
+.dial { filter: drop-shadow(0 0 6px rgba(201,162,39,.7)); }
+
 /* ---- How it works: brass plate, bottom right, every page ---- */
 .helpfab { position: fixed; right: 18px; bottom: 18px; z-index: 400; display: inline-flex; align-items: center; gap: 9px; text-decoration: none;
   background: var(--e-gold); color: var(--e-navy-deep); font-family: Roboto, Arial, sans-serif; font-weight: 700; font-size: 13px;
-  padding: 9px 15px 9px 11px; border-radius: var(--plate); border: 1px solid #9c7d18; box-shadow: inset 0 -3px 0 #9c7d18, 0 8px 18px -10px rgba(0,0,0,.6); }
+  padding: 9px 15px 9px 11px; border-radius: var(--plate); border: 1px solid #9c7d18; }
 .helpfab .ic { width: 22px; height: 22px; --ic2: #fff; transition: transform .6s var(--ease-strike); }
 .helpfab:hover { background: #d8b33a; }
 .helpfab:hover .ic { transform: rotate(180deg); }
-.helpfab:active { transform: translateY(1px); box-shadow: inset 0 -1px 0 #9c7d18; }
-@media print { .helpfab { display: none; } }
+@media print { .helpfab { display: none; } *, *::before, *::after { box-shadow: none !important; filter: none !important; } }
 
 /* ---- motion: played by assets/motion.js on the element a person just acted on ---- */
 @keyframes m-stamp { 0% { transform: scale(1.4) rotate(-5deg); opacity: 0; } 55% { transform: scale(.93) rotate(1deg); opacity: 1; } 100% { transform: none; } }
