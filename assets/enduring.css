@@ -1,0 +1,45 @@
+/* Enduring shared layer. Loaded after each page's own <style>.
+   Owns: plate radius, icon sizing, the How it works plate, motion. Page layout and page components stay in the page. */
+:root {
+  --plate: 3px;
+  --e-navy: #193661; --e-navy-deep: #122a4d; --e-brass: #A6832C; --e-gold: #C9A227; --e-steel: #A7A9AC;
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --ease-strike: cubic-bezier(.3, 1.5, .5, 1);
+}
+
+/* ---- icons: <svg class="ic"><use href="assets/icons.svg#name"/></svg> ---- */
+.ic { width: 1.3em; height: 1.3em; flex: 0 0 auto; fill: currentColor; --ic2: var(--e-brass); vertical-align: -.25em; overflow: visible; }
+
+:focus-visible { outline: 2px solid var(--e-gold); outline-offset: 2px; }
+
+/* ---- How it works: brass plate, bottom right, every page ---- */
+.helpfab { position: fixed; right: 18px; bottom: 18px; z-index: 400; display: inline-flex; align-items: center; gap: 9px; text-decoration: none;
+  background: var(--e-gold); color: var(--e-navy-deep); font-family: Roboto, Arial, sans-serif; font-weight: 700; font-size: 13px;
+  padding: 9px 15px 9px 11px; border-radius: var(--plate); border: 1px solid #9c7d18; box-shadow: inset 0 -3px 0 #9c7d18, 0 8px 18px -10px rgba(0,0,0,.6); }
+.helpfab .ic { width: 22px; height: 22px; --ic2: #fff; transition: transform .6s var(--ease-strike); }
+.helpfab:hover { background: #d8b33a; }
+.helpfab:hover .ic { transform: rotate(180deg); }
+.helpfab:active { transform: translateY(1px); box-shadow: inset 0 -1px 0 #9c7d18; }
+@media print { .helpfab { display: none; } }
+
+/* ---- motion: played by assets/motion.js on the element a person just acted on ---- */
+@keyframes m-stamp { 0% { transform: scale(1.4) rotate(-5deg); opacity: 0; } 55% { transform: scale(.93) rotate(1deg); opacity: 1; } 100% { transform: none; } }
+@keyframes m-drop { 0% { transform: translateY(-12px); opacity: 0; } 70% { transform: translateY(1px); opacity: 1; } 100% { transform: none; } }
+@keyframes m-heat { 0% { background-color: rgba(201,162,39,.42); box-shadow: inset 5px 0 0 var(--e-gold); } 100% { box-shadow: inset 5px 0 0 transparent; } }
+@keyframes m-open { 0% { transform: translateY(-6px); opacity: 0; } 100% { transform: none; opacity: 1; } }
+@keyframes m-rise { 0% { transform: translateY(18px); opacity: 0; } 100% { transform: none; opacity: 1; } }
+@keyframes m-fade { 0% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes m-rule { 0% { background-size: 0 3px; } 100% { background-size: 100% 3px; } }
+@keyframes m-spark { 0% { opacity: 0; transform: scale(.3); } 25% { opacity: 1; } 100% { opacity: 0; transform: scale(1.25); } }
+@keyframes m-strike { 0%, 100% { transform: none; } 40% { transform: translateY(2px) scaleY(.94); } }
+@keyframes m-grow { 0% { transform: scaleX(0); } 100% { transform: none; } }
+@keyframes m-glow { 0%, 100% { filter: none; } 30% { filter: drop-shadow(0 0 6px rgba(242,107,29,.9)); } 55% { filter: drop-shadow(0 0 2px rgba(242,107,29,.5)); } 75% { filter: drop-shadow(0 0 8px rgba(201,162,39,.9)); } }
+.m-stamp { animation: m-stamp .34s var(--ease-strike); }
+.m-drop { animation: m-drop .32s var(--ease-out); }
+.m-heat { animation: m-heat 1s ease-out; }
+.m-open { animation: m-open .2s var(--ease-out); }
+.m-grow { transform-origin: left center; animation: m-grow .5s var(--ease-out); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}

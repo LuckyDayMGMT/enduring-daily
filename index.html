@@ -30,10 +30,10 @@
     --paper:     #f7f8fa;
     --ink:       #14161a;
     --line:      #e4e6ea;
-    --shadow-sm: 0 1px 2px rgba(16,24,40,0.06);
+    --shadow-sm: none;
     --serif: "Tiempos Headline", Georgia, "Times New Roman", serif;
     --sans: "Roboto", "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    --r: 6px;
+    --r: 3px;
   }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
@@ -54,7 +54,8 @@
     padding: 8px 16px; font-family: var(--serif); font-size: 22px; letter-spacing: 3px;
     color: var(--white); line-height: 1;
   }
-  .mast-left .product { margin-top: 14px; font-family: var(--serif); font-size: 30px; letter-spacing: 0.3px; color: var(--white); }
+  .mast-left .product { margin-top: 14px; font-family: var(--serif); font-size: 30px; letter-spacing: 0.3px; color: var(--white); display: flex; align-items: center; gap: 12px; }
+  .mast-left .product .ic { width: 38px; height: 38px; color: var(--white); --ic2: var(--brass-lt); }
   .mast-left .tagline { margin-top: 8px; font-size: 14px; font-weight: 300; color: #cdd6e4; max-width: 620px; }
   .mast-right { text-align: right; }
   .clock { font-size: 15px; color: #cdd6e4; }
@@ -74,7 +75,7 @@
   }
   .mode-tag {
     display: inline-block; margin-top: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.4px;
-    font-size: 10px; padding: 5px 11px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.3); color: #cdd6e4;
+    font-size: 10px; padding: 5px 11px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.3); color: #cdd6e4;
   }
   .mode-tag.owner { color: var(--blue); background: var(--white); border-color: var(--white); }
 
@@ -94,10 +95,10 @@
   .card-head.clay { border-bottom-color: var(--black); }
   .card-title { font-family: var(--serif); font-size: 19px; color: var(--blue); flex: 1; }
   .card-sub { font-weight: 900; text-transform: uppercase; letter-spacing: 1.2px; font-size: 10px; color: var(--gray-dk); }
-  .count { font-weight: 500; font-size: 12px; color: var(--white); background: var(--blue); border-radius: 5px; padding: 2px 9px; min-width: 26px; text-align: center; }
+  .count { font-weight: 700; font-size: 12px; color: var(--white); background: var(--blue); border-radius: 2px; padding: 2px 9px; min-width: 26px; text-align: center; }
   .card-body { padding: 8px 8px 10px; flex: 1; display: flex; flex-direction: column; gap: 1px; }
 
-  .item { display: flex; align-items: flex-start; gap: 11px; padding: 10px; border-radius: 5px; transition: background 0.15s ease; }
+  .item { display: flex; align-items: flex-start; gap: 11px; padding: 10px; border-radius: var(--plate); transition: background 0.15s ease; }
   .item:hover { background: var(--gray-lt); }
   .drag-handle {
     flex: 0 0 auto; margin-top: 1px; width: 16px; text-align: center;
@@ -112,7 +113,7 @@
   .item.drop-target { box-shadow: 0 -2px 0 0 var(--blue) inset; }
   .check {
     flex: 0 0 auto; width: 17px; height: 17px; margin-top: 2px; border: 1.5px solid var(--gray);
-    border-radius: 4px; cursor: pointer; position: relative; transition: all 0.15s ease; background: var(--white);
+    border-radius: 2px; cursor: pointer; position: relative; transition: all 0.15s ease; background: var(--white);
   }
   .check:hover { border-color: var(--brass); }
   .check.done { background: var(--blue); border-color: var(--blue); }
@@ -125,31 +126,33 @@
   .item-text { font-size: 14.5px; color: var(--ink); word-wrap: break-word; }
   .item.done .item-text { color: var(--gray-dk); text-decoration: line-through; text-decoration-color: var(--gray); }
   .item-meta { margin-top: 3px; font-size: 11px; color: var(--gray-dk); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-  .pill { font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; font-size: 9px; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--gray-md); color: var(--gray-dk); }
+  .pill { font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; font-size: 9px; padding: 2px 7px; border-radius: 2px; border: 1px solid var(--gray-md); color: var(--gray-dk); }
   .pill.new { color: var(--white); background: var(--blue); border-color: var(--blue); }
   .item-actions { display: flex; gap: 6px; opacity: 0; transition: opacity 0.15s ease; flex: 0 0 auto; }
   .item:hover .item-actions { opacity: 1; }
   .iconbtn {
-    background: var(--white); border: 1px solid var(--gray-md); color: var(--gray-dk); border-radius: 5px;
-    width: 26px; height: 26px; font-size: 13px; line-height: 1; cursor: pointer; display: grid; place-items: center; transition: all 0.15s ease;
+    background: var(--white); border: 1px solid var(--gray-md); color: var(--gray-dk); border-radius: var(--plate);
+    width: 28px; height: 28px; font-size: 13px; line-height: 1; cursor: pointer; display: grid; place-items: center; transition: all 0.15s ease;
   }
+  .iconbtn .ic { width: 17px; height: 17px; }
   .iconbtn:hover { color: var(--brass); border-color: var(--brass); }
-  .iconbtn.danger:hover { color: var(--white); background: var(--black); border-color: var(--black); }
+  .iconbtn.danger:hover { color: var(--white); background: var(--black); border-color: var(--black); --ic2: var(--white); }
   .iconbtn.accept:hover { color: var(--white); background: var(--blue); border-color: var(--blue); }
   .empty { padding: 22px 12px; color: var(--gray-dk); font-size: 13.5px; font-weight: 300; text-align: center; }
+  .empty .ic { display: block; width: 48px; height: 48px; margin: 0 auto 8px; color: var(--gray-md); --ic2: var(--gray); }
 
   .quick-add { display: flex; gap: 8px; padding: 10px 12px 13px; border-top: 1px solid var(--line); }
   [hidden] { display: none !important; }
   .quick-add input {
     flex: 1; background: var(--white); border: 1px solid var(--gray-md); color: var(--ink);
-    border-radius: 5px; padding: 9px 12px; font-size: 14px; font-family: var(--sans);
+    border-radius: var(--plate); padding: 9px 12px; font-size: 14px; font-family: var(--sans);
   }
   .quick-add input:focus { outline: none; border-color: var(--brass); }
   .quick-add input::placeholder { color: var(--gray); }
-  .btn { font-family: var(--sans); font-size: 13.5px; font-weight: 500; border-radius: 5px; padding: 9px 16px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s ease; white-space: nowrap; }
-  .btn.primary { background: var(--blue); color: var(--white); border-color: var(--blue); }
-  .btn.primary:hover { background: var(--blue-deep); border-color: var(--brass); }
+  .btn { font-family: var(--sans); font-size: 13.5px; font-weight: 500; border-radius: var(--plate); padding: 9px 16px; cursor: pointer; border: 1px solid transparent; transition: background 0.15s ease, color 0.15s ease; white-space: nowrap; }
+  .btn.primary { background: var(--blue); color: var(--white); border-color: var(--blue); box-shadow: inset 0 -3px 0 var(--brass); }
   .btn.primary:hover { background: var(--blue-deep); }
+  .btn.primary:active { transform: translateY(1px); box-shadow: inset 0 -1px 0 var(--brass); }
   .btn.ghost { background: transparent; color: var(--gray-dk); border-color: var(--gray-md); font-size: 12px; padding: 6px 12px; }
   .btn.ghost:hover { color: var(--black); border-color: var(--gray-dk); }
   .restore-btn { font-size: 11px; padding: 4px 10px; }
@@ -160,14 +163,14 @@
   .field label { display: block; font-weight: 900; text-transform: uppercase; letter-spacing: 1.2px; font-size: 9.5px; color: var(--gray-dk); margin-bottom: 6px; }
   .field input, .field textarea {
     width: 100%; background: var(--white); border: 1px solid var(--gray-md); color: var(--ink);
-    border-radius: 5px; padding: 10px 12px; font-size: 14px; font-family: var(--sans); resize: vertical;
+    border-radius: var(--plate); padding: 10px 12px; font-size: 14px; font-family: var(--sans); resize: vertical;
   }
   .field input:focus, .field textarea:focus { outline: none; border-color: var(--brass); }
   .field input::placeholder, .field textarea::placeholder { color: var(--gray); }
   .two-up { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   @media (max-width: 520px) { .two-up { grid-template-columns: 1fr; } }
   .route-row { display: flex; gap: 10px; align-items: center; }
-  select.route { background: var(--white); color: var(--ink); border: 1px solid var(--gray-md); border-radius: 5px; padding: 8px 10px; font-size: 13.5px; font-family: var(--sans); }
+  select.route { background: var(--white); color: var(--ink); border: 1px solid var(--gray-md); border-radius: var(--plate); padding: 8px 10px; font-size: 13.5px; font-family: var(--sans); }
   select.route:focus { outline: none; border-color: var(--brass); }
   .form-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .toast { font-size: 12.5px; font-weight: 500; color: var(--blue); opacity: 0; transition: opacity 0.3s ease; }
@@ -192,24 +195,31 @@
   .gate-card h1 { font-family: var(--serif); font-size: 25px; color: var(--blue); margin: 0 0 8px; font-weight: 400; }
   .gate-card p { font-size: 13.5px; font-weight: 300; color: var(--gray-dk); margin: 0 0 22px; line-height: 1.5; }
   .gsi { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
-    background: var(--white); border: 1px solid var(--gray-md); border-radius: 5px; padding: 11px 16px;
+    background: var(--white); border: 1px solid var(--gray-md); border-radius: var(--plate); padding: 11px 16px;
     font-family: var(--sans); font-size: 14.5px; font-weight: 500; color: var(--ink); cursor: pointer; transition: all .15s ease; }
   .gsi:hover { border-color: var(--brass); background: var(--gray-lt); }
   .gate-err { margin-top: 16px; font-size: 12.5px; color: var(--black); font-weight: 500; min-height: 18px; }
   .gate-foot { margin-top: 20px; font-size: 11px; color: var(--gray); font-weight: 300; }
   .who { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: #cdd6e4; }
   .who b { color: var(--white); font-weight: 500; }
-  .signout { font-weight: 900; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; color: #cdd6e4; cursor: pointer; border: 1px solid rgba(255,255,255,0.3); border-radius: 999px; padding: 5px 12px; background: none; font-family: var(--sans); }
-  .signout:hover { color: var(--brass); background: var(--white); border-color: var(--white); }
-  .bkchip { display: inline-block; font-weight: 900; letter-spacing: 1.5px; font-size: 12px;
+  .signout { font-weight: 500; font-size: 13px; color: #e3e9f2; cursor: pointer; border: 1px solid rgba(255,255,255,0.3); border-radius: var(--plate); padding: 5px 12px; background: none; font-family: var(--sans); }
+  .signout:hover { color: var(--blue); background: var(--white); border-color: var(--white); }
+  .bkchip { display: inline-flex; align-items: center; height: 34px; font-weight: 900; letter-spacing: 1.5px; font-size: 12px;
     color: var(--white); text-decoration: none; background: rgba(185,217,235,0.18);
-    border: 1px solid #B9D9EB; border-radius: 999px; padding: 5px 13px; }
+    border: 1px solid #B9D9EB; border-radius: var(--plate); padding: 0 12px; }
   .bkchip:hover { background: #B9D9EB; color: var(--navy); border-color: #B9D9EB; }
-  .lotchip { display: inline-flex; align-items: center; gap: 6px; font-weight: 900; letter-spacing: 1px; font-size: 11px;
-    text-transform: uppercase; color: var(--white); text-decoration: none; background: rgba(242,107,29,0.16);
-    border: 1px solid #F26B1D; border-radius: 999px; padding: 4px 12px 4px 8px; }
-  .lotchip svg { width: 16px; height: 16px; }
-  .lotchip:hover { background: #F26B1D; color: var(--white); }
+  .lotchip { display: inline-flex; align-items: center; gap: 8px; height: 34px; font-weight: 500; font-size: 13.5px;
+    color: var(--white); text-decoration: none; background: none;
+    border: 1px solid rgba(255,255,255,0.3); border-radius: var(--plate); padding: 0 12px 0 8px; }
+  .lotchip .ic { width: 24px; height: 24px; color: #000; --ic2: var(--brass-lt); }
+  .lotchip:hover { background: var(--white); color: var(--blue); }
+  .gatechip { display: inline-flex; align-items: center; gap: 8px; height: 34px; font-weight: 500; font-size: 13.5px;
+    color: var(--white); text-decoration: none; background: none;
+    border: 1px solid rgba(255,255,255,0.3); border-radius: var(--plate); padding: 0 12px 0 8px; }
+  .gatechip .ic { width: 22px; height: 22px; color: #cdd6e4; --ic2: var(--brass-lt); }
+  .gatechip:hover { background: var(--white); color: var(--blue); }
+  .gatechip:hover .ic { color: var(--blue); }
+  .sb.linked { cursor: pointer; }
 
   /* ---- Notes ---- */
   .notes { margin-top: 8px; padding-left: 2px; display: flex; flex-direction: column; gap: 5px; }
@@ -219,7 +229,7 @@
   .note-del { margin-left: auto; cursor: pointer; color: var(--gray); font-size: 11px; background: none; border: none; padding: 0 2px; }
   .note-del:hover { color: var(--black); }
   .note-add { display: flex; gap: 6px; margin-top: 7px; }
-  .note-add input { flex: 1; background: var(--white); border: 1px solid var(--gray-md); border-radius: 4px;
+  .note-add input { flex: 1; background: var(--white); border: 1px solid var(--gray-md); border-radius: 2px;
     padding: 6px 9px; font-size: 12.5px; font-family: var(--sans); color: var(--ink); }
   .note-add input:focus { outline: none; border-color: var(--brass); }
   .note-add button { font-size: 11.5px; padding: 5px 11px; }
@@ -229,7 +239,7 @@
 
   /* ---- Project tracker ---- */
   .proj-search { margin-right: 16px; min-width: 240px; background: var(--white); border: 1px solid var(--gray-md);
-    border-radius: 6px; padding: 7px 12px; font-size: 13.5px; font-family: var(--sans); color: var(--ink); }
+    border-radius: var(--plate); padding: 7px 12px; font-size: 13.5px; font-family: var(--sans); color: var(--ink); }
   .proj-search:focus { outline: none; border-color: var(--brass); }
   .proj-search::placeholder { color: var(--gray); }
   .proj.search-hit .p-name { background: rgba(166,131,44,0.16); border-radius: 3px; padding: 0 3px; }
@@ -246,20 +256,20 @@
   .proj.complete { opacity: 0.45; }
   .proj.complete .p-name { text-decoration: line-through; }
   .p-head { display: flex; align-items: center; gap: 10px; }
-  .p-check { flex: 0 0 auto; width: 19px; height: 19px; border: 2px solid var(--gray-md); border-radius: 4px;
+  .p-check { flex: 0 0 auto; width: 19px; height: 19px; border: 2px solid var(--gray-md); border-radius: 2px;
     cursor: pointer; display: grid; place-items: center; font-size: 12px; color: transparent; background: var(--white); }
   .p-check.on { background: var(--blue); border-color: var(--blue); color: var(--white); }
   .p-check.readonly { cursor: default; }
   .p-name { font-family: var(--serif); font-size: 21px; color: var(--navy, #193661); flex: 0 1 auto; min-width: 0; }
   .p-prog { flex: 1; display: flex; align-items: center; gap: 10px; min-width: 120px; margin: 0 18px; }
-  .p-prog .bar-wrap { flex: 1; height: 8px; background: var(--gray-lt); border-radius: 4px; overflow: hidden; display: flex; }
+  .p-prog .bar-wrap { flex: 1; height: 8px; background: var(--gray-lt); border-radius: 2px; overflow: hidden; display: flex; }
   .p-prog .seg { height: 100%; }
   .p-prog .seg.green { background: #0F6E56; } .p-prog .seg.yellow { background: #C9A227; }
   .p-prog .seg.blue { background: #185FA5; }
   .p-prog .frac { flex: 0 0 auto; font-size: 11.5px; font-weight: 700; color: var(--gray-dk); white-space: nowrap; }
   .proj.complete .p-prog .seg { background: var(--gray-md); }
   .p-chips { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-  .chip { font-size: 11.5px; font-weight: 900; letter-spacing: .6px; padding: 3px 8px; border-radius: 999px;
+  .chip { font-size: 11.5px; font-weight: 900; letter-spacing: .6px; padding: 3px 8px; border-radius: 2px;
     border: 1px solid var(--gray-md); color: var(--gray-dk); background: var(--white); text-decoration: none;
     display: inline-flex; align-items: center; gap: 3px; }
   a.chip:hover { border-color: var(--brass); color: var(--brass); }
@@ -267,7 +277,7 @@
   .chip.launch { border-style: dashed; border-color: var(--brass); color: var(--brass); }
   .chip.click { cursor: pointer; }
   .p-body { margin-top: 8px; padding-left: 29px; }
-  .sub { display: flex; align-items: center; gap: 10px; padding: 6px 6px; border-radius: 5px; }
+  .sub { display: flex; align-items: center; gap: 10px; padding: 6px 6px; border-radius: var(--plate); }
   .sub:hover { background: var(--gray-lt); }
   .s-dot { flex: 0 0 auto; width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15); }
   .s-dot.click { cursor: pointer; }
@@ -277,7 +287,7 @@
   .proj.complete .s-text { text-decoration: line-through; }
   .ini { flex: 0 0 auto; width: 42px; text-align: center; }
   .ini input { width: 42px; text-align: center; text-transform: uppercase; font-size: 13px; font-weight: 700;
-    color: var(--navy, #193661); background: var(--white); border: 1px solid var(--gray-md); border-radius: 4px;
+    color: var(--navy, #193661); background: var(--white); border: 1px solid var(--gray-md); border-radius: 2px;
     padding: 3px 0; font-family: var(--sans); }
   .ini input:focus { outline: none; border-color: var(--brass); }
   .ini input:disabled { background: var(--gray-lt); color: var(--gray-dk); border-color: var(--line); }
@@ -293,7 +303,7 @@
   .s-arrows button:hover, .s-del:hover { color: var(--brass); }
   .s-del:hover { color: var(--black); }
   .sub-add { display: flex; gap: 6px; margin-top: 5px; }
-  .sub-add input { flex: 1; background: var(--white); border: 1px solid var(--gray-md); border-radius: 4px;
+  .sub-add input { flex: 1; background: var(--white); border: 1px solid var(--gray-md); border-radius: 2px;
     padding: 6px 10px; font-size: 14px; font-family: var(--sans); }
   .sub-add input:focus { outline: none; border-color: var(--brass); }
   .sub-add button { font-size: 11px; padding: 4px 10px; }
@@ -303,11 +313,13 @@
   .caret.open { transform: rotate(90deg); color: var(--blue); }
   .caret:hover { color: var(--brass); }
   .proj.collapsed .p-body { display: none; }
-  .pencil { background: none; border: none; cursor: pointer; color: var(--gray); font-size: 15px; padding: 0 4px; font-family: var(--sans); }
+  .pencil { background: none; border: none; cursor: pointer; color: var(--gray); font-size: 15px; padding: 0 4px; font-family: var(--sans); line-height: 1; }
+  .pencil .ic { width: 17px; height: 17px; --ic2: var(--gray-md); }
+  .pencil:hover .ic { --ic2: var(--brass); }
   .pencil:hover { color: var(--brass); }
   .sub .pencil { font-size: 13.5px; }
   .p-form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); flex-wrap: wrap; }
-  .p-form input { background: var(--white); border: 1px solid var(--gray-md); border-radius: 5px;
+  .p-form input { background: var(--white); border: 1px solid var(--gray-md); border-radius: var(--plate);
     padding: 8px 10px; font-size: 13px; font-family: var(--sans); min-width: 140px; }
   .p-form input:focus { outline: none; border-color: var(--brass); }
 
@@ -326,10 +338,10 @@
   .g-row.complete .g-label { color: var(--gray); text-decoration: line-through; }
   .g-track { flex: 1; position: relative; height: 30px; background:
     repeating-linear-gradient(to right, transparent, transparent calc(100% / var(--gm) - 1px), var(--line) calc(100% / var(--gm) - 1px), var(--line) calc(100% / var(--gm))); }
-  .g-bar { position: absolute; top: 7px; height: 16px; border-radius: 4px; background: var(--blue); min-width: 8px; }
+  .g-bar { position: absolute; top: 7px; height: 16px; border-radius: 2px; background: var(--blue); min-width: 8px; box-shadow: inset 0 -3px 0 var(--brass); }
   .g-bar .g-cap { position: absolute; right: -4px; top: -14px; font-size: 8.5px; font-weight: 900;
     color: var(--gray-dk); letter-spacing: .4px; white-space: nowrap; }
-  .g-row.complete .g-bar { background: var(--gray); }
+  .g-row.complete .g-bar { background: var(--gray); box-shadow: none; }
   .g-today { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--brass); z-index: 2; }
   .g-today::after { content: "TODAY"; position: absolute; top: -1px; left: 4px; font-size: 8px;
     font-weight: 900; color: var(--brass); letter-spacing: .5px; }
@@ -339,33 +351,37 @@
   .g-unsched b { color: var(--navy, #193661); font-weight: 700; }
 
   /* ---- PortCo tags ---- */
-  .chip.co { border-width: 1px; cursor: default; }
+  .chip.co { border-width: 1px; border-left-width: 4px; cursor: default; }
   .chip.co.click { cursor: pointer; }
   .chip.co-school   { border-color: #C9A227; color: #8a6f16; background: rgba(201,162,39,0.12); }
   .chip.co-allrec   { border-color: #993C1D; color: #993C1D; background: rgba(153,60,29,0.08); }
   .chip.co-kinetico { border-color: #7fb2d4; color: #2f6d94; background: rgba(185,217,235,0.28); }
   .chip.co-ebs      { border-color: #000000; color: #000000; background: rgba(0,0,0,0.06); }
+  .chip.co-multi    { border-color: var(--brass); color: #7d5f16; background: rgba(166,131,44,0.10); }
   .chip.co-none     { border-style: dashed; color: var(--gray); }
-  .g-filter { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; padding: 4px 4px 10px; }
-  .g-filter .gf { font-size: 11px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase;
-    padding: 5px 11px; border-radius: 999px; border: 1px solid var(--gray-md); color: var(--gray-dk);
+  .g-filter { display: inline-flex; flex-wrap: wrap; margin: 4px 4px 10px; border: 1px solid var(--gray-md); border-radius: var(--plate); overflow: hidden; }
+  .g-filter .gf { font-size: 13px; font-weight: 500;
+    padding: 6px 13px; border: none; border-right: 1px solid var(--line); border-radius: 0; color: var(--gray-dk);
     background: var(--white); cursor: pointer; font-family: var(--sans); }
-  .g-filter .gf:hover { border-color: var(--brass); }
+  .g-filter .gf:last-child { border-right: none; }
+  .g-filter .gf:hover { color: var(--ink); background: var(--gray-lt); }
   .g-filter .gf.on { color: var(--white); background: var(--blue); border-color: var(--blue); }
   .g-filter .gf.on.co-school   { background: #C9A227; border-color: #C9A227; color: #33270a; }
   .g-filter .gf.on.co-allrec   { background: #993C1D; border-color: #993C1D; }
   .g-filter .gf.on.co-kinetico { background: #7fb2d4; border-color: #7fb2d4; color: #10314a; }
   .g-filter .gf.on.co-ebs      { background: #000000; border-color: #000000; color: #ffffff; }
+  .g-filter .gf.on.co-multi    { background: var(--brass); border-color: var(--brass); color: #ffffff; }
   .g-label .co-tag { font-size: 8px; font-weight: 900; letter-spacing: .4px; padding: 1px 5px; border-radius: 3px;
     margin-right: 6px; text-transform: uppercase; vertical-align: middle; }
   .co-tag.co-school   { background: rgba(201,162,39,0.20); color: #8a6f16; }
   .co-tag.co-allrec   { background: rgba(153,60,29,0.16); color: #993C1D; }
   .co-tag.co-kinetico { background: rgba(185,217,235,0.45); color: #2f6d94; }
   .co-tag.co-ebs      { background: rgba(0,0,0,0.12); color: #000000; }
+  .co-tag.co-multi    { background: rgba(166,131,44,0.18); color: #7d5f16; }
 
   /* ---- Stage doc badges ---- */
   .stages { flex: 0 0 auto; display: flex; gap: 4px; align-items: center; }
-  .sb { font-weight: 900; font-size: 10.5px; letter-spacing: .6px; padding: 3px 7px; border-radius: 4px;
+  .sb { font-weight: 900; font-size: 10.5px; letter-spacing: .6px; padding: 3px 7px; border-radius: 2px;
     border: 1px solid var(--gray-md); color: var(--gray); background: var(--white);
     cursor: default; text-decoration: none; display: inline-flex; align-items: center; gap: 3px; line-height: 1.2; }
   .sb.owner { cursor: pointer; }
@@ -430,6 +446,11 @@
     /* Notes + questions add rows */
     .note-add input, .quick-add input { font-size: 15px; }
 
+    .g-filter { display: grid; grid-template-columns: repeat(3, 1fr); width: calc(100% - 8px); }
+    .gf { border-bottom: 1px solid var(--line); text-align: center; }
+    .gf:nth-child(3n) { border-right: none; }
+    .gf:nth-last-child(-n+3):nth-child(3n+1), .gf:nth-last-child(-n+3):nth-child(3n+1) ~ .gf { border-bottom: none; }
+
     /* Gantt: let it scroll horizontally rather than crush */
     #ganttBody { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .gantt { min-width: 560px; }
@@ -437,7 +458,9 @@
     /* Recently-deleted + trash */
     .restore-btn { font-size: 12px; }
   }
+
 </style>
+<link rel="stylesheet" href="assets/enduring.css?v=1" />
 </head>
 <body>
 
@@ -459,7 +482,7 @@
   <div class="mast-inner">
     <div class="mast-left">
       <span class="logo-box">ENDURING</span>
-      <div class="product">Enduring Daily</div>
+      <div class="product"><svg class="ic" aria-hidden="true"><use href="assets/icons.svg#board"/></svg>Enduring Daily</div>
       <span class="mode-tag" id="modeTag">Read-only view</span>
     </div>
     <div class="mast-right">
@@ -468,7 +491,8 @@
       <div style="margin-top:10px"><span class="who" id="whoBox"></span></div>
       <div style="margin-top:9px; display:flex; gap:8px; align-items:center; justify-content:flex-end;">
         <a class="bkchip" href="bk.html" title="From the Desk of Steven Cooper">BK</a>
-        <a class="lotchip" href="lot.html" title="Parking Lot"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M13 4h6l6 22H7z" fill="#F26B1D"/><path d="M11.4 12h9.2l1.2 4.5H10.2zM9 21.5h14l1 3.5H8z" fill="#fff" opacity=".9"/><rect x="3" y="26" width="26" height="3.5" rx="1.2" fill="#3a3a3a"/></svg>Parking Lot</a>
+        <a class="lotchip" href="refinery.html" title="The Refinery: where ideas get forged into reality"><svg class="ic" aria-hidden="true"><use href="assets/icons.svg#anvil"/></svg>Refinery</a>
+        <a class="gatechip" href="furnace.html" title="The Furnace: where ideas are screened, scored, and ranked"><svg class="ic" aria-hidden="true"><use href="assets/icons.svg#furnace"/></svg>Furnace</a>
       </div>
     </div>
   </div>
@@ -477,8 +501,7 @@
 <main>
   <section class="card col-span" data-list="projects">
     <div class="card-head">
-      <div class="card-title">Projects</div>
-      <div class="card-sub" style="flex:1">Sorted by launch date, soonest first</div>
+      <div class="card-title" style="flex:1">Projects</div>
       <input type="search" id="projSearch" class="proj-search" placeholder="Search projects & sub-items…" autocomplete="off" />
       <div class="legend">
         <span class="lg"><i class="dot red"></i>Not started</span>
@@ -533,7 +556,7 @@
 <footer>
   <div class="foot-inner">
     <span class="foot-logo">ENDURING</span>
-    <span>Enduring Daily · Operations Board · v22</span>
+    <span>Enduring Daily · Operations Board · v27</span>
     <span class="lock-hint" id="lockHint"></span>
   </div>
 </footer>
@@ -541,6 +564,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="assets/motion.js?v=1"></script>
 <script>
 /* ============================================================
    1. LIVE SYNC CONFIG  ← paste your Firebase web config here.
@@ -592,6 +616,7 @@ function initBackend() {
 }
 
 function attachListeners() {
+  db.ref("gateway").on("value", snap => { store.gateway = snap.val() || {}; renderList("projects"); });
   LISTS.forEach(list => {
     db.ref("board/" + list).on("value", snap => {
       store[list] = snap.val() || {};
@@ -648,7 +673,7 @@ function setSync(on, label) {
 }
 
 function pushItem(list, obj) {
-  if (LIVE) { db.ref("board/" + list).push(obj); }
+  if (LIVE) { const ref = db.ref("board/" + list).push(); Motion.after(`[data-id="${ref.key}"]`, "m-drop"); ref.set(obj); }
   else { const id = "loc" + Math.random().toString(36).slice(2, 9); store[list] = store[list] || {}; store[list][id] = obj; renderList(list); }
 }
 function addNote(list, itemId, text) {
@@ -718,43 +743,44 @@ function notesHTML(list, id, it) {
     <button class="note-toggle" data-act="togglenotes" data-target="${list}:${id}">${notes.length?`${notes.length} note${notes.length>1?"s":""}`:"Add a note"} ▾</button>`;
 }
 
+/* Projects promoted from The Refinery carry ideaId; their S1/S2 come from the Furnace record, not the manual cycle. */
 function stageBadge(id, stage, state, url) {
+  const p = (store.projects || {})[id];
+  if (p && p.ideaId) {
+    const g = (store.gateway || {})[p.ideaId] || {};
+    const fin = g.final || {}, dr = g.draft || {};
+    let st = "todo";
+    if (stage === "s1") st = fin.s1 ? "done" : (dr.s1 ? "draft" : "todo");
+    else st = fin.s2 ? "done" : (fin.s1 && fin.s1.decision === "pilot") ? "na" : (dr.s2 ? "draft" : "todo");
+    const label = stage.toUpperCase();
+    const title = st === "done" ? "Finalized in The Furnace" : st === "draft" ? "Draft in The Furnace" : st === "na" ? "Not required (pilot without Stage 2)" : "Not started";
+    return `<a class="sb linked${st === "done" ? " done" : st === "na" ? " na" : ""}" href="furnace.html#${esc(p.ideaId)}" title="${title}" ${st === "draft" ? 'style="border-color:var(--brass);color:var(--brass);border-style:dashed"' : ""}>${label}${st === "na" ? " —" : ""}</a>`;
+  }
   const s = state || "todo";
   const label = stage.toUpperCase();
   const cls = "sb" + (s === "done" ? " done" : s === "na" ? " na" : "") + (isOwner ? " owner" : "");
   const title = s === "done" ? (url ? "Open the doc — click badge text to change state" : "Marked done (no link)")
               : s === "na" ? "Not applicable" : "Not started";
   if (s === "done" && url) {
-    return `<span class="stages-wrap"><a class="${cls}" href="${esc(url)}" target="_blank" rel="noopener" title="${title}">${label}<span class="lnk">↗</span></a>${
+    return `<span class="stages-wrap"><a class="${cls}" data-badge="${stage}" href="${esc(url)}" target="_blank" rel="noopener" title="${title}">${label}<span class="lnk">↗</span></a>${
       isOwner?`<button class="sb owner" style="padding:3px 4px" data-act="stage" data-id="${id}" data-stage="${stage}" title="Change state">•</button>`:""}</span>`;
   }
   return isOwner
-    ? `<button class="${cls}" data-act="stage" data-id="${id}" data-stage="${stage}" title="${title}">${label}${s==="na"?" —":""}</button>`
-    : `<span class="${cls}" title="${title}">${label}${s==="na"?" —":""}</span>`;
+    ? `<button class="${cls}" data-badge="${stage}" data-act="stage" data-id="${id}" data-stage="${stage}" title="${title}">${label}${s==="na"?" —":""}</button>`
+    : `<span class="${cls}" data-badge="${stage}" title="${title}">${label}${s==="na"?" —":""}</span>`;
 }
 
 const STATUS_CYCLE = ["red", "yellow", "blue", "green"];
-
-// Project order: soonest launch first, ties alphabetical; undated after dated; completed last.
-function projectCompare(a, b) {
-  const pa = a[1], pb = b[1];
-  const ca = pa.complete ? 1 : 0, cb = pb.complete ? 1 : 0;
-  if (ca !== cb) return ca - cb;
-  const da = pa.launch || "", dbb = pb.launch || "";
-  if (da && !dbb) return -1;
-  if (!da && dbb) return 1;
-  if (da !== dbb) return da < dbb ? -1 : 1;
-  return (pa.text || "").localeCompare(pb.text || "", undefined, { sensitivity: "base" });
-}
 
 // PortCo tagging. Cycle: none -> school -> allrec -> kinetico -> ebs -> none
 const PORTCOS = {
   school:   { label: "School Apparel", short: "SCHOOL" },
   allrec:   { label: "AllRec",         short: "ALLREC" },
   kinetico: { label: "Kinetico SA",    short: "KINETICO" },
-  ebs:      { label: "EBS",            short: "EBS" }
+  ebs:      { label: "EBS",            short: "EBS" },
+  multi:    { label: "Multiple",       short: "MULTI" }
 };
-const CO_CYCLE = ["", "school", "allrec", "kinetico", "ebs"];
+const CO_CYCLE = ["", "school", "allrec", "kinetico", "ebs", "multi"];
 let ganttFilter = "";  // "" = all; else a portco key
 
 function subRow(pid, sid, s, canEdit, ownerCtl, q) {
@@ -765,7 +791,7 @@ function subRow(pid, sid, s, canEdit, ownerCtl, q) {
     <div class="s-text">${esc(s.text)}</div>
     <div class="ini" data-lbl="Driver"><input maxlength="3" value="${esc(s.driver || "")}" placeholder="—" ${canEdit ? `data-ini="driver" data-pid="${pid}" data-sid="${sid}"` : "disabled"} /></div>
     <div class="ini" data-lbl="Appr"><input maxlength="3" value="${esc(s.approved || "")}" placeholder="—" ${canEdit ? `data-ini="approved" data-pid="${pid}" data-sid="${sid}"` : "disabled"} /></div>
-    ${ownerCtl ? `<button class="pencil" title="Edit text" data-act="subrename" data-pid="${pid}" data-sid="${sid}">✎</button>
+    ${ownerCtl ? `<button class="pencil" title="Edit text" data-act="subrename" data-pid="${pid}" data-sid="${sid}"><svg class="ic" aria-hidden="true"><use href="assets/icons.svg#pencil"/></svg></button>
     <div class="s-arrows">
       <button data-act="subup" data-pid="${pid}" data-sid="${sid}" title="Move up">▴</button>
       <button data-act="subdown" data-pid="${pid}" data-sid="${sid}" title="Move down">▾</button>
@@ -786,7 +812,11 @@ function renderGantt() {
   if (!body) return;
   const projs = Object.entries(store.projects || {})
     .filter(([_, p]) => !p.deleted)
-    .sort(projectCompare);
+    .sort((a, b) => {
+      const ca = a[1].complete ? 1 : 0, cb = b[1].complete ? 1 : 0;
+      if (ca !== cb) return ca - cb;
+      return (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0);
+    });
   const filtered = ganttFilter ? projs.filter(([_, p]) => p.co === ganttFilter) : projs;
   const scheduled = [], unscheduled = [];
   filtered.forEach(([pid, p]) => {
@@ -834,6 +864,7 @@ function renderGantt() {
     </div>
     ${unscheduled.length ? `<div class="g-unsched"><b>Unscheduled:</b> ${unscheduled.map(esc).join(" \u00b7 ")}</div>` : ""}
   </div>`;
+  Motion.flush();
 }
 
 function renderProjects() {
@@ -843,9 +874,13 @@ function renderProjects() {
   if (drag && drag.list === "projects") return;
   const entries = Object.entries(store.projects || {})
     .filter(([_, p]) => !p.deleted)
-    .sort(projectCompare);
+    .sort((a, b) => {
+      const ca = a[1].complete ? 1 : 0, cb = b[1].complete ? 1 : 0;
+      if (ca !== cb) return ca - cb;
+      return (a[1].order ?? a[1].ts ?? 0) - (b[1].order ?? b[1].ts ?? 0);
+    });
   if (countEl) countEl.textContent = entries.filter(([_, p]) => !p.complete).length;
-  if (!entries.length) { body.innerHTML = `<div class="empty">No projects yet.</div>`; renderGantt(); return; }
+  if (!entries.length) { body.innerHTML = `<div class="empty"><svg class="ic" aria-hidden="true"><use href="assets/icons.svg#board"/></svg>No projects yet.</div>`; renderGantt(); return; }
 
   const q = projQuery;
   let shown = entries;
@@ -878,9 +913,10 @@ function renderProjects() {
     return `<div class="proj ${isOpen ? "open" : "collapsed"} ${p.complete ? "complete" : ""} ${pNameHit ? "search-hit" : ""}" data-id="${pid}" data-list="projects">
       <div class="p-head">
         <button class="caret ${isOpen ? "open" : ""}" data-act="toggleproj" data-pid="${pid}" title="${isOpen ? "Collapse" : "Expand"}" aria-label="Toggle">▸</button>
+        ${isOwner ? `<div class="drag-handle" title="Drag to re-rank" data-drag="projects" data-id="${pid}">⠿</div>` : ""}
         <span class="p-check ${p.complete ? "on" : ""}${isOwner ? "" : " readonly"}" ${isOwner ? `data-act="pcomplete" data-pid="${pid}"` : ""} title="${p.complete ? "Complete" : "Mark complete"}">✓</span>
         <div class="p-name">${esc(p.text)}</div>
-        ${isOwner ? `<button class="pencil" title="Rename project" data-act="rename" data-pid="${pid}">✎</button>` : ""}
+        ${isOwner ? `<button class="pencil" title="Rename project" data-act="rename" data-pid="${pid}"><svg class="ic" aria-hidden="true"><use href="assets/icons.svg#pencil"/></svg></button>` : ""}
         ${(() => {
           const vals = Object.values(p.subs || {});
           if (!vals.length) return `<div class="p-prog"></div>`;
@@ -900,11 +936,15 @@ function renderProjects() {
           ${startChip}
           ${launchChip}
           ${coChip}
-          ${isOwner ? `<button class="iconbtn danger" title="Remove project" data-act="remove" data-list="projects" data-id="${pid}">✕</button>` : ""}
+          ${isOwner ? `<span class="s-arrows p-arrows">
+            <button data-act="projup" data-pid="${pid}" title="Move up">▴</button>
+            <button data-act="projdown" data-pid="${pid}" title="Move down">▾</button>
+          </span>
+          <button class="iconbtn danger" title="Remove project" data-act="remove" data-list="projects" data-id="${pid}"><svg class="ic" aria-hidden="true"><use href="assets/icons.svg#close"/></svg></button>` : ""}
         </div>
       </div>
       <div class="p-body">
-        ${subs.length ? `<div class="s-cols"><span style="width:16px"></span><span class="spacer"></span><span class="ini-h">Driver</span><span class="ini-h">Appr</span>${isOwner ? `<span class="ghost"><button class="pencil">✎</button></span><span class="ghost s-arrows"><button>▴</button><button>▾</button></span><button class="ghost s-del">✕</button>` : ""}</div>` : ""}
+        ${subs.length ? `<div class="s-cols"><span style="width:16px"></span><span class="spacer"></span><span class="ini-h">Driver</span><span class="ini-h">Appr</span>${isOwner ? `<span class="ghost"><button class="pencil"><svg class="ic" aria-hidden="true"><use href="assets/icons.svg#pencil"/></svg></button></span><span class="ghost s-arrows"><button>▴</button><button>▾</button></span><button class="ghost s-del">✕</button>` : ""}</div>` : ""}
         ${subs.map(([sid, s]) => subRow(pid, sid, s, canEdit, isOwner, q)).join("")}
         ${isOwner ? `<div class="sub-add">
           <input type="text" placeholder="Add a sub-item…" data-subinput="${pid}" />
@@ -915,6 +955,7 @@ function renderProjects() {
     </div>`;
   }).join("");
   renderGantt();
+  Motion.flush();
 }
 
 function renderList(list) {
@@ -953,10 +994,11 @@ function renderList(list) {
         ${notesHTML(list, id, it)}
       </div>
       ${isOwner?`<div class="item-actions">
-        <button class="iconbtn danger" title="Delete" data-act="remove" data-list="${list}" data-id="${id}">✕</button>
+        <button class="iconbtn danger" title="Delete" data-act="remove" data-list="${list}" data-id="${id}"><svg class="ic" aria-hidden="true"><use href="assets/icons.svg#close"/></svg></button>
       </div>`:""}
     </div>`;
   }).join("");
+  Motion.flush();
 }
 
 const LIST_LABELS = { questions: "Questions", projects: "Projects" };
@@ -1001,7 +1043,7 @@ document.addEventListener("click", (e) => {
   if (act === "toggleproj") {
     const pid = el.dataset.pid;
     if (expandedProjects.has(pid)) expandedProjects.delete(pid);
-    else expandedProjects.add(pid);
+    else { expandedProjects.add(pid); Motion.after(`.proj[data-id="${pid}"] .p-body`, "m-open"); }
     renderProjects();
     return;
   }
@@ -1014,6 +1056,7 @@ document.addEventListener("click", (e) => {
     const cur = (((store.projects || {})[pid] || {}).subs || {})[sid];
     if (!cur) return;
     const next = STATUS_CYCLE[(STATUS_CYCLE.indexOf(cur.status || "red") + 1) % STATUS_CYCLE.length];
+    Motion.after(`.proj[data-id="${pid}"] .sub[data-sid="${sid}"] .s-dot`, "m-stamp");
     db.ref(projPath(pid) + "/subs/" + sid + "/status").set(next);
     return;
   }
@@ -1045,7 +1088,9 @@ document.addEventListener("click", (e) => {
   }
   if (act === "pcomplete") {
     const pid = el.dataset.pid;
-    updateItem("projects", pid, { complete: !(store.projects[pid] || {}).complete });
+    const done = !(store.projects[pid] || {}).complete;
+    if (done) Motion.after(`.proj[data-id="${pid}"] .p-check`, "m-stamp");
+    Motion.flip(document.querySelector('[data-body="projects"]'), () => updateItem("projects", pid, { complete: done }));
     return;
   }
   if (act === "setdrive") {
@@ -1086,8 +1131,7 @@ document.addEventListener("click", (e) => {
     if (swap < 0 || swap >= group.length) return;
     const A = group[idx], B = group[swap];
     const ao = A[1].order ?? A[1].ts, bo = B[1].order ?? B[1].ts;
-    updateItem("projects", A[0], { order: bo });
-    updateItem("projects", B[0], { order: ao });
+    Motion.flip(document.querySelector('[data-body="projects"]'), () => { updateItem("projects", A[0], { order: bo }); updateItem("projects", B[0], { order: ao }); });
     return;
   }
   if (act === "subup" || act === "subdown") {
@@ -1099,6 +1143,7 @@ document.addEventListener("click", (e) => {
     if (swap < 0 || swap >= subs.length) return;
     const A = subs[idx], B = subs[swap];
     const ao = A[1].order ?? A[1].ts, bo = B[1].order ?? B[1].ts;
+    Motion.after(`.proj[data-id="${pid}"] .sub[data-sid="${sid}"]`, "m-drop");
     db.ref(projPath(pid) + "/subs/" + A[0] + "/order").set(bo);
     db.ref(projPath(pid) + "/subs/" + B[0] + "/order").set(ao);
     return;
@@ -1118,6 +1163,7 @@ document.addEventListener("click", (e) => {
       if (clean && !/^https?:\/\//i.test(clean)) { alert("That doesn't look like a URL. It should start with https://"); return; }
       patch[stage] = "done";
       patch[stage + "url"] = clean || null;
+      Motion.after(`.proj[data-id="${id}"] [data-badge="${stage}"]`, "m-stamp");
     } else if (cur === "done") {
       patch[stage] = "na";
       patch[stage + "url"] = null;
@@ -1129,9 +1175,9 @@ document.addEventListener("click", (e) => {
     return;
   }
 
-  if (act === "toggle") updateItem(list, id, { done: !store[list][id].done });
+  if (act === "toggle") { const done = !store[list][id].done; if (done) Motion.after(`.item[data-id="${id}"] .check`, "m-stamp"); Motion.flip(document.querySelector(`[data-body="${list}"]`), () => updateItem(list, id, { done })); }
   if (act === "review") updateItem(list, id, { reviewed: true });
-  if (act === "remove") softDelete(list, id);
+  if (act === "remove") Motion.exit(el.closest(".item, .proj")).then(() => softDelete(list, id));
 });
 
 // Add a note to an item
@@ -1245,14 +1291,18 @@ document.addEventListener("click", (e) => {
   const pid = b.dataset.subadd;
   const input = document.querySelector(`[data-subinput="${pid}"]`);
   if (!input || !input.value.trim()) return;
-  db.ref(projPath(pid) + "/subs").push({ text: input.value.trim(), ts: Date.now(), order: Date.now(), status: "red" });
+  const ref = db.ref(projPath(pid) + "/subs").push();
+  Motion.after(`.proj[data-id="${pid}"] .sub[data-sid="${ref.key}"]`, "m-drop");
+  ref.set({ text: input.value.trim(), ts: Date.now(), order: Date.now(), status: "red" });
   input.value = "";
 });
 document.addEventListener("keydown", (e) => {
   const i = e.target.closest("[data-subinput]");
   if (!i || e.key !== "Enter" || !isOwner) return;
   if (i.value.trim()) {
-    db.ref(projPath(i.dataset.subinput) + "/subs").push({ text: i.value.trim(), ts: Date.now(), order: Date.now(), status: "red" });
+    const ref = db.ref(projPath(i.dataset.subinput) + "/subs").push();
+    Motion.after(`.proj[data-id="${i.dataset.subinput}"] .sub[data-sid="${ref.key}"]`, "m-drop");
+    ref.set({ text: i.value.trim(), ts: Date.now(), order: Date.now(), status: "red" });
     i.value = "";
   }
 });
@@ -1289,10 +1339,12 @@ document.addEventListener("click", (e) => {
   const gf = e.target.closest("[data-gfilter]");
   if (!gf) return;
   ganttFilter = gf.dataset.gfilter;
+  Motion.after("#ganttBody .g-bar", "m-grow");
   renderGantt();
 });
 document.getElementById("gateBtn").addEventListener("click", signIn);
 if (initBackend()) startAuth();
 </script>
+<a class="helpfab" href="guide.html" title="What The Refinery is, what it does, and how an idea moves"><svg class="ic" aria-hidden="true"><use href="assets/icons.svg#compass"/></svg>How it works</a>
 </body>
 </html>

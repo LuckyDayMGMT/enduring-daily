@@ -6,14 +6,25 @@ Live at enduringdaily.co (GitHub Pages) on Firebase project enduring-daily. Ever
 
 | File | What it is | Version stamp in footer |
 |---|---|---|
-| index.html | Enduring Daily project tracker. @enduring.co only. | Operations Board · v26 |
-| refinery.html | The Refinery (was Parking Lot). Leaders see their company; @enduring.co sees all four lots. | The Refinery · v7 |
-| furnace.html | The Furnace (was The Gateway). Stage 1 and Stage 2 in-app with live scoring, the ranked queue, and the value tracker. @enduring.co only. | The Furnace · v5 |
+| index.html | Enduring Daily project tracker. @enduring.co only. | Operations Board · v27 |
+| refinery.html | The Refinery (was Parking Lot). Leaders see their company; @enduring.co sees all four lots. | The Refinery · v8 |
+| assets/enduring.css, assets/icons.svg, assets/motion.js | Shared design layer: plate radius, icon sprite, How it works plate, motion. Loaded with ?v=1; bump it when they change. | n/a |
+| furnace.html | The Furnace (was The Gateway). Stage 1 and Stage 2 in-app with live scoring, the ranked queue, and the value tracker. @enduring.co only. | The Furnace · v6 |
 | gateway.html | Redirect to furnace.html so old links and the tracker's earlier badges still resolve. | none |
-| guide.html | How it works. Public, no sign-in, nothing sensitive. Interactive pipeline map, leader instructions, behind-the-Gateway section, FAQ, print styles. | How it works · v7 |
+| guide.html | How it works. Public, no sign-in, nothing sensitive. Interactive pipeline map, leader instructions, behind-the-Gateway section, FAQ, print styles. | How it works · v8 |
 | lot.html | Redirect to refinery.html so old links and sign-in emails still work. | none |
 | bk.html | From the Desk of Steven Cooper. Unchanged. | none |
 | database.rules.json | Realtime Database rules. Publish by `firebase deploy --only database` or paste into the console. | n/a |
+
+## Redesign: tracker v27, Refinery v8, Furnace v6, guide v8 (September 27, 2026)
+
+Less templated look across every page except bk.html. Pill shapes are gone: buttons are 3px plates (primary has a brass lip and sinks on press), filters are segmented bars (a 3-column grid on phones), tags and PortCo chips are flat labels with a thick color edge, cards are hairline with no soft shadow, the status strip uses diamond rivets on the Refinery and in the guide. Glyph icons are replaced by a two-tone sprite (assets/icons.svg: navy via currentColor, brass via --ic2): anvil, furnace, hammer, board, flame, pillar icons, pencil, close, compass. Refinery lot tabs are folder tabs. The How it works plate lives in assets/enduring.css. The guide hero drops the all-caps eyebrow and the gold accent phrase; wording is unchanged.
+
+Motion only answers what a person did, never a Firebase re-render: a handler calls Motion.after(selector, class), writes, and render() ends with Motion.flush(). When a click causes two writes, the animation is queued before the last one. Tracker: sub-status dot, complete checkbox, stage badge and question checkbox stamp; completing and reordering slide rows (FLIP); new projects and sub-items drop in; delete collapses then writes; expanding a project slides open; the Timeline filter grows the bars. Refinery: tag on stamps, new idea drops in, delete collapses, promote flashes gold and stamps On the tracker, Forge submit stamps the Forged stop, filter and sort use FLIP, the Forge sheet rises with a brass rule, the anvil is struck once on load. Furnace: score pips and the live score stamp, finalizing S1 or S2 flashes the decision box, queue ranking and company filter use FLIP, the value view fills the bar, the detail panel slides open, the masthead furnace flickers once on load. Guide: the one load moment, the rail draws and the stations light up in order. prefers-reduced-motion turns all of it off. Guide print is still two Letter pages.
+
+Also fixed: Refinery sign-in card ENDURING box was navy on navy; Refinery rows on phones put actions under the idea text.
+
+The tracker and guide here are built on v26 and v7 from 2026-09-16_Enduring_Daily_Furnace_v1.zip, which were never committed (main still had v22 and v3). The Furnace had no newer copy; its footer read v4 while this table said v5, so it goes to v6. Do not upload functions/index.js from that older drop: the repo copy is newer. The root index.js is a stray older copy of the functions code; nothing loads it.
 
 ## Furnace rename and guide v7 (September 16, 2026)
 
